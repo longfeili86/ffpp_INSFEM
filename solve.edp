@@ -1,0 +1,39 @@
+/*
+This file solves the INS equation from t0 to tf
+
+by Longfei Li 12102015
+*/
+
+
+int step=0.;              // computation step
+int pstep=tplot/dt;       // plot step
+dt = tplot/pstep;         // adjust dt
+int nstep = tf/dt+0.5;    // total number of steps
+
+cout << "dt=" << dt << endl;
+
+// define finite element functions
+int numberOfTimeLevels = 3; // save solutions for 3 time levels;
+Vh[int] uh(numberOfTimeLevels);
+Vh[int] vh(numberOfTimeLevels);
+Vh[int] ph(numberOfTimeLevels);
+Vh[int] rhs1(numberOfTimeLevels); // rhs of the first momentum equations
+Vh[int] rhs2(numberOfTimeLevels); // rhs of the second momentum equations
+real[int] t(3); // 3 time levels;
+
+// get all the FEM matrices
+include "getFEMMatrices.edp"
+
+matrix vMatrix = rho*M; //Matrix for momentum equation
+matrix pMatrix = -S;    //Matrix for PPE
+
+if(ts=="IMEX"|ts=="IMEXPC")
+{
+vMatrix = vMatrix+0.5*dt*mu*S;
+}
+
+//include "implementDirBCforMassMatrix.edp"
+
+
+
+

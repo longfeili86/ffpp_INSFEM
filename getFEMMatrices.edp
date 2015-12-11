@@ -1,0 +1,28 @@
+/*
+This file computes all the FEM matrices:
+M,S,Lx,Ly,Sxx,Sxy,Syy
+
+by Longfei Li 12112015
+*/
+
+//define variational forms
+varf massVarf(temp,phi) = int2d(Th,qforder=quadOrder)(temp*phi);
+varf stiffVarf(temp,phi) = int2d(Th,qforder=quadOrder)(dx(temp)*dx(phi)+dy(temp)*dy(phi));
+varf pxVarf(temp,phi) = int2d(Th,qforder=quadOrder)( (dx(temp)*phi));
+varf pyVarf(temp,phi) = int2d(Th,qforder=quadOrder)( (dy(temp)*phi));
+
+varf sxxVarf(temp,phi) = int2d(Th,qforder=quadOrder)(dx(temp)*dx(phi));
+varf sxyVarf(temp,phi) = int2d(Th,qforder=quadOrder)(dx(temp)*dy(phi));
+varf syyVarf(temp,phi) = int2d(Th,qforder=quadOrder)(dy(temp)*dy(phi));
+
+//build sparse matrices from the variational forms
+matrix M=massVarf(Vh,Vh);
+matrix S=stiffVarf(Vh,Vh);
+matrix Lx=pxVarf(Vh,Vh);   
+matrix Ly=pyVarf(Vh,Vh);
+matrix Sxx=sxxVarf(Vh,Vh);
+matrix Sxy=sxyVarf(Vh,Vh);
+matrix Syy=syyVarf(Vh,Vh);
+
+
+

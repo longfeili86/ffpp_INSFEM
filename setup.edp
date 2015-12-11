@@ -1,0 +1,63 @@
+/* This file setup the code according the options specified in runScript.edp
+
+by Longfei Li 12102015
+*/
+
+cout << "\n\nSetting up to run: " << runName << endl;
+// create the dataFolder to store results
+string dataFolderName = outputDir+runName;
+exec("mkdir -p "+dataFolderName);
+
+
+//read mesh and do mesh refinement is splitNumber>1
+mesh Th = readmesh("mesh/"+meshName+".msh");
+assert(splitNumber>=1);
+if (splitNumber>1)
+{
+Th = trunc(Th,1,split=splitNumber);
+}
+if(isPlot)
+{
+plot(Th,wait=0, ps=dataFolderName+"/grid.eps");
+}
+
+
+// define Pn finite element space
+fespace Vh(Th,Pn);
+
+
+// define some FE functions
+Vh phi;   // basis function
+Vh temp;  // a temp FE function to hold stuff
+
+//get the normal vector on all nodes. For interoir nodes n=(0,0).
+include "getNormalVectorOnNodes.edp"
+
+
+//determine time-step
+real dt=0.;
+include "getDt.edp"
+
+
+real timer=clock();  // timer start
+include "solve.edp"    // solve the INS
+timer=clock()-timer;
+cout << "Total time used for solve: " <<  timer << endl;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,43 @@
+/*
+This file computes the unit normal vector on all nodes.
+For interior nodes, n = (0,0).
+
+return the x and y components of the normal vector on all dof:
+real[int] Nx(Vh.ndof), Ny(Vh.ndof)
+
+by Longfei Li 12102015
+*/
+
+
+// use boundary integral to convert normal on edge to normal on nodes.
+varf nxVarf(unsued,phi)=int1d(Th,qforder=quadOrder)(N.x*phi);
+varf nyVarf(unsued,phi)=int1d(Th,qforder=quadOrder)(N.y*phi);
+real[int] Nx(Vh.ndof), Ny(Vh.ndof);
+Nx = nxVarf(0,Vh);
+Ny = nyVarf(0,Vh);
+temp = x; real[int] Px=temp[]; // x-coordinates
+temp = y; real[int] Py =temp[];   // y-coordinates
+
+
+Vh lb = label;  // label number of all dof, interior=0, otherwise positive int
+
+for(int i=0;i<Vh.ndof;i++)
+{
+real Nnorm;
+Nnorm = sqrt(Nx[i]^2+Ny[i]^2);
+if (Nnorm!=0)
+{
+Nx[i] /= Nnorm;      //normalize the vector
+Ny[i] /= Nnorm;
+}
+
+
+
+bool printNormal=false;
+if(printNormal)
+{
+cout <<"(" <<Px[i] << "," << Py[i] << ")= "
+     <<"(" <<Nx[i] << "," << Ny[i] << "), "
+     <<"label = " << lb[][i] << endl;
+}
+}

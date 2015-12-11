@@ -1,0 +1,62 @@
+//===========================================
+// generate a mesh
+//===========================================
+
+
+mesh Th; 
+string meshName;
+
+//meshName="square";
+//meshName="squareStretched";
+//meshName="cic";
+meshName="cilc";  
+
+
+if (meshName=="square")
+{
+// ==== square mesh [0,1]x[0,1] ====
+int ns=10;
+Th = square(ns,ns);
+}
+else if (meshName=="squareStretched")
+{
+// ==== stretched square mesh [0,1]x[0,1] ====
+int ns=10;
+Th = square(ns,ns);
+Th=movemesh(Th,[(cos((1-x)*pi)+1)/2,tanh(y/0.5)/tanh(1/0.5)]);
+}
+else if (meshName=="cic")
+{
+// ==== cic mesh ====
+int ns = 50;
+int nc = 30;
+real r = 0.1;
+real[int] center = [0.5,0.5];
+
+border S1(t=0,1){x=t;y=0; label=1;}
+border S2(t=0,1){x=1;y=t; label=2;}
+border S3(t=0,1){x=1-t;y=1; label=3;}
+border S4(t=0,1){x=0;y=1-t; label=4;}
+border C(t=0,2*pi){x=r*cos(t)+center[0];y=r*sin(t)+center[1]; label=5;}
+Th = buildmesh(S1(ns)+S2(ns)+S3(ns)+S4(ns)+C(-nc));
+}
+else if (meshName=="cilc")
+{
+int nin = 8;
+int nout= 6;
+int nr = 80;
+int nwall = 32;
+real r = 0.1;
+real[int] center = [0.2,0.2];
+
+border S1(t=0,2.2){x=t;y=0; label=1;}
+border S2(t=0,0.41){x=2.2;y=t; label=2;} // out flow
+border S3(t=0,2.2){x=2.2-t;y=0.41; label=3;}
+border S4(t=0,0.41){x=0;y=0.41-t; label=4;}// in flow
+border C(t=0,2*pi){x=r*cos(t)+center[0];y=r*sin(t)+center[1]; label=5;}
+
+Th = buildmesh(S1(nwall)+S2(nout)+S3(nwall)+S4(nin)+C(-nr));
+}
+
+
+savemesh(Th,meshName+".msh");
