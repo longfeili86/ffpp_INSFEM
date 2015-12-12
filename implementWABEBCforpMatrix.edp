@@ -1,0 +1,54 @@
+/*
+This file implements the WABE pressure BC for pMatrix
+
+by Longfei Li 12112015
+*/
+
+
+int[int]  Ix(0), Iy(0), IP(0), IPnew(0);
+int[int]  Jx(0), Jy(0), JP(0), JPnew(0);
+real[int] Cx(0), Cy(0), CP(0), CPnew(0);
+[Ix,Jx,Cx] = Lx;
+[Iy,Jy,Cy] = Ly;
+[IP,JP,CP] = pMatrix;
+
+//make a copy of interior rows
+for(int i=0;i<IP.n;i++)
+{
+int rowNumber = IP(i);
+if(lb[][rowNumber]==0)  // interior equations
+{
+// If rowNumber is interior, the matrix is unchanged
+IPnew.resize(IPnew.n+1); IPnew(IPnew.n-1) = IP(i);
+JPnew.resize(JPnew.n+1); JPnew(JPnew.n-1) = JP(i);
+CPnew.resize(CPnew.n+1); CPnew(CPnew.n-1) = CP(i);	  
+}
+}
+
+
+// get boundary rows. Use boundary rows from Nx(i)*Lx(i,:)+Ny(i)*Ly(i,:)
+for (int i =0;i<bNodes.n;i++)
+{
+int rowNumber = bNodes(i);
+   Cx(i)= Nx(Ix(i))*Cx(i);
+}
+for (int i =0;i<Iy.n;i++)
+{
+   Cy(i)= Ny(Iy(i))*Cy(i);
+}
+
+
+// get Nx*Lx+Ny*Ly
+int[int]  Ibc= [Ix,Iy];
+int[int] Jbc = [Jx,Jy];
+real[int] Cbc = [Cx,Cy];
+
+writeSparseMatrixToMfile(Ibc,Jbc,Cbc,Ibc.n,dataFolderName,"aaa");
+
+
+
+
+
+
+
+

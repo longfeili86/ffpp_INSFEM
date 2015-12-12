@@ -1,0 +1,35 @@
+/*
+This file defines some utility functions
+
+by Longfei Li 12112015
+*/
+
+
+
+
+func int writeSparseMatrixToMfile(int[int] I, int[int] J, real[int] C, int sz, string dir,string matrixName)
+{
+// this function writes a sparse matrix M = sparse(I,J,C), sz = length(I) 
+// to dir/matrixName.m 
+{
+string fileName = dir+"/"+matrixName+"File.m";
+ofstream oFile(fileName);
+oFile << "I=[";
+for(int i=0;i<sz;i++){oFile<<" "<< I(i); if(i%10==0 & i>1){oFile<<" ...\n";}}
+oFile << "];\n\n";
+
+oFile << "J=[";
+for(int i=0;i<sz;i++){oFile<<" "<< J(i); if(i%10==0 & i>1){oFile<<" ...\n";}}
+oFile << "];\n\n";
+
+oFile << "C=[";
+for(int i=0;i<sz;i++){oFile<<" "<< C(i); if(i%10==0 & i>1){oFile<<" ...\n";}}
+oFile << "];\n\n";
+
+oFile<< "I=I+1; J=J+1; %matlab index starts at 1\n";
+oFile<< matrixName << " = sparse(I,J,C);\n\n";
+} //file object is deleted at the end of block
+
+return 0;
+
+}

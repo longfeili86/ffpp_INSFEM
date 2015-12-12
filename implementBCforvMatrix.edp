@@ -1,0 +1,52 @@
+/*
+This file implements velocity BC for the mass matrix: vMatrix
+
+by Longfei Li 12112015
+*/
+
+
+
+int [int] I(0), Inew(0);
+int [int] J(0), Jnew(0);
+real[int] C(0), Cnew(0);
+[I,J,C] = vMatrix;  
+
+//make a copy of interior rows
+for(int i=0;i<I.n;i++)
+{
+int rowNumber = I(i);
+if(lb[][rowNumber]==0)  // interior equations
+{
+// If rowNumber is interior, the matrix is unchanged
+Inew.resize(Inew.n+1); Inew(Inew.n-1) = I(i);
+Jnew.resize(Jnew.n+1); Jnew(Jnew.n-1) = J(i);
+Cnew.resize(Cnew.n+1); Cnew(Cnew.n-1) = C(i);	  
+}
+}
+
+// get boundary rows. Use boundary rows from identity matrix
+real[int] Cb(bNodes.n);
+Cb=1.; 
+
+//combine interior rows and boundary rows
+Inew = [Inew,bNodes];
+Jnew = [Jnew,bNodes];
+Cnew = [Cnew,Cb];
+
+//update vMatrix
+vMatrix=[Inew,Jnew,Cnew];
+
+
+// write matrix to file
+bool writeMatrixToFile=true;
+if(writeMatrixToFile) 
+{
+writeSparseMatrixToMfile(I,J,C,I.n,dataFolderName,"vMatrixBeforeBC");
+writeSparseMatrixToMfile(I,J,C,I.n,dataFolderName,"vMatrixAfterBC");
+}// file objects are closed at the end of the block
+
+
+
+
+
+
