@@ -42,7 +42,7 @@ bool writeMatrixToFile=true;
 if(writeMatrixToFile) 
 {
 writeSparseMatrixToMfile(I,J,C,I.n,dataFolderName,"vMatrixBeforeBC");
-writeSparseMatrixToMfile(I,J,C,I.n,dataFolderName,"vMatrixAfterBC");
+writeSparseMatrixToMfile(Inew,Jnew,Cnew,Inew.n,dataFolderName,"vMatrixAfterBC");
 }// file objects are closed at the end of the block
 
 

@@ -9,10 +9,14 @@ string meshName;
 //meshName="square";
 //meshName="squareStretched";
 //meshName="cic";
-meshName="cilc";  
+//meshName="cilc";  
+meshName="testMesh";
 
-
-if (meshName=="square")
+if  (meshName=="testMesh")
+{
+Th = square(2,2);
+}
+else if (meshName=="square")
 {
 // ==== square mesh [0,1]x[0,1] ====
 int ns=10;

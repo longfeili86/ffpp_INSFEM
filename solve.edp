@@ -21,8 +21,6 @@ Vh[int] rhs1(numberOfTimeLevels); // rhs of the first momentum equations
 Vh[int] rhs2(numberOfTimeLevels); // rhs of the second momentum equations
 real[int] t(3); // 3 time levels;
 
-// get all the FEM matrices
-include "getFEMMatrices.edp"
 
 matrix vMatrix = rho*M; //Matrix for momentum equation
 matrix pMatrix = -S;    //Matrix for PPE
@@ -32,8 +30,12 @@ if(ts=="IMEX"|ts=="IMEXPC")
 vMatrix = vMatrix+0.5*dt*mu*S;
 }
 
-//include "implementDirBCforMassMatrix.edp"
+include "implementBCforvMatrix.edp"
 
+if(WABE)   //use the WABE pressure BC
+{
+include "implementWABEBCforpMatrix.edp"
+}
 
 
 

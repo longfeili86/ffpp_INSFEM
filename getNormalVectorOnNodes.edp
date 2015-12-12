@@ -12,11 +12,16 @@ by Longfei Li 12102015
 // use boundary integral to convert normal on edge to normal on nodes.
 varf nxVarf(unsued,phi)=int1d(Th,qforder=quadOrder)(N.x*phi);
 varf nyVarf(unsued,phi)=int1d(Th,qforder=quadOrder)(N.y*phi);
+
 real[int] Nx(Vh.ndof), Ny(Vh.ndof);
 Nx = nxVarf(0,Vh);
 Ny = nyVarf(0,Vh);
-temp = x; real[int] Px=temp[]; // x-coordinates
-temp = y; real[int] Py =temp[];   // y-coordinates
+temp = x; 
+real[int] Px=temp[]; // x-coordinates
+temp = y; 
+real[int] Py =temp[]; // y-coordinates
+
+int[int] bNodes(0);  //global index of boundary nodes
 
 
 Vh lb = label;  // label number of all dof, interior=0, otherwise positive int
@@ -31,13 +36,18 @@ Nx[i] /= Nnorm;      //normalize the vector
 Ny[i] /= Nnorm;
 }
 
-
+int lbValue = lb[][i];
+if(lbValue>0)  //boundary nodes
+{
+bNodes.resize(bNodes.n+1); // add one more slot in bNodes
+bNodes(bNodes.n-1) = i;    // put the index i in bNodes
+}
 
 bool printNormal=false;
 if(printNormal)
 {
 cout <<"(" <<Px[i] << "," << Py[i] << ")= "
      <<"(" <<Nx[i] << "," << Ny[i] << "), "
-     <<"label = " << lb[][i] << endl;
+     <<"label = " << lbValue << endl;
 }
 }

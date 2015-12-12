@@ -1,8 +1,52 @@
-% This script shows an example of running ff++_INSFEM codes.
-% To run a different case, make a copy of this file and modify the options
-% for the case to run.
+/*
+This script shows an example of running ff++_INSFEM codes.
+============================================================================
+ To run with different options, make a copy of this file 
+ and modify the options for new runs
+============================================================================
+
+by Longfei Li 12102015
+*/
+
+
+// define output location to store results:
+string outputDir = ""; // empty to store in 'pwd'
+string runName = "tzTrig";   // folder name for the output data
+
+// physical parameters
+real mu=0.1;
+real rho=1.;
+real nu = mu/rho;
+
+// time stepping parameters
+real tf=.1;               // finial time
+real tplot=5.;		  // plot time
+real t0=0.;		  // initial time
+real cfl=0.1;             // fraction of the computed dt to use, i.e., dt = cfl*dt;
+string ts = "IMEXPC";     // time-stepping method
+       	    		  // support: FE,AB2,PC2, IMEX, IMEXPC
+
+// PDE options
+bool dd=true;             // divergence damping option
+bool NS = false;	  // Navier-Stokes or Stokes
+bool WABE=true;           // WABE or TN pressure boundary conditions
+macro Pn P2               // use Pn finite-element space. Support: P1,...,P4
+//load "Element_P3"       // uncomment this for P3     
+//load "Element_P4"	  // uncomment this for P4
+
+// mesh options
+string meshName = "testMesh"; //name of the mesh. A meshName.msh file must be created first in mesh/
+int splitNumber = 1;    // split each side of a triangle into splitNumber pieces
+    		  	 // specify 1 for not splitting. This is used for mesh refinement
+
+// other options
+bool isPlot=true;	 // plot option
+bool isOutputError=true; // save error option
+int  quadOrder = 10;     // order of quadrature formula for integration
 
 
 
 
+//*********** DO NOT MODIFY BELOW:***************
+include "setup.edp"
 
