@@ -1,11 +1,19 @@
 /*
-This file implements velocity BC for the mass matrix: vMatrix
+This file constructs matrix for the momentum equation: vMatrix
+Dirichelt BC is applied on all boundaries.
 
 by Longfei Li 12112015
 */
 
+{
+vMatrix = rho*M;
+if(ts=="IMEX"|ts=="IMEXPC")
+{
+vMatrix = vMatrix+0.5*dt*mu*S;
+}
 
 
+// implement BC for vMatrix
 int [int] I(0), Inew(0);
 int [int] J(0), Jnew(0);
 real[int] C(0), Cnew(0);
@@ -38,14 +46,13 @@ vMatrix=[Inew,Jnew,Cnew];
 
 
 // write matrix to file
-bool writeMatrixToFile=true;
 if(writeMatrixToFile) 
 {
 writeSparseMatrixToMfile(I,J,C,I.n,dataFolderName,"vMatrixBeforeBC");
 writeSparseMatrixToMfile(Inew,Jnew,Cnew,Inew.n,dataFolderName,"vMatrixAfterBC");
 }// file objects are closed at the end of the block
 
-
+} // variables defined in this file out of scope here
 
 
 

@@ -43,6 +43,7 @@ int splitNumber = 1;    // split each side of a triangle into splitNumber pieces
 bool isPlot=true;	 // plot option
 bool isOutputError=true; // save error option
 int  quadOrder = 10;     // order of quadrature formula for integration
+bool writeMatrixToFile=true; // write matrices to m files
 
 
 

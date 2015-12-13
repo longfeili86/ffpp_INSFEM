@@ -37,12 +37,15 @@ Vh temp;  // a temp FE function to hold stuff
 include "getNormalVectorOnNodes.edp"
 
 
+Vh h=hTriangle; // size of triangle
+
 //determine time-step
 real dt=0.;
 include "getDt.edp"
 
 
-// get all the FEM matrices
+// get FEM matrices
+matrix M,S,Lx,Ly,Sxx,Sxy,Syy;
 include "getFEMMatrices.edp"
 
 

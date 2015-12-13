@@ -5,7 +5,6 @@ by Longfei Li 12102015
 */
 
 
-Vh h=hTriangle; // size of triangle
 if (ts=="IMEX" | ts=="IMEXPC")
 {
 	dt = cfl*0.2*h[].min;

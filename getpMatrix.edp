@@ -1,10 +1,17 @@
 /*
-This file implements the WABE pressure BC for pMatrix
+This file constructs matrix for the PPE: pMatrix
+TN or WABE bc is applied on all boundaries.
+Regularization is applied to remove singuarity (Neumann BC on all boundaries).
 
 by Longfei Li 12112015
 */
 
+{
+pMatrix = -S;
 
+
+if(WABE)   //use the WABE pressure BC
+{
 int[int]  Ix(0), Iy(0), IP(0), IPnew(0);
 int[int]  Jx(0), Jy(0), JP(0), JPnew(0);
 real[int] Cx(0), Cy(0), CP(0), CPnew(0);
@@ -56,11 +63,30 @@ pMatrix = [IPnew,JPnew,CPnew];
 
 if(writeMatrixToFile)
 {
-writeSparseMatrixToMfile(IP,JP,CP,IP.n,dataFolderName,"pMatrixBeforeBC");
-writeSparseMatrixToMfile(IPnew,JPnew,CPnew,IPnew.n,dataFolderName,"pMatrixAfterBC");
+writeSparseMatrixToMfile(IP,JP,CP,IP.n,dataFolderName,"pMatrixBeforeWABEBC");
+writeSparseMatrixToMfile(IPnew,JPnew,CPnew,IPnew.n,dataFolderName,"pMatrixAfterWABEBC");
+}
 }
 
 
+//pressure regularization
+//pressure constraint
+varf vB(temp,phi)= int2d(Th,qforder=quadOrder)(1.*phi);  
+real[int]  B =  vB(0,Vh);
+//augmented matrix for pressure equation
+pMatrix =   [[pMatrix,B],
+		[B',0]];
+if(writeMatrixToFile)
+{
+int[int]  I(0);
+int[int]  J(0);
+real[int] C(0);
+[I,J,C] = pMatrix;
+writeSparseMatrixToMfile(IP,JP,CP,IP.n,dataFolderName,"pMatrixAugmented");
+}
+
+
+} // variables defined in this file out of scope here
 
 
 
