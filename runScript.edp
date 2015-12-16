@@ -23,27 +23,40 @@ real tf=.1;               // finial time
 real tplot=5.;		  // plot time
 real t0=0.;		  // initial time
 real cfl=0.1;             // fraction of the computed dt to use, i.e., dt = cfl*dt;
-string ts = "IMEXPC";     // time-stepping method
+string ts = "AB2";     // time-stepping method
        	    		  // support: FE,AB2,PC2, IMEX, IMEXPC
 
 // PDE options
 bool dd=true;             // divergence damping option
-bool NS = false;	  // Navier-Stokes or Stokes
+bool NS = !true;	  // Navier-Stokes or Stokes
 bool WABE=true;           // WABE or TN pressure boundary conditions
-macro Pn P2               // use Pn finite-element space. Support: P1,...,P4
+macro Pn P2               //EOM //use Pn finite-element space. P1,...,P4
 //load "Element_P3"       // uncomment this for P3     
 //load "Element_P4"	  // uncomment this for P4
 
 // mesh options
 string meshName = "testMesh"; //name of the mesh. A meshName.msh file must be created first in mesh/
 int splitNumber = 1;    // split each side of a triangle into splitNumber pieces
-    		  	 // specify 1 for not splitting. This is used for mesh refinement
+    		  	 // specify 1 for no splitting. This is used for mesh refinement
 
 // other options
 bool isPlot=true;	 // plot option
 bool isOutputError=true; // save error option
 int  quadOrder = 10;     // order of quadrature formula for integration
 bool writeMatrixToFile=true; // write matrices to m files
+macro vSOLVER UMFPACK    // solver for velocity
+macro pSOLVER UMFPACK    // solver for pressure
+
+
+// twilightzone options.
+bool isTwilightzone = true;
+
+// specify the name of the .edp file that defines TZ functions if TZ tests
+// otherwise the file name that defines initial and boundary functions.
+// TZ functions definition file can be generated using twilightzonePreparation.m
+// icbc functions definition file can be generated using icbcPreparation.m
+macro funcDefFILE()  "TZFunctions.edp"   //EOM  //modify the file name between quotes
+
 
 
 

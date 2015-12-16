@@ -22,13 +22,13 @@ real[int] C(0), Cnew(0);
 //make a copy of interior rows
 for(int i=0;i<I.n;i++)
 {
-int rowNumber = I(i);
+int rowNumber = I[i];
 if(lb[][rowNumber]==0)  // interior equations
 {
 // If rowNumber is interior, the matrix is unchanged
-Inew.resize(Inew.n+1); Inew(Inew.n-1) = I(i);
-Jnew.resize(Jnew.n+1); Jnew(Jnew.n-1) = J(i);
-Cnew.resize(Cnew.n+1); Cnew(Cnew.n-1) = C(i);	  
+Inew.resize(Inew.n+1); Inew[Inew.n-1] = I[i];
+Jnew.resize(Jnew.n+1); Jnew[Jnew.n-1] = J[i];
+Cnew.resize(Cnew.n+1); Cnew[Cnew.n-1] = C[i];	  
 }
 }
 

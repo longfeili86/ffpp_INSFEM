@@ -1,0 +1,20 @@
+/*
+This file implements the pressure bc for rhs
+
+by Longfei Li 12162015
+*/
+
+{
+if(WABE)
+{
+
+}
+else
+{
+int numberOfBoundaries=lb[].max;
+}
+
+
+
+
+} // varibles defined in this file go out of scope here

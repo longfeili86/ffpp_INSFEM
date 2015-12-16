@@ -26,9 +26,9 @@ int rowNumber = IP(i);
 if(lb[][rowNumber]==0)  // interior equations
 {
 // If rowNumber is interior, the matrix is unchanged
-IPnew.resize(IPnew.n+1); IPnew(IPnew.n-1) = IP(i);
-JPnew.resize(JPnew.n+1); JPnew(JPnew.n-1) = JP(i);
-CPnew.resize(CPnew.n+1); CPnew(CPnew.n-1) = CP(i);	  
+IPnew.resize(IPnew.n+1); IPnew[IPnew.n-1] = IP[i];
+JPnew.resize(JPnew.n+1); JPnew[JPnew.n-1] = JP[i];
+CPnew.resize(CPnew.n+1); CPnew[CPnew.n-1] = CP[i];	  
 }
 }
 
@@ -37,24 +37,24 @@ CPnew.resize(CPnew.n+1); CPnew(CPnew.n-1) = CP(i);
 //  boundary rows from Nx(i)*Lx(i,:)
 for (int i =0;i<Ix.n;i++)
 {
-int rowNumber = Ix(i);
+int rowNumber = Ix[i];
 if(lb[][rowNumber]>0) //boundary nodes
 {
-IPnew.resize(IPnew.n+1); IPnew(IPnew.n-1) = Ix(i);
-JPnew.resize(JPnew.n+1); JPnew(JPnew.n-1) = Jx(i);
-CPnew.resize(CPnew.n+1); CPnew(CPnew.n-1) = Nx(rowNumber)*Cx(i);	  
+IPnew.resize(IPnew.n+1); IPnew[IPnew.n-1] = Ix[i];
+JPnew.resize(JPnew.n+1); JPnew[JPnew.n-1] = Jx[i];
+CPnew.resize(CPnew.n+1); CPnew[CPnew.n-1] = Nx[rowNumber]*Cx[i];	  
 }
 }
 
 //  boundary rows from Ny(i)*Ly(i,:)
 for (int i =0;i<Iy.n;i++)
 {
-int rowNumber = Iy(i);
+int rowNumber = Iy[i];
 if(lb[][rowNumber]>0) //boundary nodes
 {
-IPnew.resize(IPnew.n+1); IPnew(IPnew.n-1) = Iy(i);
-JPnew.resize(JPnew.n+1); JPnew(JPnew.n-1) = Jy(i);
-CPnew.resize(CPnew.n+1); CPnew(CPnew.n-1) = Ny(rowNumber)*Cy(i);	  
+IPnew.resize(IPnew.n+1); IPnew[IPnew.n-1] = Iy[i];
+JPnew.resize(JPnew.n+1); JPnew[JPnew.n-1] = Jy[i];
+CPnew.resize(CPnew.n+1); CPnew[CPnew.n-1] = Ny[rowNumber]*Cy[i];	  
 }
 }
 
@@ -82,7 +82,7 @@ int[int]  I(0);
 int[int]  J(0);
 real[int] C(0);
 [I,J,C] = pMatrix;
-writeSparseMatrixToMfile(IP,JP,CP,IP.n,dataFolderName,"pMatrixAugmented");
+writeSparseMatrixToMfile(I,J,C,I.n,dataFolderName,"pMatrixAugmented");
 }
 
 

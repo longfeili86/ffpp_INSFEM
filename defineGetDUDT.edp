@@ -1,0 +1,39 @@
+/*
+This file defines the getDUDT functions for u,v.
+Note that the invisid and visid parts of the DUDT are updated separately,
+which is convenient for various time-stepping methods.
+
+by Longfei Li 12152015
+*/
+
+// define the DUDT
+// inputs are all FE functions. 
+// invisu,invisv, visu,visv will be updated after function call
+
+macro getDUDT(tl)  
+{
+if(isTwilightzone)
+{
+fu[]=fuFunc(t[tl]);
+fv[]=fvFunc(t[tl]); 
+}
+
+varf invisuVarf(ununsed,phi) = int2d(Th,qforder=quadOrder)((-rho*(uh[tl]*dx(uh[tl])+vh[tl]*dy(uh[tl]))*ns-dx(ph[tl])+fu)*phi);
+invisu[tl][] =  invisuVarf(0,Vh);
+
+varf invisvVarf(unused,phi) = int2d(Th,qforder=quadOrder)((-rho*(uh[tl]*dx(vh[tl])+vh[tl]*dy(vh[tl]))*ns-dy(ph[tl])+fv)*phi);
+invisv[tl][] =  invisvVarf(0,Vh);
+
+varf visuVarf(ununsed,phi) = int2d(Th,qforder=quadOrder)(-mu*(dx(uh[tl])*dx(phi)+dy(uh[tl])*dy(phi)));
+visu[tl][] = visuVarf(0,Vh);
+
+
+varf visvVarf(ununsed,phi) = int2d(Th,qforder=quadOrder)(-mu*(dx(vh[tl])*dx(phi)+dy(vh[tl])*dy(phi)));
+visv[tl][] = visvVarf(0,Vh);
+
+} //EOM
+
+
+
+
+

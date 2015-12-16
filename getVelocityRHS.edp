@@ -1,0 +1,45 @@
+/*
+This file compute rhs for u and v at corrent step.
+
+by Longfei Li 12162015
+*/
+
+{
+
+rhsu=0.;
+rhsv=0.;
+
+if(curStepping=="FE")
+{
+rhsu = invisu[cur]+visu[cur];
+rhsv = invisv[cur]+visv[cur];
+}
+else if(curStepping=="AB2")
+{
+rhsu = 1.5*(invisu[cur]+visu[cur])-0.5*(invisu[prev]+visu[prev]);
+rhsv = 1.5*(invisv[cur]+visv[cur])-0.5*(invisv[prev]+visv[prev]);
+}
+else if(curStepping=="IMEXPRE")   // IMEX predictor
+{
+rhsu = 1.5*invisu[cur]-0.5*invisu[prev]+0.5*visu[prev];
+rhsv = 1.5*invisv[cur]-0.5*invisv[prev]+0.5*visv[prev];
+}
+else if(curStepping=="AM2")
+{
+rhsu = 0.5*(invisu[new]+visu[new])+0.5*(invisu[cur]+visu[cur]);
+rhsv = 0.5*(invisv[new]+visv[new])+0.5*(invisv[cur]+visv[cur]);
+}
+else if(curStepping=="IMEXCOR")  // IMEX corrector
+{
+rhsu = 0.5*invisu[new]+0.5*invisu[cur]+0.5*visu[cur];
+rhsv = 0.5*invisv[new]+0.5*invisv[cur]+0.5*visv[cur];
+}
+
+
+
+
+rhsu = MUcur+dt*rhsu;
+rhsv = MVcur+dt*rhsv;
+
+
+} // variables defined in this file go out of scope here

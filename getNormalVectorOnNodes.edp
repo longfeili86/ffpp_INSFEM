@@ -9,22 +9,19 @@ by Longfei Li 12102015
 */
 
 
+{
 // use boundary integral to convert normal on edge to normal on nodes.
 varf nxVarf(unsued,phi)=int1d(Th,qforder=quadOrder)(N.x*phi);
 varf nyVarf(unsued,phi)=int1d(Th,qforder=quadOrder)(N.y*phi);
 
-real[int] Nx(Vh.ndof), Ny(Vh.ndof);
 Nx = nxVarf(0,Vh);
 Ny = nyVarf(0,Vh);
 temp = x; 
 real[int] Px=temp[]; // x-coordinates
 temp = y; 
-real[int] Py =temp[]; // y-coordinates
-
-int[int] bNodes(0);  //global index of boundary nodes
+real[int] Py=temp[]; // y-coordinates
 
 
-Vh lb = label;  // label number of all dof, interior=0, otherwise positive int
 
 for(int i=0;i<Vh.ndof;i++)
 {
@@ -51,3 +48,4 @@ cout <<"(" <<Px[i] << "," << Py[i] << ")= "
      <<"label = " << lbValue << endl;
 }
 }
+} // variables defined in this file out of scope here

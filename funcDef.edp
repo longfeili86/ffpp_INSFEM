@@ -15,15 +15,15 @@ func int writeSparseMatrixToMfile(int[int] I, int[int] J, real[int] C, int sz, s
 string fileName = dir+"/"+matrixName+"File.m";
 ofstream oFile(fileName);
 oFile << "I=[";
-for(int i=0;i<sz;i++){oFile<<" "<< I(i); if(i%10==0 & i>1){oFile<<" ...\n";}}
+for(int i=0;i<sz;i++){oFile<<" "<< I[i]; if(i%10==0 & i>1){oFile<<" ...\n";}}
 oFile << "];\n\n";
 
 oFile << "J=[";
-for(int i=0;i<sz;i++){oFile<<" "<< J(i); if(i%10==0 & i>1){oFile<<" ...\n";}}
+for(int i=0;i<sz;i++){oFile<<" "<< J[i]; if(i%10==0 & i>1){oFile<<" ...\n";}}
 oFile << "];\n\n";
 
 oFile << "C=[";
-for(int i=0;i<sz;i++){oFile<<" "<< C(i); if(i%10==0 & i>1){oFile<<" ...\n";}}
+for(int i=0;i<sz;i++){oFile<<" "<< C[i]; if(i%10==0 & i>1){oFile<<" ...\n";}}
 oFile << "];\n\n";
 
 oFile<< "I=I+1; J=J+1; %matlab index starts at 1\n";

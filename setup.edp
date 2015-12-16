@@ -26,18 +26,25 @@ plot(Th,wait=0, ps=dataFolderName+"/grid.eps");
 
 // define Pn finite element space
 fespace Vh(Th,Pn);
+Vh lb = label;  // label number of all dof, interior=0, otherwise positive int
+Vh h=hTriangle; // size of triangle
 cout << "ndof="<<Vh.ndof<<endl;
 
+
+real ns=0.;  // for stokes equations
+if(NS==true){ns=1;} // for NS equations
+include funcDefFILE
 
 // define some FE functions
 Vh phi;   // basis function
 Vh temp;  // a temp FE function to hold stuff
 
+
 //get the normal vector on all nodes. For interoir nodes n=(0,0).
+real[int] Nx(Vh.ndof), Ny(Vh.ndof);  // x and y components of the normal vector
+int[int] bNodes(0);  //global index of boundary nodes
 include "getNormalVectorOnNodes.edp"
 
-
-Vh h=hTriangle; // size of triangle
 
 //determine time-step
 real dt=0.;
@@ -48,25 +55,21 @@ include "getDt.edp"
 matrix M,S,Lx,Ly,Sxx,Sxy,Syy;
 include "getFEMMatrices.edp"
 
+//construct matrices for momentum equations and PPE
+matrix vMatrix; //Matrix for momentum equation
+matrix pMatrix; //Matrix for PPE
+include "getvMatrix.edp"
+include "getpMatrix.edp"
+set(vMatrix,solver=vSOLVER);  // this causes mem leak. A FreeFEM++ bug.
+set(pMatrix,solver=pSOLVER);
+
+
+
 
 real timer=clock();  // timer start
 include "solve.edp"    // solve the INS
 timer=clock()-timer;
 cout << "Total time used for solve: " <<  timer << endl;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

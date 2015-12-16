@@ -4,6 +4,7 @@ This file solves the INS equation from t0 to tf
 by Longfei Li 12102015
 */
 
+include "defineGetDUDT.edp"   // this file defines getDUDT functions for u,v eqns
 
 int step=0.;              // computation step
 int pstep=tplot/dt;       // plot step
@@ -12,21 +13,57 @@ int nstep = tf/dt+0.5;    // total number of steps
 
 cout << "dt=" << dt << endl;
 
-// define finite element functions
+// define finite element functions for solutions and rhs
 int numberOfTimeLevels = 3; // save solutions for 3 time levels;
 Vh[int] uh(numberOfTimeLevels);
 Vh[int] vh(numberOfTimeLevels);
 Vh[int] ph(numberOfTimeLevels);
-Vh[int] rhs1(numberOfTimeLevels); // rhs of the first momentum equations
-Vh[int] rhs2(numberOfTimeLevels); // rhs of the second momentum equations
-real[int] t(3); // 3 time levels;
+Vh[int] invisu(numberOfTimeLevels); // invisid part of dudt
+Vh[int] invisv(numberOfTimeLevels); // invisid part of dvdt
+Vh[int] visu(numberOfTimeLevels); // viscous part of dudt
+Vh[int] visv(numberOfTimeLevels); // viscous part of dvdt
+real[int] t(3);  // 3 time levels;
+
+//forcing functions
+Vh fu = 0.;   // forcing function of the u equation
+Vh fv = 0.;   // forcing function of the v equation
+Vh fp = 0.;   // forcing function of the p equation
 
 
-matrix vMatrix; //Matrix for momentum equation
-matrix pMatrix; //Matrix for PPE
-include "getvMatrix.edp"
-include "getpMatrix.edp"
+//Define exact solutions here for all runs.
+//If there are no exact solutions, these won't be used, but they are still
+//defined because ff++ lacks the ability to control varible scope.
+Vh ue = 0.;
+Vh ve = 0.;
+Vh pe = 0.;
 
 
+// Divergence Damping
+Vh alpha=0.;
+if(dd){alpha=1/dt;}  
 
+int prev,cur,new; //define time levels
+// Initial conditions
+cur=step%numberOfTimeLevels;
+new=(step+1)%numberOfTimeLevels;
+prev=(step+2)%numberOfTimeLevels;
+include "initialConditions.edp"
 
+for(step; step<=nstep;step++)
+{
+real stepTimer = clock();
+cur=step%numberOfTimeLevels;
+new=(step+1)%numberOfTimeLevels;
+prev=(step+2)%numberOfTimeLevels;
+
+t[new]= t0 + (step+1)*dt;
+
+include "advance.edp"
+
+// update DUDT at new time
+getDUDT(new); 
+
+stepTimer = clock()-stepTimer;
+cout << "Computational time for this step: " << stepTimer << endl;
+
+}

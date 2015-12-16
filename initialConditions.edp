@@ -1,0 +1,28 @@
+/*
+This file sets the initial conditions.
+
+by Longfei Li 12152015
+*/
+
+t[cur] = t0;
+
+
+// for tz tests, provide previous level from exact solutions as initial conditions
+// since 2 time levels are needed for 2nd order time stepping methods
+
+uh[cur][] = uibFunc(0,t[cur]);
+vh[cur][] = vibFunc(0,t[cur]);
+ph[cur][] = peFunc(t[cur]);
+
+getDUDT(cur);
+
+if(isTwilightzone)
+{
+t[prev] = t[cur]-dt;
+uh[prev][] = ueFunc(t[prev]);
+vh[prev][] = veFunc(t[prev]);
+ph[prev][] = peFunc(t[prev]);
+
+getDUDT(prev)
+}
+

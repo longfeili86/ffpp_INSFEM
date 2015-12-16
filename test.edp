@@ -1,0 +1,33 @@
+macro getVelocityRHS(tl) 
+{
+varf rhsuVarf(ununsed,phi) = int2d(Th,qforder=quadOrder)((-rho*(u*dx(u)+v*dy(u))*ns-dx(p)+fu)*phi);
+rhsu[] =  rhsuVarf(0,Vh);
+
+varf rhsvVarf(unused,phi) = int2d(Th,qforder=quadOrder)((-rho*(u*dx(v)+v*dy(v))*ns-dy(p)+fv)*phi);
+rhsv[] =  rhsvVarf(0,Vh);
+} //EOM
+
+
+int quadOrder=10;
+real rho=1.;
+real ns=1.;
+mesh Th = readmesh("mesh/cilc.msh");
+load "Element_P3"
+fespace Vh(Th,P2);
+Vh[int] uh(3); 
+Vh[int] vh(3);
+Vh[int] ph(3);
+Vh[int] rhsu(3);
+Vh[int] rhsv(3);
+uh[1]=x; vh[1]=x;ph[1]=x;
+Vh fu=x+y;
+Vh fv=x*y;
+
+Vh phii=0.;
+phii[][0]=1.;
+
+plot(phii,fill=1);
+
+
+
+

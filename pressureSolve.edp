@@ -1,0 +1,24 @@
+/*
+This file solve the PPE.
+
+by Longfei Li 12162015
+*/
+
+{
+Vh rhsp;  //pressure rhs
+
+if(isTwilightzone) //update pressure forcing at new time
+{
+fp[]=fpFunc(t[new]);
+}
+
+varf rhspVarf(unused,phi)=int2d(Th,qforder=quadOrder)(((-rho*(dx(uh[new])*dx(uh[new])+2*dy(uh[new])*dx(vh[new])+dy(vh[new])*dy(vh[new])))*ns+fp+alpha*(dx(uh[new])+dy(vh[new])))*phi);
+
+rhsp[] = rhspVarf(0,Vh);
+
+//include "implementPressureBCforRHS.edp"
+
+
+
+
+}// varibles defined in this file go out of scope here
