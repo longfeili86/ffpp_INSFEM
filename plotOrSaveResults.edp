@@ -1,0 +1,76 @@
+/*
+This file plots and/or saves the results at cur time
+
+by Longfei Li 12172015
+*/
+
+{
+//compute div
+int tl=cur; // time level
+div = dx(uh[tl])+dy(vh[tl]);
+string info="Stokes, ";
+if(NS){info="N-S, ";}
+if(WABE){info=info+"WABE bc, ";}
+else{info=info+"TN bc, ";}
+if(dd){info=info+"dd: ";}
+else{info=info+"nodd: ";}
+
+if(isPlot)
+{
+// plot on finer mesh if higher-order elements are used
+bool plotOnFinerMeshForHighOrderMethods=false;
+if(pn>1 & plotOnFinerMeshForHighOrderMethods)
+{
+cout << "interpolate solution to finer mesh to plot\n";
+mesh ThRefined= trunc(Th,1,split=pn,label=0);
+fespace VhPlot(ThRefined,P1);
+VhPlot uPlot,vPlot,pPlot,divPlot;
+uPlot = uh[tl];
+vPlot = vh[tl];
+pPlot = ph[tl];
+divPlot=div;
+plot(uPlot,wait=vwait,fill=vfill,value=vvalue,cmm=info+"uR at t="+t[tl],ps=dataFolderName+"/uR"+counter+".eps");
+plot(vPlot,wait=vwait,fill=vfill,value=vvalue,cmm=info+"vR at t="+t[tl],ps=dataFolderName+"/vR"+counter+".eps");
+plot(pPlot,wait=vwait,fill=vfill,value=vvalue,cmm=info+"pR at t="+t[tl],ps=dataFolderName+"/pR"+counter+".eps");
+plot(divPlot   ,wait=vwait,fill=vfill,value=vvalue,cmm=info+"divR at t="+t[tl],ps=dataFolderName+"/divR"+counter+".eps");
+}
+
+plot(uh[tl],wait=vwait,fill=vfill,value=vvalue,cmm=info+"u at t="+t[tl],ps=dataFolderName+"/u"+counter+".eps");
+plot(vh[tl],wait=vwait,fill=vfill,value=vvalue,cmm=info+"v at t="+t[tl],ps=dataFolderName+"/v"+counter+".eps");
+plot(ph[tl],wait=vwait,fill=vfill,value=vvalue,cmm=info+"p at t="+t[tl],ps=dataFolderName+"/p"+counter+".eps");
+plot(div   ,wait=vwait,fill=vfill,value=vvalue,cmm=info+"div at t="+t[tl],ps=dataFolderName+"/div"+counter+".eps");
+}
+if(saveDataForMATLAB)
+{
+writeRealArrayToMFile(uh[tl][],uh[tl][].n,"u"+counter,dataFolderName);
+writeRealArrayToMFile(vh[tl][],vh[tl][].n,"v"+counter,dataFolderName);
+writeRealArrayToMFile(ph[tl][],ph[tl][].n,"p"+counter,dataFolderName);
+}
+
+// tz tests
+if(isTwilightzone)
+{
+// update exact solution for tz tests
+ue[] = ueFunc(t[tl]);
+ve[] = veFunc(t[tl]);
+pe[] = peFunc(t[tl]);
+// compute errors for tz tests
+erru = abs(uh[tl]-ue);
+errv = abs(vh[tl]-ve);
+errp = abs(ph[tl]-pe);
+
+if(isPlot)
+{
+plot(erru,wait=vwait,fill=vfill,value=vvalue,cmm=info+"error u at t="+t[tl],ps=dataFolderName+"/erru"+counter+".eps");
+plot(errv,wait=vwait,fill=vfill,value=vvalue,cmm=info+"error v at t="+t[tl],ps=dataFolderName+"/errv"+counter+".eps");
+plot(errp,wait=vwait,fill=vfill,value=vvalue,cmm=info+"error p at t="+t[tl],ps=dataFolderName+"/errp"+counter+".eps");
+}
+if(saveDataForMATLAB)
+{
+writeRealArrayToMFile(erru[],erru[].n,"erru"+counter,dataFolderName);
+writeRealArrayToMFile(errv[],errv[].n,"errv"+counter,dataFolderName);
+writeRealArrayToMFile(errp[],errp[].n,"errp"+counter,dataFolderName);
+}
+
+}
+}//variables defined in this file go out of scope here
