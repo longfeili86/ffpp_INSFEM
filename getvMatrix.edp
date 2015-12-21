@@ -46,10 +46,9 @@ vMatrix=[Inew,Jnew,Cnew];
 
 
 // write matrix to file
-if(writeMatrixToFile) 
+if(saveDataForMATLAB) 
 {
-writeSparseMatrixToMfile(I,J,C,I.n,dataFolderName,"vMatrixBeforeBC");
-writeSparseMatrixToMfile(Inew,Jnew,Cnew,Inew.n,dataFolderName,"vMatrixAfterBC");
+writeSparseMatrixToMfile(Inew,Jnew,Cnew,Inew.n,"vMatrix",dataFolderName);
 }// file objects are closed at the end of the block
 
 } // variables defined in this file out of scope here

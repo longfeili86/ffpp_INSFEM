@@ -5,20 +5,31 @@ by Longfei Li 12162015
 */
 
 {
-Vh rhsp;  //pressure rhs
+real[int] rhsp(Vh.ndof);  //pressure rhs
 
 if(isTwilightzone) //update pressure forcing at new time
 {
 fp[]=fpFunc(t[new]);
 }
 
-varf rhspVarf(unused,phi)=int2d(Th,qforder=quadOrder)(((-rho*(dx(uh[new])*dx(uh[new])+2*dy(uh[new])*dx(vh[new])+dy(vh[new])*dy(vh[new])))*ns+fp+alpha*(dx(uh[new])+dy(vh[new])))*phi);
+varf rhspVarf(unused,phi)=int2d(Th,qforder=quadOrder)(((-ns*rho*(dx(uh[new])*dx(uh[new])+2*dy(uh[new])*dx(vh[new])+dy(vh[new])*dy(vh[new])))+fp+alpha*(dx(uh[new])+dy(vh[new])))*phi);
 
-rhsp[] = rhspVarf(0,Vh);
+rhsp = rhspVarf(0,Vh);
 
-//include "implementPressureBCforRHS.edp"
+include "implementPressureBCforRHS.edp"
 
 
-
+// pressure regularization
+real[int]  RHSaug(pMatrix.n),Paug(pMatrix.n),Pave(1),lambda(1);
+Pave=0; // for non-tz tests, the average of pressure is 0
+if(isTwilightzone)
+{
+// for tz tests, the average of pressure is computed from exact solution
+pe[] = peFunc(t[new]); //update exact pressure at new time
+Pave = int2d(Th,qforder=quadOrder)(pe);
+}
+RHSaug = [ rhsp, Pave];
+Paug = pMatrix^-1*RHSaug;
+[ph[new][],lambda] = Paug;  // set the value to ph
 
 }// varibles defined in this file go out of scope here

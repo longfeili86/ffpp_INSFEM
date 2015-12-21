@@ -10,11 +10,13 @@ string meshName;
 //meshName="squareStretched";
 //meshName="cic";
 //meshName="cilc";  
-meshName="testMesh";
+//meshName="testMesh";
+meshName="disk";
+
 
 if  (meshName=="testMesh")
 {
-Th = square(2,2);
+Th = square(4,4);
 }
 else if (meshName=="square")
 {
@@ -60,6 +62,14 @@ border S4(t=0,0.41){x=0;y=0.41-t; label=4;}// in flow
 border C(t=0,2*pi){x=r*cos(t)+center[0];y=r*sin(t)+center[1]; label=5;}
 
 Th = buildmesh(S1(nwall)+S2(nout)+S3(nwall)+S4(nin)+C(-nr));
+}
+else if(meshName=="disk")
+{
+
+real r=1.;
+real[int] center = [0.,0.];
+border C(t=0,2*pi){x=r*cos(t)+center[0];y=r*sin(t)+center[1]; label=1;}
+Th = buildmesh(C(40));
 }
 
 

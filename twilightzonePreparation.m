@@ -1,4 +1,4 @@
-function twilightzonePreparation(Ue,Ve,Pe,nb,filename)
+function twilightzonePreparation(Ue,Ve,Pe,filename)
 %===========================================================================
 % This function computes the derivatives of the given Exact solutions,and
 % generate a filename.edp file for the FreeFEM++ code to use.
@@ -63,6 +63,8 @@ fP = diff(fU,x)+diff(fV,y);
 % convert from sym to char for ouput
 Exact.ueFunc = char(Ue);
 Exact.veFunc = char(Ve);
+Exact.uetFunc = char(Uet);
+Exact.vetFunc = char(Vet);
 Exact.peFunc = char(Pe);
 Exact.fuFunc = char(fU);
 Exact.fvFunc = char(fV);
@@ -81,7 +83,7 @@ fprintf(fid,'//========================================================\n');
 fprintf(fid,'\n\n\n');
 
 
-% write Exact into ff++ functions
+% write Exact solutions and forcing functions 
 for i=1:numel(fields)
     fprintf(fid,'func real[int] %s(real t)\n{\n',fields{i});
     fprintf(fid,'Vh ff = %s;\n\n',Exact.(fields{i}));
@@ -90,15 +92,64 @@ for i=1:numel(fields)
     fprintf(fid,'\n\n\n');
 end
 
-% some functions are defined to make the code work for both tz
-% and non-tz tests.
-fprintf(fid,'func real[int] uibFunc(int i, real t)\n{\n');
+% write initial functions
+fprintf(fid,'func real[int] u0Func(real t)\n{\n');
 fprintf(fid,'return ueFunc(t);\n}');
 fprintf(fid,'\n\n\n');
-fprintf(fid,'func real[int] vibFunc(int i,real t)\n{\n');
+
+fprintf(fid,'func real[int] v0Func(real t)\n{\n');
 fprintf(fid,'return veFunc(t);\n}');
 fprintf(fid,'\n\n\n');
 
+fprintf(fid,'func real[int] p0Func(real t)\n{\n');
+fprintf(fid,'return peFunc(t);\n}');
+fprintf(fid,'\n\n\n');
+
+% write boundary functions
+fprintf(fid,'func real[int] ubFunc(real t)\n{\n');
+fprintf(fid,'real[int] ff(Vh.ndof); ff=ueFunc(t);\n');
+fprintf(fid,'real[int] rv(Vh.ndof); rv=0.;\n');
+fprintf(fid,'//loop over all the boundary points\n');
+fprintf(fid,'for(int i=0;i<bNodes.n;i++){\n');
+fprintf(fid,'int gIndex = bNodes[i];\n');
+fprintf(fid,'rv[gIndex] = ff[gIndex];\n');
+fprintf(fid,'}\n');
+fprintf(fid,'return rv;\n}');
+fprintf(fid,'\n\n\n');
+
+fprintf(fid,'func real[int] vbFunc(real t)\n{\n');
+fprintf(fid,'real[int] ff(Vh.ndof); ff=veFunc(t);\n');
+fprintf(fid,'real[int] rv(Vh.ndof); rv=0.;\n');
+fprintf(fid,'//loop over all the boundary points\n');
+fprintf(fid,'for(int i=0;i<bNodes.n;i++){\n');
+fprintf(fid,'int gIndex = bNodes[i];\n');
+fprintf(fid,'rv[gIndex] = ff[gIndex];\n');
+fprintf(fid,'}\n');
+fprintf(fid,'return rv;\n}');
+fprintf(fid,'\n\n\n');
+
+
+fprintf(fid,'func real[int] ubtFunc(real t)\n{\n');
+fprintf(fid,'real[int] ff(Vh.ndof); ff=uetFunc(t);\n');
+fprintf(fid,'real[int] rv(Vh.ndof); rv=0.;\n');
+fprintf(fid,'//loop over all the boundary points\n');
+fprintf(fid,'for(int i=0;i<bNodes.n;i++){\n');
+fprintf(fid,'int gIndex = bNodes[i];\n');
+fprintf(fid,'rv[gIndex] = ff[gIndex];\n');
+fprintf(fid,'}\n');
+fprintf(fid,'return rv;\n}');
+fprintf(fid,'\n\n\n');
+
+fprintf(fid,'func real[int] vbtFunc(real t)\n{\n');
+fprintf(fid,'real[int] ff(Vh.ndof); ff=vetFunc(t);\n');
+fprintf(fid,'real[int] rv(Vh.ndof); rv=0.;\n');
+fprintf(fid,'//loop over all the boundary points\n');
+fprintf(fid,'for(int i=0;i<bNodes.n;i++){\n');
+fprintf(fid,'int gIndex = bNodes[i];\n');
+fprintf(fid,'rv[gIndex] = ff[gIndex];\n');
+fprintf(fid,'}\n');
+fprintf(fid,'return rv;\n}');
+fprintf(fid,'\n\n\n');
 
 fclose(fid);
 

@@ -30,22 +30,26 @@ else if((ts=="IMEX" | ts=="IMEXPC") &  (isTwilightzone | step>0) )
 curStepping = "IMEXPRE";
 }
 
-cout<< "curStepping=" << curStepping << endl;
-include "getVelocityRHS.edp"   //get RHS for the current step
-include "implementVelocityBCforRHS.edp"  //implement Dirichlet BC for velocity rhs
-uh[new][] = vMatrix^-1*rhsu[];
-vh[new][] = vMatrix^-1*rhsv[];
 
-include "pressureSolve.edp"
+include "velocitySolve.edp"
+include "pressureSolve.edp"  //ph[new] solved after this call
 
-//test=====================
-ph[new][] = peFunc(t[new]);
-Vh err; err[] = ueFunc(t[new]); err=err-uh[new];
-plot(err,fill=1,value=1);
-//test=====================
+// update DUDT at new time
+getDUDT(new); 
 
 //corrector step
+if( ts=="PC2" | ts=="IMEXPC")
+{
+if(ts=="PC2"){curStepping = "AM2";}
+else if(ts=="IMEXPC"){curStepping = "IMEXCOR";}
 
+include "velocitySolve.edp"
+include "pressureSolve.edp"  //ph[new] solved after this call
+
+// update DUDT at new time
+getDUDT(new); 
+
+}
 
 
 

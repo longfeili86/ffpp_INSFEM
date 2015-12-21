@@ -6,10 +6,17 @@ by Longfei Li 12102015
 
 include "defineGetDUDT.edp"   // this file defines getDUDT functions for u,v eqns
 
+tplot = min(tplot,tf);    // make sure tplot is smaller, otherwise just plot at tf
 int step=0.;              // computation step
 int pstep=tplot/dt;       // plot step
 dt = tplot/pstep;         // adjust dt
 int nstep = tf/dt+0.5;    // total number of steps
+
+if(saveDataForMATLAB)
+{
+real[int] timeInfo=[t0,tplot,tf];
+writeRealArrayToMFile(timeInfo,timeInfo.n,"timeInfo",dataFolderName);
+}
 
 cout << "dt=" << dt << endl;
 
@@ -30,13 +37,16 @@ Vh fv = 0.;   // forcing function of the v equation
 Vh fp = 0.;   // forcing function of the p equation
 
 
-//Define exact solutions here for all runs.
+//Define exact solutions and errors here for all runs.
 //If there are no exact solutions, these won't be used, but they are still
 //defined because ff++ lacks the ability to control varible scope.
 Vh ue = 0.;
 Vh ve = 0.;
 Vh pe = 0.;
-
+Vh erru = 0.;
+Vh errv = 0.;
+Vh errp = 0.;
+Vh div = 0.;
 
 // Divergence Damping
 Vh alpha=0.;
@@ -51,19 +61,21 @@ include "initialConditions.edp"
 
 for(step; step<=nstep;step++)
 {
-real stepTimer = clock();
 cur=step%numberOfTimeLevels;
 new=(step+1)%numberOfTimeLevels;
 prev=(step+2)%numberOfTimeLevels;
 
 t[new]= t0 + (step+1)*dt;
 
+real stepTimer = clock();
 include "advance.edp"
-
-// update DUDT at new time
-getDUDT(new); 
-
 stepTimer = clock()-stepTimer;
-cout << "Computational time for this step: " << stepTimer << endl;
+//cout << "Computational time for step " << step+1 <<" : " << stepTimer << endl;
 
+if((step%pstep)==0)
+{
+// plot solutions, div, errors(if tz) and save a copy of eps file.
+int counter = step/pstep;
+include "plotOrSaveResults.edp"  
+}
 }

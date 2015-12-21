@@ -18,10 +18,10 @@ fu[]=fuFunc(t[tl]);
 fv[]=fvFunc(t[tl]); 
 }
 
-varf invisuVarf(ununsed,phi) = int2d(Th,qforder=quadOrder)((-rho*(uh[tl]*dx(uh[tl])+vh[tl]*dy(uh[tl]))*ns-dx(ph[tl])+fu)*phi);
+varf invisuVarf(ununsed,phi) = int2d(Th,qforder=quadOrder)((-ns*rho*(uh[tl]*dx(uh[tl])+vh[tl]*dy(uh[tl]))-dx(ph[tl])+fu)*phi);
 invisu[tl][] =  invisuVarf(0,Vh);
 
-varf invisvVarf(unused,phi) = int2d(Th,qforder=quadOrder)((-rho*(uh[tl]*dx(vh[tl])+vh[tl]*dy(vh[tl]))*ns-dy(ph[tl])+fv)*phi);
+varf invisvVarf(unused,phi) = int2d(Th,qforder=quadOrder)((-ns*rho*(uh[tl]*dx(vh[tl])+vh[tl]*dy(vh[tl]))-dy(ph[tl])+fv)*phi);
 invisv[tl][] =  invisvVarf(0,Vh);
 
 varf visuVarf(ununsed,phi) = int2d(Th,qforder=quadOrder)(-mu*(dx(uh[tl])*dx(phi)+dy(uh[tl])*dy(phi)));

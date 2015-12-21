@@ -9,25 +9,20 @@ by Longfei Li 12162015
 
 {
 int numberOfBoundaries = lb[].max;
-Vh[int] ub(numberOfBoundaries);
-Vh[int] vb(numberOfBoundaries); // boundary functions for u and v
-
-//loop over all the boundaries
-for(int i=0; i<numberOfBoundaries;i++)
-{
-int bN = i+1;
-ub[i][]= uibFunc(bN,t[new]);
-vb[i][]= vibFunc(bN,t[new]);
-}
+// boundary functions for u and v
+Vh ub;
+Vh vb;
+// update boundary functions at new time
+ub[]=ubFunc(t[new]);
+vb[]=vbFunc(t[new]);
 
 //loop over all the boundary nodes
 for(int i=0; i<bNodes.n;i++)
 {
 int gIndex = bNodes[i]; //global index of the boundary nodes
-int bI = lb[][gIndex]-1;  //the boundary label of current node. Index and label is off by 1.
 
-rhsu[][gIndex]=ub[bI][][gIndex];  
-rhsv[][gIndex]=vb[bI][][gIndex];
+rhsu[][gIndex]=ub[][gIndex];  
+rhsv[][gIndex]=vb[][gIndex];
 }
 
 

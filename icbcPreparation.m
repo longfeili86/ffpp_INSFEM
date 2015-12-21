@@ -1,4 +1,4 @@
-function icbcPreparation(Uib,Vib,nb,filename)
+function icbcPreparation(Uib,Vib,Pib,nb,filename)
 %===========================================================================
 % This function writes the specified initial and boundary conditions
 % Uib,Vib into filename.edp file for FF++ code to use
@@ -9,6 +9,7 @@ function icbcPreparation(Uib,Vib,nb,filename)
 % Input:
 %    Uib: an array of strings that defines i&b functions: u0, u1,... un. 
 %    Vib: an array of strings that defines i&b functions: v0, v1,... vn.
+%    Pib: an array of strings that defines i&b functions: p0 for now....
 %     nb: number of boundaries of the domain
 %    filename: name of the output .edp file
 
@@ -32,28 +33,25 @@ fprintf(fid,'//========================================================\n');
 fprintf(fid,'\n\n\n');
 
 
-% write icbc functions for FF++
-n = length(Uib);
-fprintf(fid,'func real[int] uibFunc(int i, real t)\n{\n');
-fprintf(fid,'if(i==%d){\n',0);
-fprintf(fid,'Vh ff = %s;}\n',Uib(1));
-for i=2:n
-    fprintf(fid,'else if(i==%d){\n',i-1);
-    fprintf(fid,'Vh ff = %s;}\n',Uib(i));
-end
-fprintf(fid,'else{\ncout<<"ICBC ERROR: Number of BC does NOT match number of boundaries of the domain"<<endl;\nassert(false);}\n');
-fprintf(fid,'return ff[];\n}\n\n\n');
+% write initial functions
+fprintf(fid,'func real[int] u0Func(real t)\n{\n');
+fprintf(fid,'Vh ff = %s;\n',Uib(1));
+fprintf(fid,'return ff[];\n}');
+fprintf(fid,'\n\n\n');
+
+fprintf(fid,'func real[int] v0Func(real t)\n{\n');
+fprintf(fid,'Vh ff = %s;\n',Vib(1));
+fprintf(fid,'return ff[];\n}');
+fprintf(fid,'\n\n\n');
+
+fprintf(fid,'func real[int] p0Func(real t)\n{\n');
+fprintf(fid,'Vh ff = %s;\n',Pib(1));
+fprintf(fid,'return ff[];\n}');
+fprintf(fid,'\n\n\n');
+
+% write boundary functions
 
 
-fprintf(fid,'func real[int] vibFunc(int i, real t)\n{\n');
-fprintf(fid,'if(i==%d){\n',0);
-fprintf(fid,'Vh ff = %s;}\n',Vib(1));
-for i=2:n
-    fprintf(fid,'else if(i==%d){\n',i-1);
-    fprintf(fid,'Vh ff = %s;}\n',Vib(i));
-end
-fprintf(fid,'else{\ncout<<"ICBC ERROR: Number of BC does NOT match number of boundaries of the domain"<<endl;\nassert(false);}\n');
-fprintf(fid,'return ff[];\n}\n\n\n');
 
 % write some unused functions to file to make both tz and non-tz tests work
 % thanks to the FF++ syntax

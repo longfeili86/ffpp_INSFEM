@@ -5,13 +5,53 @@ by Longfei Li 12162015
 */
 
 {
+// boundary functions for ut and vt
+Vh ubt;
+Vh vbt;
+// update boundary functions at new time
+ubt[]=ubtFunc(t[new]);
+vbt[]=vbtFunc(t[new]);
+// update forcing functions at new time
+if(isTwilightzone)
+{
+fu[]=fuFunc(t[new]);
+fv[]=fvFunc(t[new]); 
+}
+
 if(WABE)
 {
+Vh ut,vt;
+// extrapolate ut,vt
+//ut = (2*uh[new]-3*uh[cur]+uh[prev])/dt;
+//vt = (2*vh[new]-3*vh[cur]+vh[prev])/dt;
+ut = (uh[new]-uh[cur])/dt;
+vt = (vh[new]-vh[cur])/dt;
+
+// WABE bc for pressure
+varf wabe1Varf(unused,phi) = int2d(Th,qforder=quadOrder)((-rho*ut-ns*rho*(uh[new]*dx(uh[new])+vh[new]*dy(uh[new]))+fu)*phi)-int2d(Th,qforder=quadOrder)(mu*(dy(uh[new])-dx(vh[new]))*dy(phi))+int1d(Th,qforder=quadOrder)(mu*N.y*(dy(uh[new])-dx(vh[new]))*phi);
+varf wabe2Varf(unused,phi) = int2d(Th,qforder=quadOrder)((-rho*vt-ns*rho*(uh[new]*dx(vh[new])+vh[new]*dy(vh[new]))+fv)*phi)-int2d(Th,qforder=quadOrder)(mu*(dx(vh[new])-dy(uh[new]))*dx(phi))+int1d(Th,qforder=quadOrder)(mu*N.x*(dx(vh[new])-dy(uh[new]))*phi);
+
+real[int] wabe1BC=wabe1Varf(0,Vh);
+wabe1BC.*=Nx;
+real[int] wabe2BC=wabe2Varf(0,Vh);
+wabe2BC.*=Ny;
+real[int] wabeBC = wabe1BC+wabe2BC;
+
+//loop over all the boundary nodes to replace wabebc on rhsp
+for(int i=0; i<bNodes.n;i++)
+{
+int gIndex = bNodes[i]; //global index of the boundary nodes
+rhsp[gIndex]=wabeBC[gIndex];  
+}
 
 }
 else
 {
-int numberOfBoundaries=lb[].max;
+// TN bc for pressure
+varf TNbcVarf(unused,phi) = int1d(Th,qforder=quadOrder)(-(N.x*(-rho*ubt-ns*rho*(uh[new]*dx(uh[new])+vh[new]*dy(uh[new]))+fu)+N.y*(-rho*vbt-ns*rho*(uh[new]*dx(vh[new])+vh[new]*dy(vh[new]))+fv))*phi)+int1d(Th,qforder=quadOrder)(-mu*(dx(vh[new])-dy(uh[new]))*(-dx(phi)*N.y+dy(phi)*N.x));
+
+rhsp += TNbcVarf(0,Vh);
+
 }
 
 

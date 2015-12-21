@@ -61,11 +61,6 @@ CPnew.resize(CPnew.n+1); CPnew[CPnew.n-1] = Ny[rowNumber]*Cy[i];
 // update pMatrix
 pMatrix = [IPnew,JPnew,CPnew];
 
-if(writeMatrixToFile)
-{
-writeSparseMatrixToMfile(IP,JP,CP,IP.n,dataFolderName,"pMatrixBeforeWABEBC");
-writeSparseMatrixToMfile(IPnew,JPnew,CPnew,IPnew.n,dataFolderName,"pMatrixAfterWABEBC");
-}
 }
 
 
@@ -76,13 +71,13 @@ real[int]  B =  vB(0,Vh);
 //augmented matrix for pressure equation
 pMatrix =   [[pMatrix,B],
 		[B',0]];
-if(writeMatrixToFile)
+if(saveDataForMATLAB)
 {
 int[int]  I(0);
 int[int]  J(0);
 real[int] C(0);
 [I,J,C] = pMatrix;
-writeSparseMatrixToMfile(I,J,C,I.n,dataFolderName,"pMatrixAugmented");
+writeSparseMatrixToMfile(I,J,C,I.n,"pMatrix",dataFolderName);
 }
 
 

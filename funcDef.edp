@@ -5,9 +5,7 @@ by Longfei Li 12112015
 */
 
 
-
-
-func int writeSparseMatrixToMfile(int[int] I, int[int] J, real[int] C, int sz, string dir,string matrixName)
+func int writeSparseMatrixToMfile(int[int] I, int[int] J, real[int] C, int sz,string matrixName,string dir)
 {
 // this function writes a sparse matrix M = sparse(I,J,C), sz = length(I) 
 // to dir/matrixName.m 
@@ -33,3 +31,28 @@ oFile<< matrixName << " = sparse(I,J,C);\n\n";
 return 0;
 
 }
+
+
+
+
+func int writeRealArrayToMFile(real[int] I,int sz,string arrayName,string dir)
+{
+// This function writes a real array to Dir/arrayNameFile.m 
+string fileName = dir+"/"+arrayName+"File.m";
+ofstream oFile(fileName);
+oFile << arrayName<<"=[";
+for(int i=0;i<sz;i++){oFile<<" "<< I[i]; if(i%10==0 & i>1){oFile<<" ...\n";}}
+oFile << "];\n\n";
+
+return 0;
+}
+
+
+
+
+
+
+
+
+
+

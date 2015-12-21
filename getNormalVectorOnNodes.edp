@@ -21,7 +21,11 @@ real[int] Px=temp[]; // x-coordinates
 temp = y; 
 real[int] Py=temp[]; // y-coordinates
 
-
+if(saveDataForMATLAB)
+{
+writeRealArrayToMFile(Px,Px.n,"x",dataFolderName);
+writeRealArrayToMFile(Py,Py.n,"y",dataFolderName);
+}
 
 for(int i=0;i<Vh.ndof;i++)
 {
@@ -40,12 +44,6 @@ bNodes.resize(bNodes.n+1); // add one more slot in bNodes
 bNodes(bNodes.n-1) = i;    // put the index i in bNodes
 }
 
-bool printNormal=false;
-if(printNormal)
-{
-cout <<"(" <<Px[i] << "," << Py[i] << ")= "
-     <<"(" <<Nx[i] << "," << Ny[i] << "), "
-     <<"label = " << lbValue << endl;
 }
-}
+
 } // variables defined in this file out of scope here

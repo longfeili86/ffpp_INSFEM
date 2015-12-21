@@ -10,9 +10,9 @@ t[cur] = t0;
 // for tz tests, provide previous level from exact solutions as initial conditions
 // since 2 time levels are needed for 2nd order time stepping methods
 
-uh[cur][] = uibFunc(0,t[cur]);
-vh[cur][] = vibFunc(0,t[cur]);
-ph[cur][] = peFunc(t[cur]);
+uh[cur][] = u0Func(t[cur]);
+vh[cur][] = v0Func(t[cur]);
+ph[cur][] = p0Func(t[cur]);
 
 getDUDT(cur);
 

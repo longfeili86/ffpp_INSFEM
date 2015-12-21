@@ -4,7 +4,11 @@ by Longfei Li 12102015
 */
 
 include "funcDef.edp"    //define some utility functions
-
+if(runName=="")
+{
+cout << "runName can not be empty\n";
+assert(false);
+}
 cout << "\n\nSetting up to run: " << runName << endl;
 // create the dataFolder to store results
 string dataFolderName = outputDir+runName;
@@ -16,24 +20,30 @@ mesh Th = readmesh("mesh/"+meshName+".msh");
 assert(splitNumber>=1);
 if (splitNumber>1)
 {
-Th = trunc(Th,1,split=splitNumber);
+Th = trunc(Th,1,split=splitNumber,label=0);
 }
 if(isPlot)
 {
 plot(Th,wait=0, ps=dataFolderName+"/grid.eps");
 }
 
+if(saveDataForMATLAB)
+{
+// save the mesh:
+savemesh(Th,dataFolderName+"/mesh.msh");
+}
+
+cout << "nv = " << Th.nv <<endl;
+cout << "nt  = " << Th.nt <<endl;
+
 
 // define Pn finite element space
+if(pn==3){load "Element_P3"}
+if(pn==4){load "Element_P4"}
 fespace Vh(Th,Pn);
 Vh lb = label;  // label number of all dof, interior=0, otherwise positive int
 Vh h=hTriangle; // size of triangle
 cout << "ndof="<<Vh.ndof<<endl;
-
-
-real ns=0.;  // for stokes equations
-if(NS==true){ns=1;} // for NS equations
-include funcDefFILE
 
 // define some FE functions
 Vh phi;   // basis function
@@ -45,6 +55,10 @@ real[int] Nx(Vh.ndof), Ny(Vh.ndof);  // x and y components of the normal vector
 int[int] bNodes(0);  //global index of boundary nodes
 include "getNormalVectorOnNodes.edp"
 
+
+real ns=0.;  // for stokes equations
+if(NS==true){ns=1;} // for NS equations
+include funcDefFILE
 
 //determine time-step
 real dt=0.;
@@ -60,16 +74,17 @@ matrix vMatrix; //Matrix for momentum equation
 matrix pMatrix; //Matrix for PPE
 include "getvMatrix.edp"
 include "getpMatrix.edp"
+
+
 set(vMatrix,solver=vSOLVER);  // this causes mem leak. A FreeFEM++ bug.
 set(pMatrix,solver=pSOLVER);
-
 
 
 
 real timer=clock();  // timer start
 include "solve.edp"    // solve the INS
 timer=clock()-timer;
-cout << "Total time used for solve: " <<  timer << endl;
+cout << "Total time used to solve: " <<  timer << endl;
 
 
 
