@@ -4,16 +4,24 @@ This files determines the time step.
 by Longfei Li 12102015
 */
 
-
 if (ts=="IMEX" | ts=="IMEXPC")
 {
-	dt = cfl*0.2*h[].min;
-	dt =min(dt,tplot);
+if(useExDt)
+{
+dt = cfl*h[].min*h[].min*0.01/mu;
+dt =min(dt,tf);
 }
 else
 {
-	dt = cfl*h[].min*h[].min*0.01/mu;
-	dt =min(dt,tplot);
+dt = cfl*0.2*h[].min;
+dt =min(dt,tf);
 }
+}
+else
+{
+dt = cfl*h[].min*h[].min*0.01/mu;
+dt =min(dt,tf);
+}
+
 
 

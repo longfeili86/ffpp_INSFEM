@@ -59,6 +59,13 @@ erru = abs(uh[tl]-ue);
 errv = abs(vh[tl]-ve);
 errp = abs(ph[tl]-pe);
 
+cout << "max norm [erru,errv,errp,div] = [" << erru[].max << ", "
+     	     	  		       	       		      << errv[].max << ", "
+							      << errp[].max << ", "
+							      << div[].max << "]\n";
+							      
+
+
 if(isPlot)
 {
 plot(erru,wait=vwait,fill=vfill,value=vvalue,cmm=info+"error u at t="+t[tl],ps=dataFolderName+"/erru"+counter+".eps");

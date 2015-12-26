@@ -1,0 +1,16 @@
+/*
+This mesh moves the square mesh a little bit
+
+by Longfei Li 12222015
+*/
+
+
+mesh Th = readmesh("square.msh");
+
+real c = -0.1;
+func uu=0.;
+func vv=(c*x*(x-1))*y;
+mesh Th1 = movemesh(Th,[x+uu,y+vv]);
+plot(Th);
+plot(Th1);
+savemesh(Th1,"bendedSquare.msh");

@@ -1,0 +1,63 @@
+
+string meshName0="disk0.msh";
+string meshName1="disk1.msh";
+string meshName2="disk2.msh";
+string meshName3="disk3.msh";
+string meshName4="disk4.msh";
+string meshName5="disk5.msh";
+string meshName6="disk6.msh";
+
+
+mesh Th0 = readmesh(meshName0);
+mesh Th1 = readmesh(meshName1);
+mesh Th2 = readmesh(meshName2);
+mesh Th3 = readmesh(meshName3);
+mesh Th4 = readmesh(meshName4);
+mesh Th5 = readmesh(meshName5);
+mesh Th6 = readmesh(meshName6);
+
+
+plot(Th0);
+cout << "Th0.nv = " << Th0.nv << endl;
+
+plot(Th1);
+cout << "Th1.nv = " << Th1.nv << endl;
+
+plot(Th2);
+cout << "Th2.nv = " << Th2.nv << endl;
+
+plot(Th4);
+cout << "Th4.nv = " << Th4.nv << endl;
+
+plot(Th5);
+cout << "Th5.nv = " << Th5.nv << endl;
+
+plot(Th6);
+cout << "Th6.nv = " << Th6.nv << endl;
+
+
+fespace Vh0(Th0,P1);
+fespace Vh1(Th1,P1);
+fespace Vh2(Th2,P1);
+fespace Vh3(Th3,P1);
+fespace Vh4(Th4,P1);
+fespace Vh5(Th5,P1);
+fespace Vh6(Th6,P1);
+
+
+Vh0 h0 = hTriangle;
+Vh1 h1 = hTriangle;
+Vh2 h2 = hTriangle;
+Vh3 h3 = hTriangle;
+Vh4 h4 = hTriangle;
+Vh5 h5 = hTriangle;
+Vh6 h6 = hTriangle;
+
+
+cout <<"h=["<< h0[].max<<", "
+     	    << h1[].max<<", "
+     	    << h2[].max<<", "
+     	    << h3[].max<<", "
+     	    << h4[].max<<", "
+     	    << h5[].max<<", "
+     	    << h6[].max<<"];\n";

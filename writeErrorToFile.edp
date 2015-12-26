@@ -1,0 +1,23 @@
+/*
+This file writes Lmax, L2 and semi H1 norm to file  for tz tests
+
+by Longfei Li 12212015
+*/
+
+
+if(isTwilightzone)
+{
+string fileName = dataFolderName+"/"+runName+"errors.txt";
+cout<<"writing error to: "<<fileName<< endl;
+ofstream oFILE(fileName,append);
+oFILE << "--------------------------------------------->\n";
+oFILE.precision(3);
+oFILE.scientific;
+// max norm
+oFILE  <<erru[].max << "  "<< errv[].max << "  "<< errp[].max<< "  " << div[].max <<endl;
+// L2 norm
+oFILE <<  sqrt(int2d(Th,qforder=10)(erru^2))  << "  "<< sqrt(int2d(Th,qforder=10)(errv^2))  << "  "<< sqrt(int2d(Th,qforder=10)(errp^2)) << "  " << sqrt(int2d(Th,qforder=10)(div^2))  <<endl;
+//H1 seminorm 
+oFILE <<  sqrt(int2d(Th,qforder=10)(dx(erru)*dx(erru)+dy(erru)*dy(erru)) )  << "  "<< sqrt(int2d(Th,qforder=10)(dx(errv)*dx(errv)+dy(errv)*dy(errv)) )  << "  "<< sqrt(int2d(Th,qforder=10)(dx(errp)*dx(errp)+dy(errp)*dy(errp)) ) << "  " <<  0.00 <<endl;
+
+}

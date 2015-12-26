@@ -5,7 +5,7 @@ if 0;
 #  usage: 
 #         generateRunScript -outputDir=<> -runName=<> -mu=<> -rho=<> ....
 #
-
+#  by Longfei Li 12/18/2015
 
 use Getopt::Long qw(GetOptions);
 
@@ -19,6 +19,7 @@ $tf_Val = 0.1;
 $t0_Val = 0.0;
 $cfl_Val = 0.5;
 $ts_Val = "IMEXPC";
+$useExDt_Val = "false";
 $dd_Val = "true";
 $NS_Val = "true";
 $WABE_Val="true"; 
@@ -26,7 +27,7 @@ $quadOrder_Val=10;
 $vSOLVER_Val="UMFPACK";
 $pSOLVER_Val="UMFPACK";
 $pn_Val=1;
-$meshName_Val = "disk";
+$meshName_Val = "square";
 $splitNumber_Val = 1;
 $tplot_Val=0.05;
 $isPlot_Val="true";
@@ -35,25 +36,111 @@ $vfill_Val = "true";
 $vvalue_Val = "true";  
 $saveDataForMATLAB_Val="true";
 $isTwilightzone_Val = "true";
-$funcDefFILE_Val ="tzTrig1Functions.edp";
-$a_Val=0.1;
+$funcDefFILE_Val ="tzTrig1Functions";
+$a_Val=1.;
 $fx_Val=1.;
 $fy_Val=1.;
 $ft_Val=1.2;
 
 
+$run_Val="false"; # run ff++ or not.
+
+GetOptions('outputDir=s'=>\$outputDir_Val,'runName=s'=>\$runName_Val,'mu=f'=>\$mu_Val,'rho=f'=>\$rho_Val,
+'tf=f'=>\$tf_Val,'t0=f'=>\$t0_Val,'cfl=f'=>\$clf_Val,'ts=s'=>\$ts_Val,'useExDt=s'=>\$useExDt_Val,'dd=s'=>\$dd_Val,
+'NS=s'=>\$NS_Val,'WABE=s'=>\$WABE_Val,'quadOder=i'=>\$quadOder_Val,'vSOLVER=s'=>\$vSOLVER_Val,
+'pSOLVER=s'=>\$pSOLVER_Val,'pn=i'=>\$pn_Val,'meshName=s'=>\$meshName_Val,'splitNumber=i'=>\$splitNumber_Val,
+'tplot=f'=>\$tplot_Val,'isPlot=s'=>\$isPlot_Val,'vwait=s'=>\$vwait_Val,'vfill=s'=>\$vfill_Val,'vvalue=s'=>\$vvalue_Val,
+'saveDataForMATLAB=s'=>\$saveDataForMATLAB_Val,'isTwilightzone=s'=>\$isTwilightzone_Val,
+'funcDefFILE=s'=>\$funcDefFILE_Val,'a=f'=>\$a_Val,'fx=f'=>\$fx_Val,'fy=f'=>\$fy_Val,'ft=f'=>\$ft_Val, 'run=s'=>\$run_Val);
+
+#check validity for the input values
+# here smartmatch is used. This feature is in perl experiment. Not supported for older version perl or could be
+# unsuppoted for future versions of perl. 
+# @tsAcceptable = ('FE','AB2','PC2','IMEX','IMEXPC');
+# @boolAcceptable = ('true','false');
+# no warnings 'experimental::smartmatch';
+# if(!($ts_Val~~@tsAcceptable))
+# {
+#     print "Perl Error: ts=$ts_Val is unacceptable. Supported values are:\n";
+#     print "@tsAcceptable\n";
+#     exit;
+# }
+# if(!($dd_Val~~@boolAcceptable))
+# {
+#     print "Perl Error: dd=$dd_Val is unacceptable. Supported values are:\n";
+#     print "@boolAcceptable\n";
+#     exit;
+# }
+# if(!($NS_Val~~@boolAcceptable))
+# {
+#     print "Perl Error: NS=$NS_Val is unacceptable. Supported values are:\n";
+#     print "@boolAcceptable\n";
+#     exit;
+# }
+# if(!($WABE_Val~~@boolAcceptable))
+# {
+#     print "Perl Error: WABE=$WABE_Val is unacceptable. Supported values are:\n";
+#     print "@boolAcceptable\n";
+#     exit;
+# }
+# if(!($isPlot_Val~~@boolAcceptable))
+# {
+#     print "Perl Error: isPlot=$isPlot_Val is unacceptable. Supported values are:\n";
+#     print "@boolAcceptable\n";
+#     exit;
+# }
+# if(!($vwait_Val~~@boolAcceptable))
+# {
+#     print "Perl Error: vwait=$vwait_Val is unacceptable. Supported values are:\n";
+#     print "@boolAcceptable\n";
+#     exit;
+# }
+# if(!($vfill_Val~~@boolAcceptable))
+# {
+#     print "Perl Error: vfill=$vfill_Val is unacceptable. Supported values are:\n";
+#     print "@boolAcceptable\n";
+#     exit;
+# }
+# if(!($vvalue_Val~~@boolAcceptable))
+# {
+#     print "Perl Error: vvalue=$vvalue_Val is unacceptable. Supported values are:\n";
+#     print "@boolAcceptable\n";
+#     exit;
+# }
+# if(!($saveDataForMATLAB_Val~~@boolAcceptable))
+# {
+#     print "Perl Error: saveDataForMATLAB=$saveDataForMATLAB_Val is unacceptable. Supported values are:\n";
+#     print "@boolAcceptable\n";
+#     exit;
+# }
+# if(!($isTwilightzone_Val~~@boolAcceptable))
+# {
+#     print "Perl Error: isTwilightzone=$isTwilightzone_Val is unacceptable. Supported values are:\n";
+#     print "@boolAcceptable\n";
+#     exit;
+# }
+# if(!($run_Val~~@boolAcceptable))
+# {
+#     print "Perl Error: run=$run_Val is unacceptable. Supported values are:\n";
+#     print "@boolAcceptable\n";
+#     exit;
+# }
 
 
-GetOptions('cmd=s'=>\$cmdFile,'grid=s'=>\$gN);
+
+$suffix = ".edp";
+if (index($funcDefFILE_Val, $suffix) == -1) {
+    print "perl: adding $suffix to $funcDefFILE_Val\n";
+    $funcDefFILE_Val =$funcDefFILE_Val.$suffix;
+} 
 
 
 
 
 
-
-$filename = $runName_Val."_runScript.edp";
+$fileName = $runName_Val."_runScript.edp";
 $timeString = localtime();
-open($OUTFILE,'>',$filename);     #> overwrite, >> append
+open($OUTFILE,'>',$fileName) || die "cannot open file $fileName!" ;     #> overwrite, >> append
 print $OUTFILE "/*
 This script was gerenerated by generateRunScript.pl  
 ============================================================================
@@ -79,6 +166,7 @@ real tf=$tf_Val; // finial time
 real t0=$t0_Val; // initial time
 real cfl=$cfl_Val; // fraction of the computed dt to use, i.e., dt = cfl*dt;
 string ts=\"$ts_Val\"; // time-stepping method. Support: FE,AB2,PC2, IMEX, IMEXPC
+bool useExDt = $useExDt_Val;  // use the same dt as Explicit methods for IMEX methods				     
 bool dd=$dd_Val; // divergence damping option
 bool NS =$NS_Val; // Navier-Stokes or Stokes
 bool WABE=$WABE_Val; // WABE or TN pressure boundary conditions
@@ -124,19 +212,14 @@ include \"setup.edp\"
 ";
 
 
-
-
-
-
-
-
-
-
-
 close $OUTFILE; 
 
 
-
+if($run_Val eq "true")
+{
+    print "run: FreeFEM++ $fileName\n";
+    system("FreeFEM++",$fileName) ;
+}
 
 
 

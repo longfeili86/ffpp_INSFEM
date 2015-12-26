@@ -1,0 +1,177 @@
+//this file test the solution of possion with neumann BC
+
+int quadOrder=10;
+real[int] maxError(9);
+real[int] L2Error(9);
+bool isNbc=false;
+
+
+for(int ii =0; ii<6; ii++){
+
+int ns = 10*2^(ii);
+//mesh Th = square(ns,ns);
+mesh Th=readmesh("disk0.msh");
+int splitNumber = 2^ii;
+Th = trunc(Th,1,split=splitNumber,label=0);
+
+
+plot(Th);
+
+load "Element_P3"
+fespace Vh(Th,P1);
+int n =Vh.ndof;
+cout << "ndof=" << n << endl;
+Vh epsilon=0*hTriangle^2;
+
+Vh exactP,exactPx,exactPy,f;
+real t = .1;
+real  fx = 1., ft = 1.2, a=1.; //tzTrig
+//real  fx = 2.3, ft = 2.3, a=.5; //tzTrig2
+exactP = a*cos(pi*ft*t)*cos(pi*fx*x)*cos(pi*fx*y);
+exactPx = -pi*a*fx*sin(pi*fx*x)*cos(pi*ft*t)*cos(pi*fx*y);
+exactPy = -pi*a*fx*sin(pi*fx*y)*cos(pi*ft*t)*cos(pi*fx*x);
+f= -2*pi^2*a*fx^2*cos(pi*ft*t)*cos(pi*fx*x)*cos(pi*fx*y);
+
+
+Vh p, phi;
+
+
+varf stiff(p,phi) = int2d(Th,qforder=quadOrder)(dx(p)*dx(phi)+dy(p)*dy(phi));
+varf vPForcing(unused,phi) = int2d(Th,qforder=quadOrder)(f*phi);
+varf vPressureBC(unused,phi) = int1d(Th,qforder=quadOrder)((exactPx*N.x+exactPy*N.y)*phi);
+
+
+Vh rhsp,temp;
+
+matrix S = stiff(Vh,Vh);
+rhsp[] = vPForcing(0,Vh); 
+
+
+
+if(isNbc)
+{
+
+// pressure matrix
+varf vB(unused,phi)= int2d(Th,qforder=quadOrder)(1.*phi); // pressure constraint 
+real[int]  B =  vB(0,Vh);
+
+//augmented matrix for pressure equation
+matrix negS = -S;
+matrix Saug = [[negS,B],
+		[B',0]];
+set(Saug,solver=UMFPACK);
+real[int]  RHSaug(B.n+1),Paug(B.n+1),Pint(1),P0(1);
+
+temp=0;
+temp[] = vPressureBC(0,Vh);
+rhsp[]-=temp[];
+
+rhsp[]+=epsilon[];
+		
+Pint = B'*exactP[];
+RHSaug = [ rhsp[], Pint];
+Paug = Saug^-1*RHSaug;
+[p[],P0] = Paug;  // set the value
+
+}
+else
+{
+Vh lb = label;  // label number of all dof, interior=0, otherwise positive int
+int[int] bNodes(0);  //global index of boundary nodes
+
+// get boundary nodes:
+for(int i=0;i<Vh.ndof;i++)
+{
+int lbValue = lb[][i];
+if(lbValue>0)  //boundary nodes
+{
+bNodes.resize(bNodes.n+1); // add one more slot in bNodes
+bNodes(bNodes.n-1) = i;    // put the index i in bNodes
+}
+}
+
+
+matrix negS = -S;
+
+//======== implement dir bc for matrix ====
+// implement BC 
+int [int] I(0), Inew(0);
+int [int] J(0), Jnew(0);
+real[int] C(0), Cnew(0);
+[I,J,C] = negS;  
+
+//make a copy of interior rows
+for(int i=0;i<I.n;i++)
+{
+int rowNumber = I[i];
+if(lb[][rowNumber]==0)  // interior equations
+{
+// If rowNumber is interior, the matrix is unchanged
+Inew.resize(Inew.n+1); Inew[Inew.n-1] = I[i];
+Jnew.resize(Jnew.n+1); Jnew[Jnew.n-1] = J[i];
+Cnew.resize(Cnew.n+1); Cnew[Cnew.n-1] = C[i];	  
+}
+}
+
+// get boundary rows. Use boundary rows from identity matrix
+real[int] Cb(bNodes.n);
+Cb=1.; 
+
+//combine interior rows and boundary rows
+Inew = [Inew,bNodes];
+Jnew = [Jnew,bNodes];
+Cnew = [Cnew,Cb];
+
+//update vMatrix
+negS=[Inew,Jnew,Cnew];
+//=======================
+
+set(negS,solver=UMFPACK);
+
+//====== bc for rhsp
+//loop over all the boundary nodes
+for(int i=0; i<bNodes.n;i++)
+{
+int gIndex = bNodes[i]; //global index of the boundary nodes
+
+rhsp[][gIndex]=exactP[][gIndex];  
+}
+//=========
+
+
+p[] = negS^-1*rhsp[];
+
+
+}
+
+
+
+
+
+Vh errorP;
+errorP = p-exactP;
+errorP = abs(errorP);
+
+plot(errorP,wait=1,dim=2,fill=1,value=1,cmm="Error P");
+plot(p,wait=1,dim=2,fill=1,value=1,cmm="P");
+
+maxError(ii) = errorP[].max;
+L2Error(ii) = sqrt(int2d(Th,qforder=10)(errorP^2)) ;
+
+cout << "error max: " << errorP[].max << endl;
+cout << "error l2: " << sqrt(int2d(Th,qforder=10)(errorP^2)) << endl;
+
+}
+
+
+
+cout << "maxError= " << maxError << endl;
+cout << "L2Error= " << L2Error << endl;
+
+
+
+
+
+
+
+

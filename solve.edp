@@ -14,7 +14,7 @@ int nstep = tf/dt+0.5;    // total number of steps
 
 if(saveDataForMATLAB)
 {
-real[int] timeInfo=[t0,tplot,tf];
+real[int] timeInfo=[t0,dt,tplot,tf];
 writeRealArrayToMFile(timeInfo,timeInfo.n,"timeInfo",dataFolderName);
 }
 
@@ -72,6 +72,12 @@ include "advance.edp"
 stepTimer = clock()-stepTimer;
 //cout << "Computational time for step " << step+1 <<" : " << stepTimer << endl;
 
+// report current time every 20 steps
+if(step%20==0)
+{
+cout << "current time = " << t[cur] << endl;
+}
+
 if((step%pstep)==0)
 {
 // plot solutions, div, errors(if tz) and save a copy of eps file.
@@ -79,3 +85,8 @@ int counter = step/pstep;
 include "plotOrSaveResults.edp"  
 }
 }
+
+// output error to file for tz tests.
+include "writeErrorToFile.edp"
+
+

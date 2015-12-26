@@ -23,6 +23,7 @@ real t0=0.;		              // initial time
 real cfl=0.5;                    // fraction of the computed dt to use, i.e., dt = cfl*dt;
 string ts = "PC2";     // time-stepping method
        	    		             // support: FE,AB2,PC2, IMEX, IMEXPC
+bool useExDt = false;  // use the same dt as Explicit methods for IMEX methods				     
 bool dd=true;             // divergence damping option
 bool NS = true;	  // Navier-Stokes or Stokes
 bool WABE=true;           // WABE or TN pressure boundary conditions
