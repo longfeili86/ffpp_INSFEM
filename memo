@@ -11,6 +11,9 @@ convRate.pl -runName=tzTrig1P1WABEPC2Square -funcDefFILE=tzTrig1Functions -pn=1 
 convRate.pl -runName=tzTrig1P1WABEIMEXPCSquare -funcDefFILE=tzTrig1Functions -pn=1 -WABE=true -ts=IMEXPC  -meshName=square -tf=.1 -useExDt=true -cfl=10. -isPlot=false 
 
 
+convRate.pl -runName=tzTrig1P1WABEIMEXPCnoddSquare -funcDefFILE=tzTrig1Functions -pn=1 -WABE=true -ts=IMEXPC -dd=false  -meshName=square -tf=.1 -useExDt=true -cfl=10. -isPlot=false 
+
+
 
 
 2. P2
