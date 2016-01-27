@@ -2,8 +2,8 @@
 
 mesh Th = square(2,2);
 
-fespace Vh(Th,P1,periodic=[[2,y],[4,y]]);
-
+//fespace Vh(Th,P1,periodic=[[2,y],[4,y]]);
+fespace Vh(Th,P1);
 
 Vh xx = x;
 Vh yy = y;
