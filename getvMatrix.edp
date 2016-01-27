@@ -7,7 +7,7 @@ by Longfei Li 12112015
 
 {
 vMatrix = rho*M;
-if(ts=="IMEX" | ts=="IMEXPC")
+if(ts=="IMEX " | ts=="IMEXPC")
 {
 vMatrix = vMatrix+0.5*dt*mu*S;
 }
@@ -19,12 +19,15 @@ int [int] J(0), Jnew(0);
 real[int] C(0), Cnew(0);
 [I,J,C] = vMatrix;  
 
-
 //make a copy of interior rows
 for(int i=0;i<I.n;i++)
 {
 int rowNumber = I[i];
-if(lb[][rowNumber]==0)  // interior equations
+
+bool isBoundaryNodes=false;
+checkIsBoundaryNode(rowNumber);  // check if node rowNumber is a boundary node
+
+if(!isBoundaryNodes)  // interior equations
 {
 // If rowNumber is interior, the matrix is unchanged
 Inew.resize(Inew.n+1); Inew[Inew.n-1] = I[i];

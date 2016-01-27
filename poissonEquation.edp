@@ -1,7 +1,7 @@
 //this file test the solution of possion with  various bc on a unit square
 
 int quadOrder=10;
-int bcType = 0;  // 0: periodic + neumann, 1: all neumann bc, 2: all dirichlet bc,
+int bcType = 1;  // 0: periodic + neumann, 1: all neumann bc, 2: all dirichlet bc,
 
 int buffer = 10;
 real[int] maxError(buffer);
@@ -18,7 +18,7 @@ func Pey = -pi*a*fx*sin(pi*fx*y)*cos(pi*ft*t)*cos(pi*fx*x);
 func fe = -2*pi^2*a*fx^2*cos(pi*ft*t)*cos(pi*fx*x)*cos(pi*fx*y);
 
 
-for(int ii =0; ii<6; ii++){
+for(int ii =1; ii<2; ii++){
 
 int ns = 10*2^(ii);
 mesh Th = square(ns,ns);

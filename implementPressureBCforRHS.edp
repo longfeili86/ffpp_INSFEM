@@ -48,10 +48,19 @@ rhsp[gIndex]=wabeBC[gIndex];
 else
 {
 // TN bc for pressure
+if (periodic)
+{
+// for periodic: only side 1 and 3 are boundaries
+varf TNbcVarf(unused,phi) = int1d(Th,1,3,qforder=quadOrder)(-(N.x*(-rho*ubt-ns*rho*(uh[new]*dx(uh[new])+vh[new]*dy(uh[new]))+fu)+N.y*(-rho*vbt-ns*rho*(uh[new]*dx(vh[new])+vh[new]*dy(vh[new]))+fv))*phi)+int1d(Th,1,3,qforder=quadOrder)(-mu*(dx(vh[new])-dy(uh[new]))*(-dx(phi)*N.y+dy(phi)*N.x));
+
+rhsp += TNbcVarf(0,Vh);
+}
+else
+{
 varf TNbcVarf(unused,phi) = int1d(Th,qforder=quadOrder)(-(N.x*(-rho*ubt-ns*rho*(uh[new]*dx(uh[new])+vh[new]*dy(uh[new]))+fu)+N.y*(-rho*vbt-ns*rho*(uh[new]*dx(vh[new])+vh[new]*dy(vh[new]))+fv))*phi)+int1d(Th,qforder=quadOrder)(-mu*(dx(vh[new])-dy(uh[new]))*(-dx(phi)*N.y+dy(phi)*N.x));
 
 rhsp += TNbcVarf(0,Vh);
-
+}
 }
 
 

@@ -23,7 +23,9 @@ real[int] Cx(0), Cy(0), CP(0), CPnew(0);
 for(int i=0;i<IP.n;i++)
 {
 int rowNumber = IP(i);
-if(lb[][rowNumber]==0)  // interior equations
+bool isBoundaryNodes=false;
+checkIsBoundaryNode(rowNumber);  // check if node rowNumber is a boundary node
+if(!isBoundaryNodes)  // interior equations
 {
 // If rowNumber is interior, the matrix is unchanged
 IPnew.resize(IPnew.n+1); IPnew[IPnew.n-1] = IP[i];
@@ -38,7 +40,9 @@ CPnew.resize(CPnew.n+1); CPnew[CPnew.n-1] = CP[i];
 for (int i =0;i<Ix.n;i++)
 {
 int rowNumber = Ix[i];
-if(lb[][rowNumber]>0) //boundary nodes
+bool isBoundaryNodes=false;
+checkIsBoundaryNode(rowNumber);  // check if node rowNumber is a boundary node
+if(isBoundaryNodes) //boundary nodes
 {
 IPnew.resize(IPnew.n+1); IPnew[IPnew.n-1] = Ix[i];
 JPnew.resize(JPnew.n+1); JPnew[JPnew.n-1] = Jx[i];
@@ -50,7 +54,9 @@ CPnew.resize(CPnew.n+1); CPnew[CPnew.n-1] = Nx[rowNumber]*Cx[i];
 for (int i =0;i<Iy.n;i++)
 {
 int rowNumber = Iy[i];
-if(lb[][rowNumber]>0) //boundary nodes
+bool isBoundaryNodes=false;
+checkIsBoundaryNode(rowNumber);  // check if node rowNumber is a boundary node
+if(isBoundaryNodes) //boundary nodes
 {
 IPnew.resize(IPnew.n+1); IPnew[IPnew.n-1] = Iy[i];
 JPnew.resize(JPnew.n+1); JPnew[JPnew.n-1] = Jy[i];

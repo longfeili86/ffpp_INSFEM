@@ -38,8 +38,8 @@ $saveDataForMATLAB_Val="true";
 $isTwilightzone_Val = "true";
 $funcDefFILE_Val ="tzTrig1Functions";
 $a_Val=1.;
-$fx_Val=1.;
-$fy_Val=1.;
+$fx_Val=2.;
+$fy_Val=2.;
 $ft_Val=1.2;
 $periodic_Val = "false";  
 

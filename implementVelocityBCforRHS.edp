@@ -8,7 +8,6 @@ by Longfei Li 12162015
 
 
 {
-int numberOfBoundaries = lb[].max;
 // boundary functions for u and v
 Vh ub;
 Vh vb;

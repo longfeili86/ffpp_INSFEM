@@ -37,8 +37,10 @@ Nx[i] /= Nnorm;      //normalize the vector
 Ny[i] /= Nnorm;
 }
 
-int lbValue = lb[][i];
-if(lbValue>0)  //boundary nodes
+bool isBoundaryNodes=false;
+checkIsBoundaryNode(i);  // check if node i is a boundary node
+
+if(isBoundaryNodes)  //boundary nodes
 {
 bNodes.resize(bNodes.n+1); // add one more slot in bNodes
 bNodes(bNodes.n-1) = i;    // put the index i in bNodes

@@ -51,6 +51,28 @@ return 0;
 
 
 
+//check if a node i is a boundary nodes
+macro checkIsBoundaryNode(i)
+{
+int lbValue = lb[][i];
+if(periodic)
+{
+isBoundaryNodes= (lbValue==1 | lbValue==3);
+}
+else
+{
+isBoundaryNodes = (lbValue>0);
+}
+
+} //EOM
+
+
+
+
+
+
+
+
 
 
 

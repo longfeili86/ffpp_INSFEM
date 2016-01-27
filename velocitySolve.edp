@@ -10,3 +10,6 @@ include "implementVelocityBCforRHS.edp"  //implement Dirichlet BC for velocity r
 uh[new][] = vMatrix^-1*rhsu[];
 vh[new][] = vMatrix^-1*rhsv[];
 } // varibles defined in this file go out of scope here
+
+uh[new][] = ueFunc(t[new]);
+vh[new][] = veFunc(t[new]);

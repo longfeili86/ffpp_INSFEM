@@ -1,5 +1,5 @@
 /*
-This file defines the getDUDT functions for u,v.
+This file defines the getDUDT macros for u,v.
 Note that the invisid and visid parts of the DUDT are updated separately,
 which is convenient for various time-stepping methods.
 
