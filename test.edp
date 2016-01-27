@@ -1,8 +1,19 @@
-mesh Th1=readmesh("refined.msh");
-mesh Th2=readmesh("mesh/testMesh1.msh");
+
+
+mesh Th = square(2,2);
+
+fespace Vh(Th,P1,periodic=[[2,y],[4,y]]);
+
+
+Vh xx = x;
+Vh yy = y;
+Vh lb = label;
+
+cout << xx[] << endl;
+cout << yy[] << endl;
+cout << lb[] << endl;
 
 
 
-plot(Th1,cmm="Th1");
 
-plot(Th2,cmm="Th2");
+plot(Th);

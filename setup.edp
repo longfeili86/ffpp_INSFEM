@@ -40,7 +40,7 @@ cout << "nt  = " << Th.nt <<endl;
 // define Pn finite element space
 if(pn==3){load "Element_P3"}
 if(pn==4){load "Element_P4"}
-fespace Vh(Th,Pn);
+fespace VH;
 Vh lb = label;  // label number of all dof, interior=0, otherwise positive int
 Vh h=hTriangle; // size of triangle
 cout << "ndof="<<Vh.ndof<<endl;
@@ -70,6 +70,7 @@ matrix M,S,Lx,Ly,Sxx,Sxy,Syy;
 include "getFEMMatrices.edp"
 
 //construct matrices for momentum equations and PPE
+//boundary condition for the matrices is implemented here
 matrix vMatrix; //Matrix for momentum equation
 matrix pMatrix; //Matrix for PPE
 include "getvMatrix.edp"

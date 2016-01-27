@@ -32,6 +32,8 @@ macro vSOLVER CG    //EOM //solver for velocity
 macro pSOLVER UMFPACK    //EOM //solver for pressure
 macro Pn P1              //EOM //use Pn finite-element space. P1,...,P4
 int pn = 1;                   //need to specify pn in int as well due to FF++ syntax
+bool periodic = false;   // use periodic bc on left and right sides of unit square
+macro VH   Vh(Th,Pn)  //EOM //define fespace
 
 // mesh options
 string meshName = "square";   //name of the mesh. A meshName.msh file must be created first in mesh/
@@ -61,6 +63,10 @@ macro funcDefFILE()  "tzTrig1Functions.edp"   //EOM  //modify the file name betw
 real a=0.1;
 real fx=1.;
 real ft=1.2;
+
+
+
+
 
 
 

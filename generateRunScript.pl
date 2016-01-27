@@ -41,7 +41,7 @@ $a_Val=1.;
 $fx_Val=1.;
 $fy_Val=1.;
 $ft_Val=1.2;
-
+$periodic_Val = "false";  
 
 $run_Val="false"; # run ff++ or not.
 
@@ -51,8 +51,18 @@ GetOptions('outputDir=s'=>\$outputDir_Val,'runName=s'=>\$runName_Val,'mu=f'=>\$m
 'pSOLVER=s'=>\$pSOLVER_Val,'pn=i'=>\$pn_Val,'meshName=s'=>\$meshName_Val,'splitNumber=i'=>\$splitNumber_Val,
 'tplot=f'=>\$tplot_Val,'isPlot=s'=>\$isPlot_Val,'vwait=s'=>\$vwait_Val,'vfill=s'=>\$vfill_Val,'vvalue=s'=>\$vvalue_Val,
 'saveDataForMATLAB=s'=>\$saveDataForMATLAB_Val,'isTwilightzone=s'=>\$isTwilightzone_Val,
-'funcDefFILE=s'=>\$funcDefFILE_Val,'a=f'=>\$a_Val,'fx=f'=>\$fx_Val,'fy=f'=>\$fy_Val,'ft=f'=>\$ft_Val, 'run=s'=>\$run_Val);
+'funcDefFILE=s'=>\$funcDefFILE_Val,'a=f'=>\$a_Val,'fx=f'=>\$fx_Val,'fy=f'=>\$fy_Val,'ft=f'=>\$ft_Val, 'run=s'=>\$run_Val,'periodic=s'=>\$periodic_Val);
 
+# update some other variables
+$VH_Val = "Vh(Th,Pn)";
+if($periodic_Val eq "true")
+{
+    $VH_Val = "Vh(Th,Pn,periodic=[[2,y],[4,y]])";
+    print "INFO:\n";
+    print "use periodic bc for the left and right side of the square\n";
+    print "I'm not checking if the problem makes sense. \n";
+    print "Make sure the exact solution is periodic in [0,1] in x direction if run  TZtests\n";
+}
 #check validity for the input values
 # here smartmatch is used. This feature is in perl experiment. Not supported for older version perl or could be
 # unsuppoted for future versions of perl. 
@@ -130,7 +140,7 @@ GetOptions('outputDir=s'=>\$outputDir_Val,'runName=s'=>\$runName_Val,'mu=f'=>\$m
 
 $suffix = ".edp";
 if (index($funcDefFILE_Val, $suffix) == -1) {
-    print "perl: adding $suffix to $funcDefFILE_Val\n";
+    # print "perl: adding $suffix to $funcDefFILE_Val\n";
     $funcDefFILE_Val =$funcDefFILE_Val.$suffix;
 } 
 
@@ -175,6 +185,8 @@ macro vSOLVER $vSOLVER_Val //EOM //solver for velocity
 macro pSOLVER $pSOLVER_Val //EOM //solver for pressure
 macro Pn P$pn_Val //EOM //use Pn finite-element space. P1,...,P4
 int pn = $pn_Val; //need to specify pn in int as well due to FF++ syntax
+bool periodic = $periodic_Val; // use periodic bc on left and right sides of unit square
+macro VH $VH_Val  //EOM //define fespace
 \n
 // mesh options
 string meshName = \"$meshName_Val\"; //name of the mesh. A meshName.msh file must be created first in mesh/
@@ -212,7 +224,10 @@ include \"setup.edp\"
 ";
 
 
+
 close $OUTFILE; 
+
+print "runScript generated: $fileName \n";
 
 
 if($run_Val eq "true")

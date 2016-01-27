@@ -7,15 +7,15 @@ by Longfei Li 12152015
 t[cur] = t0;
 
 
-// for tz tests, provide previous level from exact solutions as initial conditions
-// since 2 time levels are needed for 2nd order time stepping methods
-
 uh[cur][] = u0Func(t[cur]);
 vh[cur][] = v0Func(t[cur]);
 ph[cur][] = p0Func(t[cur]);
 
 getDUDT(cur);
 
+
+// for tz tests, provide previous level from exact solutions as initial conditions
+// since 2 time levels are needed for 2nd order time stepping methods
 if(isTwilightzone)
 {
 t[prev] = t[cur]-dt;
