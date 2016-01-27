@@ -11,7 +11,7 @@
 
 
 
-for($i=0;$i<3;$i++)
+for($i=0;$i<4;$i++)
 {
     $sn = 2**$i;
     $cmd = "generateRunScript.pl @ARGV -splitNumber=$sn -run=true";

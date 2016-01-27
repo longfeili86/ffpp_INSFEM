@@ -16,16 +16,8 @@ varf nyVarf(unsued,phi)=int1d(Th,qforder=quadOrder)(N.y*phi);
 
 Nx = nxVarf(0,Vh);
 Ny = nyVarf(0,Vh);
-temp = x; 
-real[int] Px=temp[]; // x-coordinates
-temp = y; 
-real[int] Py=temp[]; // y-coordinates
 
-if(saveDataForMATLAB)
-{
-writeRealArrayToMFile(Px,Px.n,"x",dataFolderName);
-writeRealArrayToMFile(Py,Py.n,"y",dataFolderName);
-}
+
 
 for(int i=0;i<Vh.ndof;i++)
 {
@@ -47,5 +39,25 @@ bNodes(bNodes.n-1) = i;    // put the index i in bNodes
 }
 
 }
+
+//fix corner normal
+if(periodic)
+{
+for(int b=0; b<bNodes.n;b++)
+{
+int gIndex = bNodes[b]; //global index of the boundary nodes
+if(Px[gIndex]==1 & Py[gIndex]==0)
+{
+Nx[gIndex]=0;
+Ny[gIndex]=-1;
+}
+if(Px[gIndex]==1 & Py[gIndex]==1)
+{
+Nx[gIndex]=0;
+Ny[gIndex]=1;
+}
+}
+}
+
 
 } // variables defined in this file out of scope here

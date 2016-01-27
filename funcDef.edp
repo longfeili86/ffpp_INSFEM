@@ -55,10 +55,10 @@ return 0;
 macro checkIsBoundaryNode(i)
 {
 int lbValue = lb[][i];
-Vh xx=x,yy=y;
+
 if(periodic)
 {
-isBoundaryNodes=( (lbValue==1 | lbValue==3) |( xx[][i]==1 & yy[][i]==0));
+isBoundaryNodes=( (lbValue==1 | lbValue==3) |( Px[i]==1 & Py[i]==0));
 }
 else
 {

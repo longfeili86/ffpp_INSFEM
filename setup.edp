@@ -53,6 +53,16 @@ Vh temp;  // a temp FE function to hold stuff
 //get the normal vector on all nodes. For interoir nodes n=(0,0).
 real[int] Nx(Vh.ndof), Ny(Vh.ndof);  // x and y components of the normal vector
 int[int] bNodes(0);  //global index of boundary nodes
+temp = x; 
+real[int] Px=temp[]; // x-coordinates
+temp = y; 
+real[int] Py=temp[]; // y-coordinates
+if(saveDataForMATLAB)
+{
+writeRealArrayToMFile(Px,Px.n,"x",dataFolderName);
+writeRealArrayToMFile(Py,Py.n,"y",dataFolderName);
+}
+
 include "getNormalVectorOnNodes.edp"
 
 
