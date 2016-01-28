@@ -22,10 +22,10 @@ if(WABE)
 {
 Vh ut,vt;
 // extrapolate ut,vt
-//ut = (2*uh[new]-3*uh[cur]+uh[prev])/dt;
-//vt = (2*vh[new]-3*vh[cur]+vh[prev])/dt;
-ut = (uh[new]-uh[cur])/dt;
-vt = (vh[new]-vh[cur])/dt;
+ut = (2*uh[new]-3*uh[cur]+uh[prev])/dt;
+vt = (2*vh[new]-3*vh[cur]+vh[prev])/dt;
+//ut = (uh[new]-uh[cur])/dt;
+//vt = (vh[new]-vh[cur])/dt;
 
 // WABE bc for pressure
 varf wabe1Varf(unused,phi) = int2d(Th,qforder=quadOrder)((-rho*ut-ns*rho*(uh[new]*dx(uh[new])+vh[new]*dy(uh[new]))+fu)*phi)-int2d(Th,qforder=quadOrder)(mu*(dy(uh[new])-dx(vh[new]))*dy(phi))+int1d(Th,qforder=quadOrder)(mu*N.y*(dy(uh[new])-dx(vh[new]))*phi);
