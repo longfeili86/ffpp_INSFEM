@@ -2,8 +2,8 @@
 
 mesh Th = square(2,2);
 
-//fespace Vh(Th,P1,periodic=[[2,y],[4,y]]);
-fespace Vh(Th,P1);
+fespace Vh(Th,P1,periodic=[[2,y],[4,y]]);
+//fespace Vh(Th,P1);
 
 Vh xx = x;
 Vh yy = y;
@@ -14,6 +14,12 @@ cout << yy[] << endl;
 cout << lb[] << endl;
 
 
+Vh phi;
 
+varf aa(unused,phi) = int2d(Th)(phi);
+
+real[int] cc(Vh.ndof);
+cc = aa(0,Vh);
+cout <<cc << endl;
 
 plot(Th);
