@@ -16,8 +16,16 @@ convRate.pl -runName=tzTrig1P1WABEIMEXPCnoddSquare -funcDefFILE=tzTrig1Functions
 
 
 
-2. P2
-convRate.pl -runName=tzTrig1P2TNIMEXPCSquare -funcDefFILE=tzTrig1Functions -pn=2 -WABE=false -ts=IMEXPC  -meshName=square -tf=.1 -useExDt=true -cfl=10. -isPlot=false
+1. periodic Square
+convRate.pl -runName=tzTrig1P1TNPC2SquarePD -funcDefFILE=tzTrig1Functions -pn=1 -WABE=false -ts=PC2  -meshName=square -tf=.1 -isPlot=false -periodic=true
 
-convRate.pl -runName=tzTrig1P2WABEIMEXPCSquare -funcDefFILE=tzTrig1Functions -pn=2 -WABE=true -ts=IMEXPC  -meshName=square -tf=.1 -useExDt=true -cfl=10. -isPlot=false 
+convRate.pl -runName=tzTrig1P1TNIMEXPCSquarePDexdt -funcDefFILE=tzTrig1Functions -pn=1 -WABE=false -ts=IMEXPC  -meshName=square -tf=.1 -useExDt=true -cfl=10. -isPlot=false -periodic=true
 
+convRate.pl -runName=tzTrig1P1TNIMEXPCSquarePD -funcDefFILE=tzTrig1Functions -pn=1 -WABE=false -ts=IMEXPC  -meshName=square -tf=.1 -isPlot=false -periodic=true
+
+
+convRate.pl -runName=tzTrig1P1WABEPC2SquarePD -funcDefFILE=tzTrig1Functions -pn=1 -WABE=true -ts=PC2  -meshName=square -tf=.1 -isPlot=false -periodic=true
+
+convRate.pl -runName=tzTrig1P1WABEIMEXPCSquarePDexdt -funcDefFILE=tzTrig1Functions -pn=1 -WABE=true -ts=IMEXPC  -meshName=square -tf=.1 -useExDt=true -cfl=10. -isPlot=false -periodic=true
+
+convRate.pl -runName=tzTrig1P1WABEIMEXPCSquarePD -funcDefFILE=tzTrig1Functions -pn=1 -WABE=true -ts=IMEXPC  -meshName=square -tf=.1 -useExDt=true -cfl=10. -isPlot=false -periodic=true
