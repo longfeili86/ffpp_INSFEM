@@ -24,18 +24,40 @@ Vh ut,vt;
 // extrapolate ut,vt
 //ut = (2*uh[new]-3*uh[cur]+uh[prev])/dt;
 //vt = (2*vh[new]-3*vh[cur]+vh[prev])/dt;
-ut = (uh[new]-uh[cur])/dt;
-vt = (vh[new]-vh[cur])/dt;
+//ut = (uh[new]-uh[cur])/dt;
+//vt = (vh[new]-vh[cur])/dt;
+ut=ubt;
+vt=vbt;
+//ut=0;
+//vt=0;
 
 // WABE bc for pressure
-varf wabe1Varf(unused,phi) = int2d(Th,qforder=quadOrder)((-rho*ut-ns*rho*(uh[new]*dx(uh[new])+vh[new]*dy(uh[new]))+fu)*phi)-int2d(Th,qforder=quadOrder)(mu*(dy(uh[new])-dx(vh[new]))*dy(phi));//+int1d(Th,qforder=quadOrder)(mu*N.y*(dy(uh[new])-dx(vh[new]))*phi);
-varf wabe2Varf(unused,phi) = int2d(Th,qforder=quadOrder)((-rho*vt-ns*rho*(uh[new]*dx(vh[new])+vh[new]*dy(vh[new]))+fv)*phi)-int2d(Th,qforder=quadOrder)(mu*(dx(vh[new])-dy(uh[new]))*dx(phi));//+int1d(Th,qforder=quadOrder)(mu*N.x*(dx(vh[new])-dy(uh[new]))*phi);
+real[int] wabe1BC(Vh.ndof), wabe2BC(Vh.ndof), wabeBC(Vh.ndof);
+if(false) // real wabe bc
+{
+varf wabe1Varf(unused,phi) = int2d(Th,qforder=quadOrder)((-rho*ut-ns*rho*(uh[new]*dx(uh[new])+vh[new]*dy(uh[new]))+fu)*phi)-int2d(Th,qforder=quadOrder)(mu*(dy(uh[new])-dx(vh[new]))*dy(phi))+int1d(Th,qforder=quadOrder)(mu*N.y*(dy(uh[new])-dx(vh[new]))*phi);
+varf wabe2Varf(unused,phi) = int2d(Th,qforder=quadOrder)((-rho*vt-ns*rho*(uh[new]*dx(vh[new])+vh[new]*dy(vh[new]))+fv)*phi)-int2d(Th,qforder=quadOrder)(mu*(dx(vh[new])-dy(uh[new]))*dx(phi))+int1d(Th,qforder=quadOrder)(mu*N.x*(dx(vh[new])-dy(uh[new]))*phi);
 
-real[int] wabe1BC=wabe1Varf(0,Vh);
+wabe1BC=wabe1Varf(0,Vh);
 wabe1BC.*=Nx;
-real[int] wabe2BC=wabe2Varf(0,Vh);
+wabe2BC=wabe2Varf(0,Vh);
+wabe2BC.*=Ny;
+wabeBC = wabe1BC+wabe2BC;
+}
+else // provide exact dpdn
+{
+// test provide exact dpdn for wabe bc
+Vh pex,pey;
+pex =  a*pi*fx*cos(pi*fx*x)*cos(pi*ft*t[new])*cos(pi*fx*y);
+pey =  -a*pi*fx*sin(pi*fx*x)*cos(pi*ft*t[new])*sin(pi*fx*y);
+varf wabe1Varf(unused,phi) = int2d(Th,qforder=quadOrder)(pex*phi);
+varf wabe2Varf(unused,phi) = int2d(Th,qforder=quadOrder)(pey*phi);
+wabe1BC=wabe1Varf(0,Vh);
+wabe1BC.*=Nx;
+wabe2BC=wabe2Varf(0,Vh);
 wabe2BC.*=Ny;
 real[int] wabeBC = wabe1BC+wabe2BC;
+}
 
 //loop over all the boundary nodes to replace wabebc on rhsp
 for(int i=0; i<bNodes.n;i++)

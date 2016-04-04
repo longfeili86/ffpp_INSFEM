@@ -58,6 +58,7 @@ pe[] = peFunc(t[tl]);
 erru = abs(uh[tl]-ue);
 errv = abs(vh[tl]-ve);
 errp = abs(ph[tl]-pe);
+divL2 = sqrt(int2d(Th,qforder=quadOrder)((dx(uh[tl])+dy(vh[tl]))^2));
 
 
 

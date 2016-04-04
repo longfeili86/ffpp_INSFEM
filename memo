@@ -28,4 +28,15 @@ convRate.pl -runName=tzTrig1P1WABEPC2SquarePD -funcDefFILE=tzTrig1Functions -pn=
 
 convRate.pl -runName=tzTrig1P1WABEIMEXPCSquarePDexdt -funcDefFILE=tzTrig1Functions -pn=1 -WABE=true -ts=IMEXPC  -meshName=square -tf=.1 -useExDt=true -cfl=10. -isPlot=false -periodic=true > pd5
 
-convRate.pl -runName=tzTrig1P1WABEIMEXPCSquarePD -funcDefFILE=tzTrig1Functions -pn=1 -WABE=true -ts=IMEXPC  -meshName=square -tf=.1  -isPlot=false -periodic=true > pd6
+convRate.pl -runName=tzTrig1P1WABEIMEXPCSquarePD -funcDefFILE=tzTrig1Functions -pn=1 -WABE=true -ts=IMEXPC  -meshName=square -tf=.1 -cfl=0.01  -isPlot=false -periodic=true > pd6
+
+
+
+
+
+//tests:
+generateRunScript.pl -run=true -funcDefFILE=tzTrig1Functions -pn=1 -WABE=false -ts=IMEXPC  -meshName=square -tf=.1 -useExDt=true -cfl=10. -isPlot=true -periodic=true -splitNumber=2
+
+generateRunScript.pl -run=true -funcDefFILE=tzTrig1Functions -pn=1 -WABE=true -ts=IMEXPC  -meshName=square -tf=.1 -useExDt=true -cfl=10. -isPlot=true -periodic=true -splitNumber=2
+
+generateRunScript.pl -run=true  -runName=tzPoly2P1WABEIMEXPCSquarePD -funcDefFILE=tzPoly2Functions -pn=1 -WABE=false -ts=IMEXPC  -meshName=square -tf=.1 -cfl=0.1  -isPlot=true -periodic=false 

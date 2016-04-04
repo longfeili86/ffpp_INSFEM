@@ -29,16 +29,16 @@
 % filename = 'tzPoly2t1Functions';
 
 %tzTrig1
-% Ue = '-a*cos(fx*pi*x)*sin(fx*pi*(y-1))*cos(ft*pi*t)'; 
-% Ve = 'a*sin(fx*pi*x)*cos(fx*pi*(y-1))*cos(ft*pi*t)';  
-% Pe = 'a*cos(fx*pi*x)*cos(fx*pi*y)*cos(ft*pi*t)';
-% filename = 'tzTrig1Functions';
+Ue = 'a*sin(fx*pi*x)*sin(fx*pi*y)*cos(ft*pi*t)';
+Ve = 'a*cos(fx*pi*x)*cos(fx*pi*y)*cos(ft*pi*t)';  
+Pe = 'a*sin(fx*pi*x)*cos(fx*pi*y)*cos(ft*pi*t)';
+filename = 'tzTrig1Functions';
 
 %tzTrig1t1
-Ue = '-a*cos(fx*pi*x)*sin(fx*pi*(y-1))*(1+0.5*t)'; 
-Ve = 'a*sin(fx*pi*x)*cos(fx*pi*(y-1))*(1+0.5*t)';  
-Pe = 'a*cos(fx*pi*x)*cos(fx*pi*y)*(1+0.5*t)';
-filename = 'tzTrig1t1Functions';
+%Ue = '-a*cos(fx*pi*x)*sin(fx*pi*(y-1))*(1+0.5*t)'; 
+%Ve = 'a*sin(fx*pi*x)*cos(fx*pi*(y-1))*(1+0.5*t)';  
+%Pe = 'a*cos(fx*pi*x)*cos(fx*pi*y)*(1+0.5*t)';
+%ilename = 'tzTrig1t1Functions';
 
 %===================== Do Not Change ===================================
 % call this function to do the symbolic computation and output the

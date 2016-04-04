@@ -47,10 +47,11 @@ Vh erru = 0.;
 Vh errv = 0.;
 Vh errp = 0.;
 Vh div = 0.;
+real divL2=0.;
 
 // Divergence Damping
 Vh alpha=0.;
-if(dd){alpha=1/dt;}  
+if(dd){alpha=.1/(h[].min*h[].min);}  
 
 int prev,cur,new; //define time levels
 // Initial conditions
