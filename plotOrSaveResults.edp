@@ -8,43 +8,49 @@ by Longfei Li 12172015
 //compute div
 int tl=cur; // time level
 div = dx(uh[tl])+dy(vh[tl]);
-string info="Stokes, ";
-if(NS){info="N-S, ";}
-if(WABE){info=info+"WABE bc, ";}
-else{info=info+"TN bc, ";}
-if(dd){info=info+"dd: ";}
-else{info=info+"nodd: ";}
-
+curl = dx(vh[tl])-dy(uh[tl]);
 if(isPlot)
 {
+plot(uh[tl],wait=vwait,fill=vfill,value=vvalue,cmm=info+"u at t="+t[tl],ps=dataFolderName+"/u"+counter+".eps");
+plot(vh[tl],wait=vwait,fill=vfill,value=vvalue,cmm=info+"v at t="+t[tl],ps=dataFolderName+"/v"+counter+".eps");
+plot(ph[tl],wait=vwait,fill=vfill,value=vvalue,cmm=info+"p at t="+t[tl],ps=dataFolderName+"/p"+counter+".eps");
+plot(div   ,wait=vwait,fill=vfill,value=vvalue,cmm=info+"div at t="+t[tl],ps=dataFolderName+"/div"+counter+".eps");
+plot(curl  ,wait=vwait,fill=vfill,value=vvalue,cmm=info+"curl at t="+t[tl],ps=dataFolderName+"/curl"+counter+".eps");
 // plot on finer mesh if higher-order elements are used
 bool plotOnFinerMeshForHighOrderMethods=false;
 if(pn>1 & plotOnFinerMeshForHighOrderMethods)
 {
 cout << "interpolate solution to finer mesh to plot\n";
+
+ {// write log file:
+   ofstream oFile(logFile,append);
+   oFile <<  "interpolate solution to finer mesh to plot\n";
+ }// 
+
+
 mesh ThRefined= trunc(Th,1,split=pn,label=0);
 fespace VhPlot(ThRefined,P1);
-VhPlot uPlot,vPlot,pPlot,divPlot;
+VhPlot uPlot,vPlot,pPlot,divPlot,curlPlot;
+// = will interpolate automatically
 uPlot = uh[tl];
 vPlot = vh[tl];
 pPlot = ph[tl];
+curlPlot = curl;
 divPlot=div;
 plot(uPlot,wait=vwait,fill=vfill,value=vvalue,cmm=info+"uR at t="+t[tl],ps=dataFolderName+"/uR"+counter+".eps");
 plot(vPlot,wait=vwait,fill=vfill,value=vvalue,cmm=info+"vR at t="+t[tl],ps=dataFolderName+"/vR"+counter+".eps");
 plot(pPlot,wait=vwait,fill=vfill,value=vvalue,cmm=info+"pR at t="+t[tl],ps=dataFolderName+"/pR"+counter+".eps");
-plot(divPlot   ,wait=vwait,fill=vfill,value=vvalue,cmm=info+"divR at t="+t[tl],ps=dataFolderName+"/divR"+counter+".eps");
+plot(divPlot,wait=vwait,fill=vfill,value=vvalue,cmm=info+"divR at t="+t[tl],ps=dataFolderName+"/divR"+counter+".eps");
+plot(curlPlot,wait=vwait,fill=vfill,value=vvalue,cmm=info+"curlR at t="+t[tl],ps=dataFolderName+"/curlR"+counter+".eps");
 }
-
-plot(uh[tl],wait=vwait,fill=vfill,value=vvalue,cmm=info+"u at t="+t[tl],ps=dataFolderName+"/u"+counter+".eps");
-plot(vh[tl],wait=vwait,fill=vfill,value=vvalue,cmm=info+"v at t="+t[tl],ps=dataFolderName+"/v"+counter+".eps");
-plot(ph[tl],wait=vwait,fill=vfill,value=vvalue,cmm=info+"p at t="+t[tl],ps=dataFolderName+"/p"+counter+".eps");
-plot(div   ,wait=vwait,fill=vfill,value=vvalue,cmm=info+"div at t="+t[tl],ps=dataFolderName+"/div"+counter+".eps");
 }
 if(saveDataForMATLAB)
 {
-writeRealArrayToMFile(uh[tl][],uh[tl][].n,"u"+counter,dataFolderName);
-writeRealArrayToMFile(vh[tl][],vh[tl][].n,"v"+counter,dataFolderName);
-writeRealArrayToMFile(ph[tl][],ph[tl][].n,"p"+counter,dataFolderName);
+  writeRealArrayToMFile(uh[tl][],uh[tl][].n,"u","u"+counter,dataFolderName);
+  writeRealArrayToMFile(vh[tl][],vh[tl][].n,"v","v"+counter,dataFolderName);
+  writeRealArrayToMFile(ph[tl][],ph[tl][].n,"p","p"+counter,dataFolderName);
+  writeRealArrayToMFile(div[],div[].n,"div","div"+counter,dataFolderName);
+  writeRealArrayToMFile(curl[],curl[].n,"curl","curl"+counter,dataFolderName);
 }
 
 // tz tests
@@ -76,9 +82,9 @@ plot(errp,wait=vwait,fill=vfill,value=vvalue,cmm=info+"error p at t="+t[tl],ps=d
 }
 if(saveDataForMATLAB)
 {
-writeRealArrayToMFile(erru[],erru[].n,"erru"+counter,dataFolderName);
-writeRealArrayToMFile(errv[],errv[].n,"errv"+counter,dataFolderName);
-writeRealArrayToMFile(errp[],errp[].n,"errp"+counter,dataFolderName);
+  writeRealArrayToMFile(erru[],erru[].n,"error of u","erru"+counter,dataFolderName);
+  writeRealArrayToMFile(errv[],errv[].n,"error of v","errv"+counter,dataFolderName);
+  writeRealArrayToMFile(errp[],errp[].n,"error of p","errp"+counter,dataFolderName);
 }
 
 }

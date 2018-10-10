@@ -11,9 +11,12 @@ assert(false);
 }
 cout << "\n\nSetting up to run: " << runName << endl;
 // create the dataFolder to store results
-string dataFolderName = outputDir+runName;
+string dataFolderName = outputDir+runName; // Longfei 09182018: we might missing "/" between outputDir and runName
 exec("mkdir -p "+dataFolderName);
 
+// keep a log file to save information
+string logFile=dataFolderName+"/"+"log.text";
+exec("sysDateTimeInfo.pl -file="+logFile);// write date info using a perl script to logfile
 
 //read mesh and do mesh refinement is splitNumber>1
 mesh Th = readmesh("mesh/"+meshName+".msh");
@@ -27,11 +30,7 @@ if(isPlot)
 plot(Th,wait=0, ps=dataFolderName+"/grid.eps");
 }
 
-if(saveDataForMATLAB)
-{
-// save the mesh:
-savemesh(Th,dataFolderName+"/mesh.msh");
-}
+
 
 cout << "nv = " << Th.nv <<endl;
 cout << "nt  = " << Th.nt <<endl;
@@ -45,6 +44,7 @@ Vh lb = label;  // label number of all dof, interior=0, otherwise positive int
 Vh h=hTriangle; // size of triangle
 cout << "ndof="<<Vh.ndof<<endl;
 
+
 // define some FE functions
 Vh phi;   // basis function
 Vh temp;  // a temp FE function to hold stuff
@@ -57,13 +57,9 @@ temp = x;
 real[int] Px=temp[]; // x-coordinates
 temp = y; 
 real[int] Py=temp[]; // y-coordinates
-if(saveDataForMATLAB)
-{
-writeRealArrayToMFile(Px,Px.n,"x",dataFolderName);
-writeRealArrayToMFile(Py,Py.n,"y",dataFolderName);
-}
 
-include "getNormalVectorOnNodes.edp"
+//FE functions Nx, Ny, lb (label) is defined in the following file:
+include "getNormalVectorOnNodes.edp" 
 
 
 real ns=0.;  // for stokes equations
@@ -100,3 +96,12 @@ cout << "Total time used to solve: " <<  timer << endl;
 
 
 
+{// write basic info to log file:
+  ofstream oFile(logFile,append);
+  oFile << "Final time reached. Done solving.\n";
+  oFile << "***************** summary ******************\n"
+	<< "Total number of steps: "<< nstep << " (steps)\n"
+	<< "Total running time: "<< timer << " (s)\n"
+	<< "Average time per step: " << timer/nstep <<  " (s)\n"
+	<< "********************************************\n";
+}// 

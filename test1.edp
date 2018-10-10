@@ -1,0 +1,26 @@
+mesh Th = square(5,5);
+savemesh(Th,"aaa.msh");
+plot(Th,wait=true);
+fespace Xh (Th, P1,periodic=[[2,y],[4,y]]);
+Xh[int] xh(2);
+xh[0] = x;
+xh[1] = y;
+
+cout << "# nodes" << endl;
+cout << Xh.ndof << endl;
+for (int n = 0; n < Xh.ndof; n++) {
+    cout << n;
+    for (int d = 0; d < 2; d++)
+        cout << "  " << xh[d][][n]; // x, y
+    cout << endl;
+}
+
+cout << endl << "# elements" << endl;
+cout << Xh.nt << endl;
+int[int] np = [0, 1, 2, 5, 3, 4]; // P2 node numbering
+for (int e = 0; e < Xh.nt; e++) {
+  cout << e;
+ for (int n = 0; n < Xh.ndofK; n++)
+    cout << "  " << Xh (e, np[n]) + 1;
+  cout << endl;
+ }

@@ -40,22 +40,32 @@ bNodes(bNodes.n-1) = i;    // put the index i in bNodes
 
 }
 
-//fix corner normal
+//fix corner normal //note: this is hard coded for unit square [0,1]x[0,1]
 if(periodic)
 {
 for(int b=0; b<bNodes.n;b++)
 {
 int gIndex = bNodes[b]; //global index of the boundary nodes
-if(Px[gIndex]==1 & Py[gIndex]==0)
+ if(Px[gIndex]==1 & Py[gIndex]==0) //(1,0)
 {
 Nx[gIndex]=0;
 Ny[gIndex]=-1;
 }
-if(Px[gIndex]==1 & Py[gIndex]==1)
+if(Px[gIndex]==1 & Py[gIndex]==1) //(1,1)
 {
 Nx[gIndex]=0;
 Ny[gIndex]=1;
 }
+if(Px[gIndex]==0 & Py[gIndex]==0) //(0,0)
+{
+Nx[gIndex]=0;
+Ny[gIndex]=-1;
+}
+if(Px[gIndex]==0 & Py[gIndex]==1) //(0,1)
+{
+Nx[gIndex]=0;
+Ny[gIndex]=1;
+} 
 }
 }
 

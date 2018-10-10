@@ -1,0 +1,6 @@
+#ignore everything except .edp and .m files
+*
+!.gitignore
+!*.edp
+!*.m
+!mesh/

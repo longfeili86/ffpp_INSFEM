@@ -1,39 +1,89 @@
+************simulations for the insfem paper:
+
+1. periodic Square trig1
+A: TN bc without divergence damping:
+convRate.pl -runName=tzTrig1P1TNnoDDPC2SquarePD -isTwilightzone=true -funcDefFILE=tzTrig1Functions -pn=1 -WABE=false -dd=false -ts=PC2  -meshName=square -tf=.1 -isPlot=false -periodic=true -cfl=1.
+
+B: TN bc with divergence damping:
+convRate.pl -runName=tzTrig1P1TNDDPC2SquarePD -isTwilightzone=true -funcDefFILE=tzTrig1Functions    -pn=1 -WABE=false -dd=true -ts=PC2  -meshName=square -tf=.1 -isPlot=false -periodic=true -cfl=1.
+
+C: WABE bc without divergence damping:
+convRate.pl -runName=tzTrig1P1WABEnoDDPC2SquarePD -isTwilightzone=true -funcDefFILE=tzTrig1Functions -pn=1 -WABE=true -dd=false -ts=PC2  -meshName=square -tf=.1 -isPlot=false -periodic=true -cfl=1.
+
+D: WABE bc with divergence damping:
+convRate.pl -runName=tzTrig1P1WABEDDPC2SquarePD -isTwilightzone=true -funcDefFILE=tzTrig1Functions -pn=1 -WABE=true -dd=true -ts=PC2  -meshName=square -tf=.1 -isPlot=false -periodic=true -cfl=1.
+
+
+2.  Square trig2
+A: TN bc without divergence damping:
+convRate.pl -runName=tzTrig2P1TNnoDDPC2Square -a=0.1 -fx=1. -ft=1.2 -isTwilightzone=true -funcDefFILE=tzTrig2Functions -pn=1 -WABE=false -dd=false -ts=PC2  -meshName=square -tf=.1 -isPlot=false -periodic=false -cfl=1.
+
+B: TN bc with divergence damping:
+convRate.pl -runName=tzTrig2P1TNDDPC2Square -a=0.1 -fx=1. -ft=1.2 -isTwilightzone=true -funcDefFILE=tzTrig2Functions -pn=1 -WABE=false -dd=true -ts=PC2  -meshName=square -tf=.1 -isPlot=false -periodic=false -cfl=1.   
+
+C: WABE bc without divergence damping:
+convRate.pl -runName=tzTrig2P1WABEnoDDPC2Square -a=0.1 -fx=1. -ft=1.2 -isTwilightzone=true -funcDefFILE=tzTrig2Functions -pn=1 -WABE=true -dd=false -ts=PC2  -meshName=square -tf=.1 -isPlot=false -periodic=false -cfl=1. 
+
+D: WABE bc with divergence damping:
+convRate.pl -runName=tzTrig2P1WABEDDPC2Square -a=0.1 -fx=1. -ft=1.2 -isTwilightzone=true -funcDefFILE=tzTrig2Functions -pn=1 -WABE=true -dd=true -ts=PC2  -meshName=square -tf=.1 -isPlot=false -periodic=false -cfl=1.
+
+3.  Square trig1
+A: TN bc without divergence damping:
+convRate.pl -runName=tzTrig1P1TNnoDDPC2Square -isTwilightzone=true -funcDefFILE=tzTrig1Functions -pn=1 -WABE=false -dd=false -ts=PC2  -meshName=square -tf=.1 -isPlot=false -periodic=false -cfl=1.
+
+B: TN bc with divergence damping:
+convRate.pl -runName=tzTrig1P1TNDDPC2Square -isTwilightzone=true -funcDefFILE=tzTrig1Functions    -pn=1 -WABE=false -dd=true -ts=PC2  -meshName=square -tf=.1 -isPlot=false -periodic=false -cfl=1.
+
+C: WABE bc without divergence damping:
+convRate.pl -runName=tzTrig1P1WABEnoDDPC2Square -isTwilightzone=true -funcDefFILE=tzTrig1Functions -pn=1 -WABE=true -dd=false -ts=PC2  -meshName=square -tf=.1 -isPlot=false -periodic=false -cfl=1.
+
+D: WABE bc with divergence damping:
+convRate.pl -runName=tzTrig1P1WABEDDPC2Square -isTwilightzone=true -funcDefFILE=tzTrig1Functions -pn=1 -WABE=true -dd=true -ts=PC2  -meshName=square -tf=.1 -isPlot=false -periodic=false -cfl=1.
+
+
+### plot resutls ####
+#non periodic bc
+plotResults -f=tzTrig1P1TNDDPC2Square -solution=2 -curl -view=3 -save
+plotResults -f=tzTrig1P1TNnoDDPC2Square -solution=2 -curl -view=3 -save
+plotResults -f=tzTrig1P1WABEDDPC2Square -solution=2 -curl -view=3 -save
+plotResults -f=tzTrig1P1WABEnoDDPC2Square -solution=2 -curl -view=3 -save
+
+
+#periodic bc
+plotResults -f=tzTrig1P1TNDDPC2SquarePD -pd -solution=2 -curl -view=3 -save
+plotResults -f=tzTrig1P1TNnoDDPC2SquarePD -pd -solution=2 -curl -view=3 -save
+plotResults -f=tzTrig1P1WABEDDPC2SquarePD -pd -solution=2 -curl -view=3 -save
+plotResults -f=tzTrig1P1WABEnoDDPC2SquarePD -pd -solution=2 -curl -view=3 -save
+
+
+### plot conv rate ###
+#non periodic bc
+postProcessData -p -plot -f=tzTrig1P1WABEDDPC2Square -ns=2 -save
+postProcessData -p -plot -f=tzTrig1P1WABEnoDDPC2Square -ns=2 -save
+postProcessData -p -plot -f=tzTrig1P1TNDDPC2Square -ns=2 -save
+postProcessData -p -plot -f=tzTrig1P1TNnoDDPC2Square -ns=2 -save
+#periodic bc
+postProcessData -p -plot -f=tzTrig1P1WABEDDPC2SquarePD -ns=2 -save
+postProcessData -p -plot -f=tzTrig1P1WABEnoDDPC2SquarePD -ns=2 -save
+postProcessData -p -plot -f=tzTrig1P1TNDDPC2SquarePD -ns=2 -save
+postProcessData -p -plot -f=tzTrig1P1TNnoDDPC2SquarePD -ns=2 -save
 
 
 
 
-// old tests:
-WABE BC:
-
-
-1. Square
-convRate.pl -runName=tzTrig1P1TNPC2Square -funcDefFILE=tzTrig1Functions -pn=1 -WABE=false -ts=PC2  -meshName=square -tf=.1 -isPlot=false
-
-convRate.pl -runName=tzTrig1P1TNIMEXPCSquare -funcDefFILE=tzTrig1Functions -pn=1 -WABE=false -ts=IMEXPC  -meshName=square -tf=.1 -useExDt=true -cfl=10. -isPlot=false 
-
-convRate.pl -runName=tzTrig1P1WABEPC2Square -funcDefFILE=tzTrig1Functions -pn=1 -WABE=true -ts=PC2  -meshName=square -tf=.1 -isPlot=false
-
-convRate.pl -runName=tzTrig1P1WABEIMEXPCSquare -funcDefFILE=tzTrig1Functions -pn=1 -WABE=true -ts=IMEXPC  -meshName=square -tf=.1 -useExDt=true -cfl=10. -isPlot=false 
-
-
-convRate.pl -runName=tzTrig1P1WABEIMEXPCnoddSquare -funcDefFILE=tzTrig1Functions -pn=1 -WABE=true -ts=IMEXPC -dd=false  -meshName=square -tf=.1 -useExDt=true -cfl=10. -isPlot=false 
 
 
 
 
-1. periodic Square
-convRate.pl -runName=tzTrig1P1TNPC2SquarePD -funcDefFILE=tzTrig1Functions -pn=1 -WABE=false -ts=PC2  -meshName=square -tf=.1 -isPlot=false -periodic=true > pd1
-
-convRate.pl -runName=tzTrig1P1TNIMEXPCSquarePDexdt -funcDefFILE=tzTrig1Functions -pn=1 -WABE=false -ts=IMEXPC  -meshName=square -tf=.1 -useExDt=true -cfl=10. -isPlot=false -periodic=true > pd2
-
-convRate.pl -runName=tzTrig1P1TNIMEXPCSquarePD -funcDefFILE=tzTrig1Functions -pn=1 -WABE=false -ts=IMEXPC  -meshName=square -tf=.1 -isPlot=false -periodic=true > pd3
 
 
-convRate.pl -runName=tzTrig1P1WABEPC2SquarePD -funcDefFILE=tzTrig1Functions -pn=1 -WABE=true -ts=PC2  -meshName=square -tf=.1 -isPlot=false -periodic=true > pd4
+************************* old stuff ********************
 
-convRate.pl -runName=tzTrig1P1WABEIMEXPCSquarePDexdt -funcDefFILE=tzTrig1Functions -pn=1 -WABE=true -ts=IMEXPC  -meshName=square -tf=.1 -useExDt=true -cfl=10. -isPlot=false -periodic=true > pd5
 
-convRate.pl -runName=tzTrig1P1WABEIMEXPCSquarePD -funcDefFILE=tzTrig1Functions -pn=1 -WABE=true -ts=IMEXPC  -meshName=square -tf=.1 -cfl=0.01  -isPlot=false -periodic=true > pd6
+
+### TRY old tests to see if get the same results:
+convRate.pl -runName=tzTrig2P1WABEDDPC2Square -a=0.1 -fx=1. -ft=1.2 -isTwilightzone=true -funcDefFILE=tzTrig2Functions -pn=1 -WABE=true -dd=true -ts=PC2  -meshName=square -tf=.1 -isPlot=false -periodic=false 
+
 
 
 

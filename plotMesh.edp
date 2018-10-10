@@ -1,0 +1,20 @@
+
+
+
+include "funcDef.edp"    //define some utility functions
+string meshname="cilc";
+mesh Th = readmesh("mesh/"+meshname+".msh");
+
+plot(Th,wait=0, ps=meshname+"Mesh.eps");
+
+fespace Vh(Th,P1);
+Vh temp;  
+real[int] Nx(Vh.ndof), Ny(Vh.ndof);  // x and y components of the normal vector
+int[int] bNodes(0);  //global index of boundary nodes
+temp = x; 
+real[int] Px=temp[]; // x-coordinates
+temp = y; 
+real[int] Py=temp[]; // y-coordinates
+
+// save DOF
+WRITEDOFTOMFILE(meshname+"Mesh",".");// degrees of freedom

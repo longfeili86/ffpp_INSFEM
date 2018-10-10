@@ -12,6 +12,7 @@ varf stiffVarf(temp,phi) = int2d(Th,qforder=quadOrder)(dx(temp)*dx(phi)+dy(temp)
 varf pxVarf(temp,phi) = int2d(Th,qforder=quadOrder)( (dx(temp)*phi));
 varf pyVarf(temp,phi) = int2d(Th,qforder=quadOrder)( (dy(temp)*phi));
 
+//Longfei  09182018: double check if we need all these. Avoid unnecessary computations
 varf sxxVarf(temp,phi) = int2d(Th,qforder=quadOrder)(dx(temp)*dx(phi));
 varf sxyVarf(temp,phi) = int2d(Th,qforder=quadOrder)(dx(temp)*dy(phi));
 varf syyVarf(temp,phi) = int2d(Th,qforder=quadOrder)(dy(temp)*dy(phi));

@@ -35,11 +35,12 @@ return 0;
 
 
 
-func int writeRealArrayToMFile(real[int] I,int sz,string arrayName,string dir)
+func int writeRealArrayToMFile(real[int] I,int sz,string comment,string arrayName,string dir)
 {
 // This function writes a real array to Dir/arrayNameFile.m 
 string fileName = dir+"/"+arrayName+"File.m";
 ofstream oFile(fileName);
+oFile << "%" << comment << endl; 
 oFile << arrayName<<"=[";
 for(int i=0;i<sz;i++){oFile<<" "<< I[i]; if(i%10==0 & i>1){oFile<<" ...\n";}}
 oFile << "];\n\n";
@@ -47,7 +48,33 @@ oFile << "];\n\n";
 return 0;
 }
 
+// write the DOFs of the fespace to an M file.
+// note that for periodic bc and pn for n>2, 
+// the mesh vertices are different from the DOFs
+macro WRITEDOFTOMFILE(Name,dir)
+{
+string fileName = dir+"/"+Name+"File.m";
+ofstream oFile(fileName);
 
+oFile << "% number of nodes: "     << Vh.ndof << endl;
+oFile << "% number of elements: "  << Vh.nt   << endl;
+
+oFile << "\n\n%coordinates:\n";
+oFile << "T.coordinates=[\n";
+for (int n = 0; n < Vh.ndof; n++) {
+  oFile << Px[n]<<" "<<Py[n]<<endl; 
+}
+oFile << "];\n";
+
+oFile << "\n\n%connectivity on each element:\n";
+oFile << "T.elements=[\n";
+for (int e = 0; e < Vh.nt; e++) {
+ for (int n = 0; n < Vh.ndofK; n++)
+   oFile << Vh(e, n) + 1 << " ";
+  oFile << endl;
+ }
+oFile << "];\n";
+} //EOM
 
 
 

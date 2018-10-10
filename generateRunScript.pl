@@ -46,7 +46,7 @@ $periodic_Val = "false";
 $run_Val="false"; # run ff++ or not.
 
 GetOptions('outputDir=s'=>\$outputDir_Val,'runName=s'=>\$runName_Val,'mu=f'=>\$mu_Val,'rho=f'=>\$rho_Val,
-'tf=f'=>\$tf_Val,'t0=f'=>\$t0_Val,'cfl=f'=>\$clf_Val,'ts=s'=>\$ts_Val,'useExDt=s'=>\$useExDt_Val,'dd=s'=>\$dd_Val,
+'tf=f'=>\$tf_Val,'t0=f'=>\$t0_Val,'cfl=f'=>\$cfl_Val,'ts=s'=>\$ts_Val,'useExDt=s'=>\$useExDt_Val,'dd=s'=>\$dd_Val,
 'NS=s'=>\$NS_Val,'WABE=s'=>\$WABE_Val,'quadOder=i'=>\$quadOder_Val,'vSOLVER=s'=>\$vSOLVER_Val,
 'pSOLVER=s'=>\$pSOLVER_Val,'pn=i'=>\$pn_Val,'meshName=s'=>\$meshName_Val,'splitNumber=i'=>\$splitNumber_Val,
 'tplot=f'=>\$tplot_Val,'isPlot=s'=>\$isPlot_Val,'vwait=s'=>\$vwait_Val,'vfill=s'=>\$vfill_Val,'vvalue=s'=>\$vvalue_Val,

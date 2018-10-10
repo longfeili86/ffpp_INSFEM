@@ -1,0 +1,8 @@
+
+int splitNumber=4;
+mesh Th = square(10,10,[6*x,6*y]);
+
+Th = trunc(Th,1,split=splitNumber,label=0);
+
+savemesh(Th,"testMesh.msh");
+plot(Th);

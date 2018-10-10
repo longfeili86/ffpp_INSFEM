@@ -12,11 +12,54 @@ int pstep=tplot/dt;       // plot step
 dt = tplot/pstep;         // adjust dt
 int nstep = tf/dt+0.5;    // total number of steps
 
+
 if(saveDataForMATLAB)
 {
+
+// save the mesh:
+savemesh(Th,dataFolderName+"/mesh.msh"); // mesh
+
+// save DOF
+WRITEDOFTOMFILE("DOF",dataFolderName);// degrees of freedom
+
+
+
 real[int] timeInfo=[t0,dt,tplot,tf];
-writeRealArrayToMFile(timeInfo,timeInfo.n,"timeInfo",dataFolderName);
+string comment="timeInfo=[t0,dt,tplot,tf]";
+ writeRealArrayToMFile(timeInfo,timeInfo.n,comment,"timeInfo",dataFolderName);
 }
+
+
+// save runtime info to logFile
+string info="Stokes, ";
+if(NS){info="N-S, ";}
+if(WABE){info=info+"WABE bc, ";}
+else{info=info+"TN bc, ";}
+if(dd){info=info+"dd ";}
+else{info=info+"nodd ";}
+if(periodic){info=info+", periodic ";}
+
+{// write basic info to log file:
+  ofstream oFile(logFile,append);
+  oFile << "PDE info: " << info << endl;
+  oFile << "Parameters: " << "mu="<< mu << ", rho="<< rho << endl;
+  oFile << "FEM info: " << "pn="<< pn << endl;
+  oFile << "Mesh info:" << "mesh name=" << meshName 
+	<< ", splitNumber="<<splitNumber<< ", nv="<<  Th.nv 
+	<< ", nt="<<  Th.nt << endl;
+  oFile << "Degrees of freedom: " <<"ndof="<< Vh.ndof 
+	<< ", ndofK="<<  Vh.ndofK <<", nt="<< Vh.nt << endl;
+  if(isTwilightzone)
+    {
+      oFile << "TwilightZone Info: a=" << a << ", fx=" << fx << ", ft=" << ft << endl;
+    }
+  oFile << "time-step info: ";
+  oFile <<"nstep=" << nstep << ", cfl="<< cfl <<", t0= "<< t0 << ", dt="<< dt << ", tplot=" << tplot << ", tf="<< tf << endl;
+  oFile << "\nBegin solving------->\n";
+}// 
+
+
+
 
 cout << "dt=" << dt << endl;
 
@@ -47,11 +90,12 @@ Vh erru = 0.;
 Vh errv = 0.;
 Vh errp = 0.;
 Vh div = 0.;
+Vh curl = 0.;
 real divL2=0.;
 
 // Divergence Damping
-Vh alpha=0.;
-if(dd){alpha=.1/(h[].min*h[].min);}  
+real alpha=0.;
+if(dd){alpha=100.*mu/(h[].min*h[].min*rho);}  
 
 int prev,cur,new; //define time levels
 // Initial conditions
@@ -77,6 +121,10 @@ stepTimer = clock()-stepTimer;
 if(step%20==0)
 {
 cout << "current time = " << t[cur] << endl;
+ {// write log file:
+   ofstream oFile(logFile,append);
+   oFile <<"step="<<step <<", current time = " << t[cur] << ", stepTimer=" <<stepTimer << "(s)" << endl;;
+ }
 }
 
 if((step%pstep)==0)
