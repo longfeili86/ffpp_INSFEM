@@ -7,7 +7,7 @@ by Longfei Li 12112015
 
 //define variational forms
 {
-varf massVarf(temp,phi) = int2d(Th,qforder=quadOrder)(temp*phi);
+  varf massVarf(temp,phi) = int2d(Th,qforder=quadOrder)(temp*phi);
 varf stiffVarf(temp,phi) = int2d(Th,qforder=quadOrder)(dx(temp)*dx(phi)+dy(temp)*dy(phi));
 varf pxVarf(temp,phi) = int2d(Th,qforder=quadOrder)( (dx(temp)*phi));
 varf pyVarf(temp,phi) = int2d(Th,qforder=quadOrder)( (dy(temp)*phi));
@@ -18,7 +18,7 @@ varf sxyVarf(temp,phi) = int2d(Th,qforder=quadOrder)(dx(temp)*dy(phi));
 varf syyVarf(temp,phi) = int2d(Th,qforder=quadOrder)(dy(temp)*dy(phi));
 
 //build sparse matrices from the variational forms
-M=massVarf(Vh,Vh);
+M=massVarf(Vh,Vh,tgv=1e30);
 S=stiffVarf(Vh,Vh);
 Lx=pxVarf(Vh,Vh);   
 Ly=pyVarf(Vh,Vh);

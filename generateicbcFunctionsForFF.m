@@ -19,7 +19,7 @@ Vic='0';
 Pic='0';
 
 
-Uib={Uic,'0','0','tanh(t)','0'}; %{Uic,Ubc1,Ubc2,...Ubcn}  
+Uib={Uic,'0','0','1','0'}; %{Uic,Ubc1,Ubc2,...Ubcn}  
 Vib={Vic,'0','0','0','0'}; %{Vic,Vbc1,Vbc2,...Vbcn}  
 Pib={Pic};  %[Pic];
 

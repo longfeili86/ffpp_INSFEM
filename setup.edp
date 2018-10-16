@@ -30,8 +30,6 @@ if(isPlot)
 plot(Th,wait=0, ps=dataFolderName+"/grid.eps");
 }
 
-
-
 cout << "nv = " << Th.nv <<endl;
 cout << "nt  = " << Th.nt <<endl;
 
@@ -58,6 +56,19 @@ real[int] Px=temp[]; // x-coordinates
 temp = y; 
 real[int] Py=temp[]; // y-coordinates
 
+
+if(saveDataForMATLAB)
+{
+// save the mesh:
+savemesh(Th,dataFolderName+"/mesh.msh"); // mesh
+// save DOF
+WRITEDOFTOMFILE("DOF",dataFolderName);// degrees of freedom
+ }
+
+
+
+
+
 //FE functions Nx, Ny, lb (label) is defined in the following file:
 include "getNormalVectorOnNodes.edp" 
 
@@ -67,13 +78,20 @@ if(NS==true){ns=1;} // for NS equations
 include funcDefFILE
 
 //determine time-step
-real dt=0.;
-include "getDt.edp"
+if(dt>0)
+  {
+    cout << "use specified dt="<<dt << endl;
+  }
+ else
+   {
+     include "getDt.edp"
+  }
 
 
 // get FEM matrices
 matrix M,S,Lx,Ly,Sxx,Sxy,Syy;
 include "getFEMMatrices.edp"
+
 
 //construct matrices for momentum equations and PPE
 //boundary condition for the matrices is implemented here
@@ -81,6 +99,8 @@ matrix vMatrix; //Matrix for momentum equation
 matrix pMatrix; //Matrix for PPE
 include "getvMatrix.edp"
 include "getpMatrix.edp"
+
+
 
 
 set(vMatrix,solver=vSOLVER);  // this causes mem leak. A FreeFEM++ bug.

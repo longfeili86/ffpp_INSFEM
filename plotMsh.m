@@ -13,7 +13,7 @@ function plotMsh(filename,varargin)
 
 if(nargin==0)
     fprintf('Provide filename for the mesh\n\n');
-    fprintf('Usage:\nplotMsh(filename)\n');
+    fprintf('Usage:\nplotMsh(filename) (optional: -save)\n');
     return
 end
 

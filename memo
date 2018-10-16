@@ -1,3 +1,21 @@
+####### test icbc functions
+
+10/16/2018
+
+
+generateRunScript.pl -run=true  -runName=testLDCSWABEtretched32x32 -mu=0.001  -funcDefFILE=icbcFunctions_LidDrivenCavity  -pn=1 -WABE=true -ts=PC2  -meshName=squareStretched32x32 -tf=50.  -cfl=.9 -isPlot=false -isTwilightzone=false -quadOrder=3 
+
+
+
+
+10/14/2018: initial run for LDC
+
+generateRunScript.pl -run=true  -runName=testLDC -mu=0.01  -funcDefFILE=icbcFunctions_LidDrivenCavity  -pn=1 -WABE=false -ts=PC2  -meshName=square -tf=10.  -cfl=.9 -isPlot=false -isTwilightzone=false -quadOrder=3   (OK)
+
+
+
+
+
 ************simulations for the insfem paper:
 
 1. periodic Square trig1

@@ -23,6 +23,7 @@ if(length(Uib)~=nb+1 || length(Vib)~=nb+1 )
 end
 
 
+
 filename = strcat(filename,'.edp');
 fprintf('MATLAB: Generating %s\n',filename);
 
@@ -36,33 +37,139 @@ fprintf(fid,'\n\n\n');
 
 % write initial functions
 fprintf(fid,'func real[int] u0Func(real t)\n{\n');
-fprintf(fid,'Vh ff = %s;\n',Uib(1));
+fprintf(fid,'Vh ff = %s;\n',Uib{1});
 fprintf(fid,'return ff[];\n}');
 fprintf(fid,'\n\n\n');
 
 fprintf(fid,'func real[int] v0Func(real t)\n{\n');
-fprintf(fid,'Vh ff = %s;\n',Vib(1));
+fprintf(fid,'Vh ff = %s;\n',Vib{1});
 fprintf(fid,'return ff[];\n}');
 fprintf(fid,'\n\n\n');
 
 fprintf(fid,'func real[int] p0Func(real t)\n{\n');
-fprintf(fid,'Vh ff = %s;\n',Pib(1));
+fprintf(fid,'Vh ff = %s;\n',Pib{1});
 fprintf(fid,'return ff[];\n}');
 fprintf(fid,'\n\n\n');
 
 % write boundary functions
-% FINISH ME>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+syms x y t; % needed to compute time derivative of boundary functions
+
+for i=1:nb
+    fprintf(fid,'func real ub%dFunc(real t,real x, real y)\n{\n',i);
+    fprintf(fid,'//Warning: x and y are reserved varible in FEM++ but it seems working ok here.\n');
+    fprintf(fid,'real rv=0.;\n');
+    fprintf(fid,'rv = %s;\n',Uib{i+1});
+    fprintf(fid,'return rv;\n}');
+    fprintf(fid,'\n\n\n');
+    
+    ubSym=sym(Uib{i+1});
+    ubtSym=diff(ubSym,t);
+    ubt=char(ubtSym);
+    fprintf(fid,'func real ubt%dFunc(real t,real x, real y)\n{\n',i);
+    fprintf(fid,'//Warning: x and y are reserved varible in FEM++ but it seems working ok here.\n');
+    fprintf(fid,'real rv=0.;\n');
+    fprintf(fid,'rv = %s;\n',ubt);
+    fprintf(fid,'return rv;\n}');
+    fprintf(fid,'\n\n\n');
+
+    
+
+    fprintf(fid,'func real vb%dFunc(real t,real x, real y)\n{\n',i);
+    fprintf(fid,'//Warning: x and y are reserved varible in FEM++ but it seems working ok here.\n');    
+    fprintf(fid,'real rv=0.;\n');
+    fprintf(fid,'rv = %s;\n',Vib{i+1});
+    fprintf(fid,'return rv;\n}');
+    fprintf(fid,'\n\n\n');
+    
+    vbSym=sym(Vib{i+1});
+    vbtSym=diff(vbSym,t);
+    vbt=char(vbtSym);
+    fprintf(fid,'func real vbt%dFunc(real t,real x, real y)\n{\n',i);
+    fprintf(fid,'//Warning: x and y are reserved varible in FEM++ but it seems working ok here.\n');
+    fprintf(fid,'real rv=0.;\n');
+    fprintf(fid,'rv = %s;\n',vbt);
+    fprintf(fid,'return rv;\n}');
+    fprintf(fid,'\n\n\n');
+
+end
+clear x y t; % release
+
+% boundary condition for u
 fprintf(fid,'func real[int] ubFunc(real t)\n{\n');
 fprintf(fid,'real[int] rv(Vh.ndof); rv=0.;\n');
 fprintf(fid,'//loop over all the boundary points\n');
 fprintf(fid,'for(int i=0;i<bNodes.n;i++){\n');
 fprintf(fid,'int gIndex = bNodes[i];\n');
-fprintf(fid,'int bNumber = lb[][i]; //Boundary number\n');  
-fprintf(fid,'rv[gIndex] = ff[gIndex];\n');
+fprintf(fid,'int bNumber = lb[][gIndex]; //Boundary number\n'); 
+
+fprintf(fid,'real xx=Px[gIndex]; //x coordinate of the point\n'); 
+fprintf(fid,'real yy=Py[gIndex]; //y coordinate of the point\n');   
+for b=1:nb 
+    fprintf(fid,'if (bNumber==%d){\n',b);
+    fprintf(fid,'rv[gIndex]=ub%dFunc(t,xx,yy);\n',b);
+    fprintf(fid,'}\n');   
+end
 fprintf(fid,'}\n');
 fprintf(fid,'return rv;\n}');
 fprintf(fid,'\n\n\n');
-% FINISH ME>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+% boundary condition for ut
+fprintf(fid,'func real[int] ubtFunc(real t)\n{\n');
+fprintf(fid,'real[int] rv(Vh.ndof); rv=0.;\n');
+fprintf(fid,'//loop over all the boundary points\n');
+fprintf(fid,'for(int i=0;i<bNodes.n;i++){\n');
+fprintf(fid,'int gIndex = bNodes[i];\n');
+fprintf(fid,'int bNumber = lb[][gIndex]; //Boundary number\n'); 
+
+fprintf(fid,'real xx=Px[gIndex]; //x coordinate of the point\n'); 
+fprintf(fid,'real yy=Py[gIndex]; //y coordinate of the point\n');   
+for b=1:nb 
+    fprintf(fid,'if (bNumber==%d){\n',b);
+    fprintf(fid,'rv[gIndex]=ubt%dFunc(t,xx,yy);\n',b);
+    fprintf(fid,'}\n');   
+end
+fprintf(fid,'}\n');
+fprintf(fid,'return rv;\n}');
+fprintf(fid,'\n\n\n');
+
+% boundary condition for v
+fprintf(fid,'func real[int] vbFunc(real t)\n{\n');
+fprintf(fid,'real[int] rv(Vh.ndof); rv=0.;\n');
+fprintf(fid,'//loop over all the boundary points\n');
+fprintf(fid,'for(int i=0;i<bNodes.n;i++){\n');
+fprintf(fid,'int gIndex = bNodes[i];\n');
+fprintf(fid,'int bNumber = lb[][gIndex]; //Boundary number\n'); 
+
+fprintf(fid,'real xx=Px[gIndex]; //x coordinate of the point\n'); 
+fprintf(fid,'real yy=Py[gIndex]; //y coordinate of the point\n');   
+for b=1:nb 
+    fprintf(fid,'if (bNumber==%d){\n',b);
+    fprintf(fid,'rv[gIndex]=vb%dFunc(t,xx,yy);\n',b);
+    fprintf(fid,'}\n');   
+end
+fprintf(fid,'}\n');
+fprintf(fid,'return rv;\n}');
+fprintf(fid,'\n\n\n');
+
+% boundary condition for vt
+fprintf(fid,'func real[int] vbtFunc(real t)\n{\n');
+fprintf(fid,'real[int] rv(Vh.ndof); rv=0.;\n');
+fprintf(fid,'//loop over all the boundary points\n');
+fprintf(fid,'for(int i=0;i<bNodes.n;i++){\n');
+fprintf(fid,'int gIndex = bNodes[i];\n');
+fprintf(fid,'int bNumber = lb[][gIndex]; //Boundary number\n'); 
+
+fprintf(fid,'real xx=Px[gIndex]; //x coordinate of the point\n'); 
+fprintf(fid,'real yy=Py[gIndex]; //y coordinate of the point\n');   
+for b=1:nb 
+    fprintf(fid,'if (bNumber==%d){\n',b);
+    fprintf(fid,'rv[gIndex]=vbt%dFunc(t,xx,yy);\n',b);
+    fprintf(fid,'}\n');   
+end
+fprintf(fid,'}\n');
+fprintf(fid,'return rv;\n}');
+fprintf(fid,'\n\n\n');
 
 
 % write some unused functions to file to make both tz and non-tz tests work

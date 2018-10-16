@@ -5,6 +5,13 @@ function mySurf(Xplot,Yplot,Zplot,titleMessage,contour)
 if(nargin==4) %optional input
     contour=false;
 end
+if(nargin==3) %optional input
+    contour=false;
+    titleMessage='untitled';
+end
+
+
+
 
 infoPrefix = '--mySurf--: '; % all info displayed by this function includes this prefix
 

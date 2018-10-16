@@ -4,3 +4,4 @@
 !*.edp
 !*.m
 !mesh/
+!mesh/*.msh

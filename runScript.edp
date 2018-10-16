@@ -20,6 +20,7 @@ real rho=1.;
 // PDE options
 real tf=.1;                         // finial time
 real t0=0.;		              // initial time
+real dt=0.;                       // time stepping; getDt will compute a value for dt or specify a value here directly.
 real cfl=0.5;                    // fraction of the computed dt to use, i.e., dt = cfl*dt;
 string ts = "PC2";     // time-stepping method
        	    		             // support: FE,AB2,PC2, IMEX, IMEXPC

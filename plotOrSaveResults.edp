@@ -8,7 +8,10 @@ by Longfei Li 12172015
 //compute div
 int tl=cur; // time level
 div = dx(uh[tl])+dy(vh[tl]);
-curl = dx(vh[tl])-dy(uh[tl]);
+curl = dx(vh[tl])-dy(uh[tl]); //old not accurate
+ // temp=dx(vh[tl])-dy(uh[tl]); 
+ // solve CurlProj(curl,phi)=int2d(Th,qforder=quadOrder)(curl*phi)-int2d(Th,qforder=quadOrder)( temp*phi)+on(1,2,3,4,curl=0);
+  
 if(isPlot)
 {
 plot(uh[tl],wait=vwait,fill=vfill,value=vvalue,cmm=info+"u at t="+t[tl],ps=dataFolderName+"/u"+counter+".eps");

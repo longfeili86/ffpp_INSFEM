@@ -53,6 +53,7 @@ vMatrix=[Inew,Jnew,Cnew];
 if(saveDataForMATLAB) 
 {
 writeSparseMatrixToMfile(Inew,Jnew,Cnew,Inew.n,"vMatrix",dataFolderName);
+ 
 }// file objects are closed at the end of the block
 
 } // variables defined in this file out of scope here

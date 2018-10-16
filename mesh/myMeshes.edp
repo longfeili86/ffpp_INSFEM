@@ -7,29 +7,30 @@ mesh Th;
 string meshName;
 
 //meshName="square";
-//meshName="squareStretched";
+meshName="squareStretched";
 //meshName="cic";
 //meshName="cilc";  
 //meshName="testMesh";
-meshName="disk";
+//meshName="disk";
 
 
 if  (meshName=="testMesh")
 {
-Th = square(4,4);
+Th = square(2,2);
 }
 else if (meshName=="square")
 {
 // ==== square mesh [0,1]x[0,1] ====
-int ns=10;
+int ns=32;
 Th = square(ns,ns);
 }
 else if (meshName=="squareStretched")
 {
 // ==== stretched square mesh [0,1]x[0,1] ====
-int ns=10;
+int ns=16;
 Th = square(ns,ns);
-Th=movemesh(Th,[(cos((1-x)*pi)+1)/2,tanh(y/0.5)/tanh(1/0.5)]);
+//Th=movemesh(Th,[(cos((1-x)*pi)+1)/2,(cos((1-y)*pi)+1)/2]);
+ Th=movemesh(Th,[x-x*(x-0.5)*(x-1),y-y*(y-0.5)*(y-1)]);
 }
 else if (meshName=="cic")
 {

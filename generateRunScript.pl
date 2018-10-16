@@ -17,6 +17,7 @@ $mu_Val = 0.1;
 $rho_Val = 1.0;
 $tf_Val = 0.1;
 $t0_Val = 0.0;
+$dt_Val = 0.0;
 $cfl_Val = 0.5;
 $ts_Val = "IMEXPC";
 $useExDt_Val = "false";
@@ -46,8 +47,8 @@ $periodic_Val = "false";
 $run_Val="false"; # run ff++ or not.
 
 GetOptions('outputDir=s'=>\$outputDir_Val,'runName=s'=>\$runName_Val,'mu=f'=>\$mu_Val,'rho=f'=>\$rho_Val,
-'tf=f'=>\$tf_Val,'t0=f'=>\$t0_Val,'cfl=f'=>\$cfl_Val,'ts=s'=>\$ts_Val,'useExDt=s'=>\$useExDt_Val,'dd=s'=>\$dd_Val,
-'NS=s'=>\$NS_Val,'WABE=s'=>\$WABE_Val,'quadOder=i'=>\$quadOder_Val,'vSOLVER=s'=>\$vSOLVER_Val,
+'tf=f'=>\$tf_Val,'t0=f'=>\$t0_Val,'dt=f'=>\$dt_Val,'cfl=f'=>\$cfl_Val,'ts=s'=>\$ts_Val,'useExDt=s'=>\$useExDt_Val,'dd=s'=>\$dd_Val,
+'NS=s'=>\$NS_Val,'WABE=s'=>\$WABE_Val,'quadOrder=i'=>\$quadOrder_Val,'vSOLVER=s'=>\$vSOLVER_Val,
 'pSOLVER=s'=>\$pSOLVER_Val,'pn=i'=>\$pn_Val,'meshName=s'=>\$meshName_Val,'splitNumber=i'=>\$splitNumber_Val,
 'tplot=f'=>\$tplot_Val,'isPlot=s'=>\$isPlot_Val,'vwait=s'=>\$vwait_Val,'vfill=s'=>\$vfill_Val,'vvalue=s'=>\$vvalue_Val,
 'saveDataForMATLAB=s'=>\$saveDataForMATLAB_Val,'isTwilightzone=s'=>\$isTwilightzone_Val,
@@ -174,6 +175,7 @@ real rho=$rho_Val;
 // PDE options
 real tf=$tf_Val; // finial time
 real t0=$t0_Val; // initial time
+real dt=$dt_Val; // time stepping; getDt will compute a value for dt if dt=0. or specify a value here directly.
 real cfl=$cfl_Val; // fraction of the computed dt to use, i.e., dt = cfl*dt;
 string ts=\"$ts_Val\"; // time-stepping method. Support: FE,AB2,PC2, IMEX, IMEXPC
 bool useExDt = $useExDt_Val;  // use the same dt as Explicit methods for IMEX methods				     
@@ -181,8 +183,8 @@ bool dd=$dd_Val; // divergence damping option
 bool NS =$NS_Val; // Navier-Stokes or Stokes
 bool WABE=$WABE_Val; // WABE or TN pressure boundary conditions
 int  quadOrder=$quadOrder_Val; // order of quadrature formula for integration
-macro vSOLVER $vSOLVER_Val //EOM //solver for velocity
-macro pSOLVER $pSOLVER_Val //EOM //solver for pressure
+macro vSOLVER  $vSOLVER_Val //EOM //solver for velocity
+macro pSOLVER  $pSOLVER_Val //EOM //solver for pressure
 macro Pn P$pn_Val //EOM //use Pn finite-element space. P1,...,P4
 int pn = $pn_Val; //need to specify pn in int as well due to FF++ syntax
 bool periodic = $periodic_Val; // use periodic bc on left and right sides of unit square
@@ -232,8 +234,8 @@ print "runScript generated: $fileName \n";
 
 if($run_Val eq "true")
 {
-    print "run: FreeFEM++ $fileName\n";
-    system("FreeFEM++",$fileName) ;
+    print "run: FreeFem++ $fileName\n";
+    system("FreeFem++",$fileName) ;
 }
 
 

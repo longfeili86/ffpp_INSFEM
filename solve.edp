@@ -12,17 +12,13 @@ int pstep=tplot/dt;       // plot step
 dt = tplot/pstep;         // adjust dt
 int nstep = tf/dt+0.5;    // total number of steps
 
+// Divergence Damping
+real alpha=0.;
+if(dd){alpha=100.*mu/(h[].min*h[].min*rho);}  
+
 
 if(saveDataForMATLAB)
 {
-
-// save the mesh:
-savemesh(Th,dataFolderName+"/mesh.msh"); // mesh
-
-// save DOF
-WRITEDOFTOMFILE("DOF",dataFolderName);// degrees of freedom
-
-
 
 real[int] timeInfo=[t0,dt,tplot,tf];
 string comment="timeInfo=[t0,dt,tplot,tf]";
@@ -43,12 +39,18 @@ if(periodic){info=info+", periodic ";}
   ofstream oFile(logFile,append);
   oFile << "PDE info: " << info << endl;
   oFile << "Parameters: " << "mu="<< mu << ", rho="<< rho << endl;
+  oFile << "timestepping method: " << ts << endl;
+  if(dd)
+    {
+      oFile << "Divergence damping parameter alpha=" << alpha << endl;
+    }
   oFile << "FEM info: " << "pn="<< pn << endl;
   oFile << "Mesh info:" << "mesh name=" << meshName 
 	<< ", splitNumber="<<splitNumber<< ", nv="<<  Th.nv 
 	<< ", nt="<<  Th.nt << endl;
   oFile << "Degrees of freedom: " <<"ndof="<< Vh.ndof 
 	<< ", ndofK="<<  Vh.ndofK <<", nt="<< Vh.nt << endl;
+  oFile << "max(h)=" << h[].max << ", min(h)=" << h[].min << endl;
   if(isTwilightzone)
     {
       oFile << "TwilightZone Info: a=" << a << ", fx=" << fx << ", ft=" << ft << endl;
@@ -93,9 +95,7 @@ Vh div = 0.;
 Vh curl = 0.;
 real divL2=0.;
 
-// Divergence Damping
-real alpha=0.;
-if(dd){alpha=100.*mu/(h[].min*h[].min*rho);}  
+
 
 int prev,cur,new; //define time levels
 // Initial conditions
@@ -115,7 +115,7 @@ t[new]= t0 + (step+1)*dt;
 real stepTimer = clock();
 include "advance.edp"
 stepTimer = clock()-stepTimer;
-//cout << "Computational time for step " << step+1 <<" : " << stepTimer << endl;
+// cout << " current time = " << t[cur] << ", Computational time for step " << step+1 <<" : " << stepTimer << endl;
 
 // report current time every 20 steps
 if(step%20==0)

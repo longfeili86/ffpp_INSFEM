@@ -4,6 +4,7 @@ folder='';
 savePlot=false;
 solution=0;
 isPD = false;
+isTZ = false;
 
 plotGrid=false;
 plotDiv=false;
@@ -28,6 +29,9 @@ for i=1:nargin
     end
     if(strcmp(line,'-pd'))
         isPD=true;
+    end
+    if(strcmp(line,'-tz'))
+        isTZ=true;
     end  
     if(strcmp(line,'-save'))
         savePlot=true;
@@ -131,7 +135,7 @@ if(plotCurl)
     plotComponent(folder,component,solution,meshPlot,figProperty,savePlot);
 end
 
-if(solution>0)
+if(solution>0 && isTZ)
     
 figure
 component='erru';

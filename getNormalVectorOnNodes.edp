@@ -40,6 +40,13 @@ bNodes(bNodes.n-1) = i;    // put the index i in bNodes
 
 }
 
+//debug
+ // for(int i=0;i<Vh.ndof;i++){
+ //   cout <<"i=" <<i <<", x="<<Px[i] <<", y="<<Py[i] << ", label="<< lb[][i] << endl;
+ //   }
+ //    cout << "bNodes=" << bNodes<< endl;
+
+ 
 //fix corner normal //note: this is hard coded for unit square [0,1]x[0,1]
 if(periodic)
 {
