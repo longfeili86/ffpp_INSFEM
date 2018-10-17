@@ -11,17 +11,35 @@
 
 % Modify here to specify different ic and bc functions
 
-filename = 'icbcFunctions_LidDrivenCavity';     % do not add suffix .edp in filename
 
 % specify initial conditions for u, v and p
 Uic='0';
 Vic='0';
 Pic='0';
 
+%lid drive cavity
+%Uib={Uic,'0','0','1','0'}; %{Uic,Ubc1,Ubc2,...Ubcn}  
+%Vib={Vic,'0','0','0','0'}; %{Vic,Vbc1,Vbc2,...Vbcn}  
+%Pib={Pic};  %[Pic];
+%filename = 'icbcFunctions_LidDrivenCavity';     % do not add suffix .edp in filename
 
-Uib={Uic,'0','0','1','0'}; %{Uic,Ubc1,Ubc2,...Ubcn}  
-Vib={Vic,'0','0','0','0'}; %{Vic,Vbc1,Vbc2,...Vbcn}  
+            
+%modified lid drive cavity
+%Uib={Uic,'0','0','(-tanh((abs(x-0.5)-0.495)/0.01)+1)/2','0'}; %{Uic,Ubc1,Ubc2,...Ubcn}  
+%Vib={Vic,'0','0','0','0'}; %{Vic,Vbc1,Vbc2,...Vbcn}  
+%Pib={Pic};  %[Pic];
+%filename = 'icbcFunctions_modifiedLidDrivenCavity';     % do not add suffix .edp in filename
+
+
+%flow past a cylinder (base grid)
+% bc1: button wall, bc2: outflow, bc3: top wall, bc4: inflow, bc5:
+% cylinder
+UinNout='0.41^(-2)*sin(pi*t/8)*(6*y*(0.41-y))';
+Uib={Uic,'0',UinNout,'0',UinNout,'0'}; %{Uic,Ubc1,Ubc2,...Ubcn}  
+Vib={Vic,'0','0','0','0','0'}; %{Vic,Vbc1,Vbc2,...Vbcn}  
 Pib={Pic};  %[Pic];
+filename = 'icbcFunctions_FlowPastCylinder';     % do not add suffix .edp in filename
+
 
 
 

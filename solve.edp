@@ -40,10 +40,7 @@ if(periodic){info=info+", periodic ";}
   oFile << "PDE info: " << info << endl;
   oFile << "Parameters: " << "mu="<< mu << ", rho="<< rho << endl;
   oFile << "timestepping method: " << ts << endl;
-  if(dd)
-    {
-      oFile << "Divergence damping parameter alpha=" << alpha << endl;
-    }
+  oFile << "Divergence damping parameter alpha=" << alpha << endl;
   oFile << "FEM info: " << "pn="<< pn << endl;
   oFile << "Mesh info:" << "mesh name=" << meshName 
 	<< ", splitNumber="<<splitNumber<< ", nv="<<  Th.nv 
@@ -59,8 +56,6 @@ if(periodic){info=info+", periodic ";}
   oFile <<"nstep=" << nstep << ", cfl="<< cfl <<", t0= "<< t0 << ", dt="<< dt << ", tplot=" << tplot << ", tf="<< tf << endl;
   oFile << "\nBegin solving------->\n";
 }// 
-
-
 
 
 cout << "dt=" << dt << endl;

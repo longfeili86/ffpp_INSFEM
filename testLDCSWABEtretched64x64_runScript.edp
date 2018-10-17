@@ -5,7 +5,7 @@ This script was gerenerated by generateRunScript.pl
  make a copy of this file  and modify the option.
 ============================================================================
 
-Tue Oct 16 19:17:39 2018
+Tue Oct 16 19:18:37 2018
 */
 
 
@@ -13,7 +13,7 @@ Tue Oct 16 19:17:39 2018
 
 // define output location to store results:
 string outputDir = ""; // empty to store in 'pwd'
-string runName = "testLDCSWABEtretched32x32";   // folder name for the output data, can not be empty
+string runName = "testLDCSWABEtretched64x64";   // folder name for the output data, can not be empty
 
 
 // physical parameters
@@ -41,7 +41,7 @@ macro VH Vh(Th,Pn)  //EOM //define fespace
 
 
 // mesh options
-string meshName = "squareStretched32x32"; //name of the mesh. A meshName.msh file must be created first in mesh/
+string meshName = "squareStretched64x64"; //name of the mesh. A meshName.msh file must be created first in mesh/
 int splitNumber = 1; // split each side of a triangle into splitNumber pieces. specify 1 for no splitting. This is used for mesh refinement
 
 

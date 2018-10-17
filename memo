@@ -1,9 +1,25 @@
 ####### test icbc functions
 
 10/16/2018
+Flow past a cylinder test:
+
+generateRunScript.pl -run=true  -runName=testFPC -mu=0.001  -funcDefFILE=icbcFunctions_FlowPastCylinder  -pn=1 -WABE=false -ts=PC2  -meshName=cilc -tf=8.  -cfl=1.2 -isPlot=false -isTwilightzone=false -quadOrder=3 -pSOLVER=sparsesolver -vSOLVER=sparsesolver -splitNumber=4
 
 
-generateRunScript.pl -run=true  -runName=testLDCSWABEtretched32x32 -mu=0.001  -funcDefFILE=icbcFunctions_LidDrivenCavity  -pn=1 -WABE=true -ts=PC2  -meshName=squareStretched32x32 -tf=50.  -cfl=.9 -isPlot=false -isTwilightzone=false -quadOrder=3 
+
+generateRunScript.pl -run=true  -runName=testFPCCoarse -mu=0.001  -funcDefFILE=icbcFunctions_FlowPastCylinder  -pn=1 -WABE=false -ts=PC2  -meshName=cilc -tf=8.  -cfl=1.2 -isPlot=false -isTwilightzone=false -quadOrder=3 -pSOLVER=sparsesolver -vSOLVER=sparsesolver 
+
+modified LDC tests
+
+generateRunScript.pl -run=true  -runName=testMLDCStretched64x64 -mu=0.001  -funcDefFILE=icbcFunctions_modifiedLidDrivenCavity  -pn=1 -WABE=false -ts=PC2  -meshName=squareStretched64x64 -tf=50.  -cfl=1.2 -isPlot=false -isTwilightzone=false -quadOrder=3 -pSOLVER=sparsesolver -vSOLVER=sparsesolver
+
+generateRunScript.pl -run=true  -runName=testMLDCWABEStretched64x64 -mu=0.001  -funcDefFILE=icbcFunctions_modifiedLidDrivenCavity  -pn=1 -WABE=true -ts=PC2  -meshName=squareStretched64x64 -tf=50.  -cfl=1.2 -isPlot=false -isTwilightzone=false -quadOrder=3 -pSOLVER=sparsesolver -vSOLVER=sparsesolver
+
+OK:
+generateRunScript.pl -run=true  -runName=testLDCSWABEtretched64x64 -mu=0.001  -funcDefFILE=icbcFunctions_LidDrivenCavity  -pn=1 -WABE=true -ts=PC2  -meshName=squareStretched64x64 -tf=50.  -cfl=1.2 -isPlot=false -isTwilightzone=false -quadOrder=3 -pSOLVER=sparsesolver -vSOLVER=sparsesolver
+
+OK:
+generateRunScript.pl -run=true  -runName=testLDCStretched64x64 -mu=0.001  -funcDefFILE=icbcFunctions_LidDrivenCavity  -pn=1 -WABE=false -ts=PC2  -meshName=squareStretched64x64 -tf=50.  -cfl=1.2 -isPlot=false -isTwilightzone=false -quadOrder=3 -pSOLVER=sparsesolver -vSOLVER=sparsesolver
 
 
 

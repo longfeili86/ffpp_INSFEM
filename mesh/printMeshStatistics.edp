@@ -1,0 +1,17 @@
+
+string meshName="cilc.msh";
+
+mesh Th = readmesh(meshName);
+
+fespace Vh(Th,P1);
+
+Vh h=hTriangle; // size of triangle
+
+
+
+
+ cout << "Mesh info:" << "mesh name=" << meshName 
+	<< ", nt="<<  Th.nt << endl;
+  cout << "Degrees of freedom: " <<"ndof="<< Vh.ndof 
+	<< ", ndofK="<<  Vh.ndofK <<", nt="<< Vh.nt << endl;
+  cout << "max(h)=" << h[].max << ", min(h)=" << h[].min << endl;

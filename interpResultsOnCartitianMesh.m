@@ -10,9 +10,16 @@ function Results=interpResultsOnCartitianMesh(X,Y,resultsFolder,n)
 %    P: interpolated results of p on the mesh [X,Y]
 % Culr: interpolated results of curl on the mesh [X,Y]
 
-run(sprintf('%s/DOFFile',resultsFolder));
+run(sprintf('%s/DOFFile.m',resultsFolder));
 x=T.coordinates(:,1);
 y=T.coordinates(:,2);
+
+% get time info
+run(sprintf('%s/timeInfoFile.m',resultsFolder));
+Results.t0=timeInfo(1);
+Results.dt=timeInfo(2);
+Results.tplot=timeInfo(3);
+Results.tf=timeInfo(4);
 
 comp={'u','v','p','curl'};
 

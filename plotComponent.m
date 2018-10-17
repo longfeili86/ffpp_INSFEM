@@ -28,7 +28,7 @@ y=mesh.coordinates(:,2);
 tri=mesh.elements(:,1:3);
 
 if(strcmp(component,'grid'))
-  triplot(tri, x,y,'LineWidth',LW);
+  trimesh(tri,x,y,'k','LineWidth',LW);
   ttl='grid';
 else
     compName=sprintf('%s%d',component,solution);
@@ -36,7 +36,8 @@ else
     comp=eval(compName);
     trisurf(tri, x,y,comp);
     shading(SD);
-       
+    zlim([min(comp),max(comp)]);
+
     if(CT)
         hold on
         [~,hh]=tricontour3(tri, x,y,comp,NL);
@@ -63,6 +64,10 @@ else
     colorbar;
 end
 
+axis equal;
+
+xlim([min(x),max(x)]);
+ylim([min(y),max(y)]);
 
 title(ttl,'FontSize',FS,'interpreter','latex');
 xlabel('$x$','FontSize',FS,'interpreter','latex');

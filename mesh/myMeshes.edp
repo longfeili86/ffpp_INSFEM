@@ -7,9 +7,9 @@ mesh Th;
 string meshName;
 
 //meshName="square";
-meshName="squareStretched";
+//meshName="squareStretched";
 //meshName="cic";
-//meshName="cilc";  
+meshName="cilc";  
 //meshName="testMesh";
 //meshName="disk";
 
@@ -21,7 +21,7 @@ Th = square(2,2);
 else if (meshName=="square")
 {
 // ==== square mesh [0,1]x[0,1] ====
-int ns=32;
+int ns=10;
 Th = square(ns,ns);
 }
 else if (meshName=="squareStretched")
@@ -51,9 +51,9 @@ else if (meshName=="cilc")
 {
 int nin = 8;
 int nout= 6;
-int nr = 80;
+int nr = 40;
 int nwall = 32;
-real r = 0.1;
+real r = 0.05;
 real[int] center = [0.2,0.2];
 
 border S1(t=0,2.2){x=t;y=0; label=1;}

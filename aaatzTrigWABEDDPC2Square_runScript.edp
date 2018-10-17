@@ -5,7 +5,7 @@ This script was gerenerated by generateRunScript.pl
  make a copy of this file  and modify the option.
 ============================================================================
 
-Tue Oct 16 19:17:39 2018
+Thu Sep  8 15:07:38 2016
 */
 
 
@@ -13,27 +13,27 @@ Tue Oct 16 19:17:39 2018
 
 // define output location to store results:
 string outputDir = ""; // empty to store in 'pwd'
-string runName = "testLDCSWABEtretched32x32";   // folder name for the output data, can not be empty
+string runName = "aaaTN";   // folder name for the output data, can not be empty
 
 
 // physical parameters
-real mu=0.001;
+real mu=0.1;
 real rho=1;
 
 
 // PDE options
-real tf=50.; // finial time
-real t0=0; // initial time
-real dt=0; // time stepping; getDt will compute a value for dt if dt=0. or specify a value here directly.
-real cfl=1.2; // fraction of the computed dt to use, i.e., dt = cfl*dt;
+real tf=.1; // finial time
+real t0=0.; // initial time
+real dt=0.; // time stepping; getDt will compute a value for dt if dt=0. or specify a value here directly.
+real cfl=1.; // fraction of the computed dt to use, i.e., dt = cfl*dt;
 string ts="PC2"; // time-stepping method. Support: FE,AB2,PC2, IMEX, IMEXPC
 bool useExDt = false;  // use the same dt as Explicit methods for IMEX methods				     
 bool dd=true; // divergence damping option
 bool NS =true; // Navier-Stokes or Stokes
-bool WABE=true; // WABE or TN pressure boundary conditions
+bool WABE=false; // WABE or TN pressure boundary conditions
 int  quadOrder=3; // order of quadrature formula for integration
-macro vSOLVER  sparsesolver //EOM //solver for velocity
-macro pSOLVER  sparsesolver //EOM //solver for pressure
+macro vSOLVER UMFPACK //EOM //solver for velocity
+macro pSOLVER UMFPACK //EOM //solver for pressure
 macro Pn P1 //EOM //use Pn finite-element space. P1,...,P4
 int pn = 1; //need to specify pn in int as well due to FF++ syntax
 bool periodic = false; // use periodic bc on left and right sides of unit square
@@ -41,8 +41,8 @@ macro VH Vh(Th,Pn)  //EOM //define fespace
 
 
 // mesh options
-string meshName = "squareStretched32x32"; //name of the mesh. A meshName.msh file must be created first in mesh/
-int splitNumber = 1; // split each side of a triangle into splitNumber pieces. specify 1 for no splitting. This is used for mesh refinement
+string meshName = "square"; //name of the mesh. A meshName.msh file must be created first in mesh/
+int splitNumber = 2; // split each side of a triangle into splitNumber pieces. specify 1 for no splitting. This is used for mesh refinement
 
 
 // plot options
@@ -55,7 +55,7 @@ bool saveDataForMATLAB=true; // write data into matlab format or not
 
 
 // twilightzone options.
-bool isTwilightzone=false;
+bool isTwilightzone=true;
 
 
 // specify the name of the .edp file that defines TZ functions if TZ tests
@@ -64,7 +64,7 @@ bool isTwilightzone=false;
 // icbc functions definition file can be generated using icbcPreparation.m
 
 
-macro funcDefFILE()  "icbcFunctions_LidDrivenCavity.edp" //EOM  //modify the file name between quotes
+macro funcDefFILE()  "tzTrig1Functions.edp" //EOM  //modify the file name between quotes
 
 
 // trig parameters
