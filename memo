@@ -1,9 +1,20 @@
 ####### test icbc functions
+10/21/2018: compute [cd,cl,dp] for the FPC test:
+generateRunScript.pl -run=true  -runName=testFPC -isFPC=true -mu=0.001  -funcDefFILE=icbcFunctions_FlowPastCylinder  -pn=1 -WABE=false -ts=PC2  -meshName=cilc -tf=8.  -cfl=1.2 -isPlot=false -isTwilightzone=false -quadOrder=3 -pSOLVER=sparsesolver -vSOLVER=sparsesolver -splitNumber=4
+
+generateRunScript.pl -run=true  -runName=testFPCWABE -isFPC=true -mu=0.001  -funcDefFILE=icbcFunctions_FlowPastCylinder  -pn=1 -WABE=true -ts=PC2  -meshName=cilc -tf=8.  -cfl=1.2 -isPlot=false -isTwilightzone=false -quadOrder=3 -pSOLVER=sparsesolver -vSOLVER=sparsesolver -splitNumber=4
+
+
+
+generateRunScript.pl -run=true  -runName=testFPC -isFPC=true -mu=0.001  -funcDefFILE=icbcFunctions_FlowPastCylinder  -pn=1 -WABE=false -ts=PC2  -meshName=cilc -tf=8.  -cfl=1.2 -isPlot=false -isTwilightzone=false -quadOrder=3 -pSOLVER=sparsesolver -vSOLVER=sparsesolver -splitNumber=1
 
 10/16/2018
 Flow past a cylinder test:
 
 generateRunScript.pl -run=true  -runName=testFPC -mu=0.001  -funcDefFILE=icbcFunctions_FlowPastCylinder  -pn=1 -WABE=false -ts=PC2  -meshName=cilc -tf=8.  -cfl=1.2 -isPlot=false -isTwilightzone=false -quadOrder=3 -pSOLVER=sparsesolver -vSOLVER=sparsesolver -splitNumber=4
+
+
+generateRunScript.pl -run=true  -runName=testFPCWABE -mu=0.001  -funcDefFILE=icbcFunctions_FlowPastCylinder  -pn=1 -WABE=true -ts=PC2  -meshName=cilc -tf=8.  -cfl=1.2 -isPlot=false -isTwilightzone=false -quadOrder=3 -pSOLVER=sparsesolver -vSOLVER=sparsesolver -splitNumber=4
 
 
 

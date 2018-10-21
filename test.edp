@@ -2,16 +2,18 @@
 
 mesh Th = square(2,2);
 
-fespace Vh(Th,P1,periodic=[[2,y],[4,y]]);
+fespace Vh(Th,P1);
 //fespace Vh(Th,P1);
 
 Vh xx = x;
 Vh yy = y;
 Vh lb = label;
+Vh f=x+y;
 
 cout << xx[] << endl;
 cout << yy[] << endl;
 cout << lb[] << endl;
+cout << "f(0.1,0.2)=" << f(.1,.2) << endl;
 
 
 Vh phi;

@@ -27,6 +27,7 @@ for i=1:length(comp)
     run(sprintf('%s/%s%dFile',resultsFolder,comp{i},n));
     Icomp = scatteredInterpolant(x,y,transpose(eval(sprintf('%s%d',comp{i},n))));
     Results.(comp{i})=Icomp(X,Y);
+    Results.(strcat('I',comp{i}))=Icomp;
 end
 
 

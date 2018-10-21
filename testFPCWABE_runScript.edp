@@ -5,7 +5,7 @@ This script was gerenerated by generateRunScript.pl
  make a copy of this file  and modify the option.
 ============================================================================
 
-Sun Oct 21 03:22:16 2018
+Thu Oct 18 02:52:13 2018
 */
 
 
@@ -13,13 +13,12 @@ Sun Oct 21 03:22:16 2018
 
 // define output location to store results:
 string outputDir = ""; // empty to store in 'pwd'
-string runName = "testFPC";   // folder name for the output data, can not be empty
+string runName = "testFPCWABE";   // folder name for the output data, can not be empty
 
 
 // physical parameters
 real mu=0.001;
 real rho=1;
-bool isFPC=true; // for FPC problem, we need to compute lift, drag and pressure difference
 
 
 // PDE options
@@ -31,7 +30,7 @@ string ts="PC2"; // time-stepping method. Support: FE,AB2,PC2, IMEX, IMEXPC
 bool useExDt = false;  // use the same dt as Explicit methods for IMEX methods				     
 bool dd=true; // divergence damping option
 bool NS =true; // Navier-Stokes or Stokes
-bool WABE=false; // WABE or TN pressure boundary conditions
+bool WABE=true; // WABE or TN pressure boundary conditions
 int  quadOrder=3; // order of quadrature formula for integration
 macro vSOLVER  sparsesolver //EOM //solver for velocity
 macro pSOLVER  sparsesolver //EOM //solver for pressure
@@ -43,7 +42,7 @@ macro VH Vh(Th,Pn)  //EOM //define fespace
 
 // mesh options
 string meshName = "cilc"; //name of the mesh. A meshName.msh file must be created first in mesh/
-int splitNumber = 1; // split each side of a triangle into splitNumber pieces. specify 1 for no splitting. This is used for mesh refinement
+int splitNumber = 4; // split each side of a triangle into splitNumber pieces. specify 1 for no splitting. This is used for mesh refinement
 
 
 // plot options

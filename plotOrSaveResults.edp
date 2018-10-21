@@ -11,7 +11,33 @@ div = dx(uh[tl])+dy(vh[tl]);
 curl = dx(vh[tl])-dy(uh[tl]); //old not accurate
  // temp=dx(vh[tl])-dy(uh[tl]); 
  // solve CurlProj(curl,phi)=int2d(Th,qforder=quadOrder)(curl*phi)-int2d(Th,qforder=quadOrder)( temp*phi)+on(1,2,3,4,curl=0);
-  
+// solve for streamfunction laplace(psi)=-curl;
+ real cd,cl,dp; //drag, lift and pressure difference for the FPC test:
+ if(isFPC)
+   {
+
+     dp=ph[tl](0.15,0.5)-ph[tl](0.25,0.5);
+     
+     real nu=mu/rho;
+     cd=-20*(int1d(Th,qforder=quadOrder,5)(nu*(dx(uh[tl])*N.x+dy(uh[tl])*N.y)-ph[tl]*N.x ));
+     cl= -20*(int1d(Th,qforder=quadOrder,5)(nu*(dx(vh[tl])*N.x+dy(vh[tl])*N.y)-ph[tl]*N.y ));
+     cout << "1. t="<<t[tl]<<", [cd,cl,dp]=["<<cd<<", "<< cl << ", "<< dp << "]" << endl;
+
+     // Vh utan=uh[tl]*N.y-vh[tl]*N.x;
+     // cd=-20*(int1d(Th,qforder=quadOrder,5)(nu*(dx(utan)*N.x+dy(utan)*N.y)*N.y-ph[tl]*N.x ));
+     // cl=20*(int1d(Th,qforder=quadOrder,5)(nu*(dx(utan)*N.x+dy(utan)*N.y)*N.x+ph[tl]*N.y));
+     //
+     // cout << "2. t="<<t[tl]<<", [cd,cl,dp]=["<<cd<<", "<< cl << ", "<< dp << "]" << endl;
+
+      {// write to file:
+	string variableName="dlp"+counter;
+	string filename=dataFolderName+"/"+variableName+"File.m";
+	ofstream oFile(filename);
+	oFile<< variableName<< "=["<< cd << ", "<< cl <<", " << dp << "];"<<endl;
+      }// 
+     
+   }
+ 
 if(isPlot)
 {
 plot(uh[tl],wait=vwait,fill=vfill,value=vvalue,cmm=info+"u at t="+t[tl],ps=dataFolderName+"/u"+counter+".eps");

@@ -42,7 +42,9 @@ $a_Val=.5;
 $fx_Val=2.;
 $fy_Val=2.;
 $ft_Val=2.;
-$periodic_Val = "false";  
+$periodic_Val = "false";
+$isFPC_Val = "false";   
+
 
 $run_Val="false"; # run ff++ or not.
 
@@ -52,7 +54,8 @@ GetOptions('outputDir=s'=>\$outputDir_Val,'runName=s'=>\$runName_Val,'mu=f'=>\$m
 'pSOLVER=s'=>\$pSOLVER_Val,'pn=i'=>\$pn_Val,'meshName=s'=>\$meshName_Val,'splitNumber=i'=>\$splitNumber_Val,
 'tplot=f'=>\$tplot_Val,'isPlot=s'=>\$isPlot_Val,'vwait=s'=>\$vwait_Val,'vfill=s'=>\$vfill_Val,'vvalue=s'=>\$vvalue_Val,
 'saveDataForMATLAB=s'=>\$saveDataForMATLAB_Val,'isTwilightzone=s'=>\$isTwilightzone_Val,
-'funcDefFILE=s'=>\$funcDefFILE_Val,'a=f'=>\$a_Val,'fx=f'=>\$fx_Val,'fy=f'=>\$fy_Val,'ft=f'=>\$ft_Val, 'run=s'=>\$run_Val,'periodic=s'=>\$periodic_Val);
+'funcDefFILE=s'=>\$funcDefFILE_Val,'a=f'=>\$a_Val,'fx=f'=>\$fx_Val,'fy=f'=>\$fy_Val,'ft=f'=>\$ft_Val, 'run=s'=>\$run_Val,'periodic=s'=>\$periodic_Val,
+'isFPC=s'=>\$isFPC_Val);
 
 # update some other variables
 $VH_Val = "Vh(Th,Pn)";
@@ -171,6 +174,7 @@ string runName = \"$runName_Val\"\;   // folder name for the output data, can no
 // physical parameters
 real mu=$mu_Val;
 real rho=$rho_Val;
+bool isFPC=$isFPC_Val; // for FPC problem, we need to compute lift, drag and pressure difference
 \n
 // PDE options
 real tf=$tf_Val; // finial time

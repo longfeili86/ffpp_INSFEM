@@ -2,8 +2,8 @@ close all
 %this script generate plots for lid-driven cavity results
 
 %resultsName='testLDCSWABEtretched64x64';
-resultsName='testLDCStretched64x64';
-%resultsName='testMLDCStretched64x64';
+%resultsName='testLDCStretched64x64';
+resultsName='testMLDCStretched64x64';
 %resultsName='testMLDCWABEStretched64x64';
 
 solutionNumber=1000;
@@ -13,7 +13,9 @@ solutionNumber=1000;
 Np=101; % number of grids for plotting
 Ic=ceil(Np/2); % index of the center grid
 
-[X,Y]=meshgrid(linspace(0,1,Np),linspace(0,1,Np));
+x=linspace(0,1,Np); x=(cos((1-x)*pi)+1)/2; %x=x-x.*(x-0.5).*(x-1);
+y=linspace(0,1,Np); y=(cos((1-y)*pi)+1)/2; %y=y-y.*(y-0.5).*(y-1);
+[X,Y]=meshgrid(x,y);
 fprintf('center point: (%f,%f)\n',X(Ic,Ic),Y(Ic,Ic));
 
 
@@ -23,26 +25,26 @@ tcurr=R.t0+solutionNumber*R.tplot;
 
 
 cmd=sprintf('plotResults -f=%s -solution=%d -grid -curl',resultsName,solutionNumber);
-eval(cmd);
+%eval(cmd);
 
 setupFigure
 
+% contour vorticity
 figure
 [C,h]=contour(X,Y,R.curl,[-5, -4, -3, -2, -1, -0.5, 0, 0.5, 1, 2, 3],'LineWidth',figOptions.LW,'ShowText','on');
 clabel(C,h,'FontSize',figOptions.FS)
 colormap jet
 title(sprintf('t=%f',tcurr),'FontSize',figOptions.FS);
 
-
+% contour pressure
 figure
 [C,h]=contour(X,Y,R.p-R.p(Ic,Ic),[0.3, 0.17, 0.12, 0.11, 0.09, 0.07, 0.05, 0.02, 0, -0.002],'LineWidth',figOptions.LW,'ShowText','on');
 clabel(C,h,'FontSize',figOptions.FS)
 colormap jet
 title(sprintf('t=%f',tcurr),'FontSize',figOptions.FS);
 
-
+% plot comparison with Ghia et al. 1982
 figure
-
 % reference data from GHIA et al. 1982 JCP
 giahRe1000.x=[1.,0.9688,0.9609,0.9531,0.9453,0.9063,0.8594,0.8047,...
     0.5000,0.2344,0.2266,0.1563,0.0938,0.0781,0.0703,0.0625,0.0000];
@@ -65,12 +67,28 @@ title(sprintf('t=%f',tcurr),'FontSize',figOptions.FS);
 set(gca,'FontSize',figOptions.FS);
 
 figure
-x=linspace(0,1,11);
-xx=(cos((1-x)*pi)+1)/2.; % stretch nodes
-[xStart,yStart]=meshgrid(xx,xx);
-h=streamline(X,Y,R.u,R.v,[xStart(:);0.01;0.07;0.5;0.9],[yStart(:);0.01;0.07;0.55;0.15]);
-title(sprintf('t=%f',tcurr),'FontSize',figOptions.FS);
-set(gca,'FontSize',figOptions.FS);
+
+ysmd=linspace(.99,0.56,10);
+xsmd=0*ysmd+0.56;
+ns=[3200,2380,1980,1600,1250,920,610,325,205,30];
+xslc=[0.05,0.1,0.1,0.05];
+yslc=[0.09,0.05,0.0001,0.05,];
+xsrc=[ 0.9,  0.9,0.9, 0.01,0.99,0.9999];
+ysrc=[ 0.05, 0.1,0.21,0.01,0.01,0.8];
+xs=[xsmd,xslc,xsrc];
+ys=[ysmd,yslc,ysrc];
+ns=[ns,152, 300, 350, 550,290,300,3800];
+n=length(xs);
+fprintf('n=%d\n',n);
+% tic;
+%  for i=1:n
+%  h=streamline(X,Y,R.u,R.v,xs,ys,[0.1,ns(i)]);
+%  set(h,'color','k','LineWidth',figOptions.LW);
+%  end
+%  toc;
+  myStreamline(X,Y,R.u,R.v,xs,ys);
+%  title(sprintf('t=%f',tcurr),'FontSize',figOptions.FS);
+%  set(gca,'FontSize',figOptions.FS);
 
 % ind = zeros(size(h));
 % for k = 1:length(h); % essentially, for each stream line.
@@ -83,6 +101,13 @@ set(gca,'FontSize',figOptions.FS);
 % set(h(logical(ind)),'color','red');
 % delete(h(~logical(ind)));
 % 
+
+figure
+nm=sqrt(R.u.^2+R.v.^2);
+u=R.u./nm;
+v=R.v./nm;
+quiver(X(1:5:end),Y(1:5:end),u(1:5:end),v(1:5:end))
+axis([0,1,0,1])
 
 
 
