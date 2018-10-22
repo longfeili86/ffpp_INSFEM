@@ -21,6 +21,7 @@ CT=property.CT;  % plot contour line or not
 CZ=property.CZ;  % contour z value
 NL=property.NL;  % number of contour lines
 
+isFPC=property.isFPC;
 useColormapRainbow;
 
 x=mesh.coordinates(:,1);
@@ -63,6 +64,13 @@ else
     view(VW);
     colorbar;
 end
+
+if(isFPC)
+    hold on
+    plotFPCdomain
+    hold off
+end
+
 
 axis equal;
 

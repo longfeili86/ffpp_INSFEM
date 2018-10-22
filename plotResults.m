@@ -4,6 +4,7 @@ folder='';
 savePlot=false;
 solution=0;
 isPD = false;
+isFPC = false;
 isTZ = false;
 
 plotGrid=false;
@@ -29,6 +30,9 @@ for i=1:nargin
     end
     if(strcmp(line,'-pd'))
         isPD=true;
+    end
+    if(strcmp(line,'-fpc'))
+        isFPC=true;
     end
     if(strcmp(line,'-tz'))
         isTZ=true;
@@ -77,6 +81,9 @@ if strcmp(folder,'')
     fprintf('Usage:\nplotResults -f=folder_name -pd (for periodic data) -save(to save plots) -solution=<n>(to plot solution n) -view=<2/3> -contour=<on/off>\n')
     return
 end
+
+figProperty.isFPC=isFPC;
+
 
 % read mesh
 if(isPD)

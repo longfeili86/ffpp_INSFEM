@@ -9,7 +9,7 @@ x=0:h:2.2;
 y=0:h:0.41;
 
 [X,Y]=meshgrid(x,y);
-solutionNumber=160; 
+solutionNumber=37; 
 
 
 R=interpResultsOnCartitianMesh(X,Y,resultsName,solutionNumber);
@@ -17,8 +17,8 @@ R=interpResultsOnCartitianMesh(X,Y,resultsName,solutionNumber);
 
 tcurr=R.t0+solutionNumber*R.tplot;
 
-cmd=sprintf('plotResults -f=%s -solution=%d -grid -curl',resultsName,solutionNumber);
-%eval(cmd);
+cmd=sprintf('plotResults -f=%s -solution=%d -grid -curl -fpc',resultsName,solutionNumber);
+eval(cmd);
 
 setupFigure
 
@@ -26,22 +26,15 @@ setupFigure
 figure
 
 % plot FPC domain boundaries
+plotFPCdomain;
 hold on
-plot(x,0.*x,'k','LineWidth',figOptions.LW);
-plot(x,0.*x+0.41,'k','LineWidth',figOptions.LW);
-plot(0*y,y,'k','LineWidth',figOptions.LW);
-plot(0*y+2.2,y,'k','LineWidth',figOptions.LW);
-% th=linspace(0,2*pi,100);
-% r=0.05;xc=0.2;yc=0.2;
-% plot(r*cos(th)+xc,r*sin(th)+yc,'k','LineWidth',figOptions.LW);
-rectangle('Position',[0.15,0.15,0.1,0.1],'Curvature',[1 1],'FaceColor','r','EdgeColor','r');
-%hold off
 axis equal
 %xlim([min(x),max(x)]);
 %ylim([min(y),max(y)]);
 d=4;
-quiver(X(1:d:end,1:d:end),Y(1:d:end,1:d:end),R.u(1:d:end,1:d:end),R.v(1:d:end,1:d:end),2,'k','LineWidth',1)
+%quiver(X(1:d:end,1:d:end),Y(1:d:end,1:d:end),R.u(1:d:end,1:d:end),R.v(1:d:end,1:d:end),2,'k','LineWidth',1)
 axis equal
+hold off
 
 %streamline
 ns=20;
