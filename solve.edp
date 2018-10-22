@@ -99,6 +99,17 @@ new=(step+1)%numberOfTimeLevels;
 prev=(step+2)%numberOfTimeLevels;
 include "initialConditions.edp"
 
+
+//20181021: for FPC test:
+real cdmax=-999.; real tcdmax=0.; // initialize cdmax and tcdmax 
+real clmax=-999.;  real tclmax=0.; // initialize clmax and tclmax
+// filenames:
+string cdfilename=dataFolderName+"/cdFile.m";
+string clfilename=dataFolderName+"/clFile.m";
+string dpfilename=dataFolderName+"/dpFile.m";
+string maxcdclfilename=dataFolderName+"/maxcdclFile.m";
+
+
 for(step; step<=nstep;step++)
 {
 cur=step%numberOfTimeLevels;
@@ -122,13 +133,91 @@ cout << "current time = " << t[cur] << endl;
  }
 }
 
-if((step%pstep)==0)
+
+// Longfei 20181021: compute drag, lift and pressure difference,
+// needed for comparison with Liu-Liu-Pego 2010 and V. John 200
+ real cd,cl,dp;
+
+ if(isFPC)
+   {
+     int tl=cur; // time level
+     dp=ph[tl](0.15,0.2)-ph[tl](0.25,0.2);
+     
+     real nu=mu/rho;
+     // note: (N.x,N.y) here is the outward normal. the normal in the drag & lift formula is directing into fluid domain.
+     // the followin two formula should be same? proof???
+     // Liu-Liu-Pego 2010 paper formula:
+     cd=-20*(int1d(Th,qforder=quadOrder,5)(nu*(dx(uh[tl])*N.x+dy(uh[tl])*N.y)-ph[tl]*N.x ));
+     cl= -20*(int1d(Th,qforder=quadOrder,5)(nu*(dx(vh[tl])*N.x+dy(vh[tl])*N.y)-ph[tl]*N.y ));
+     //cout << "1. t="<<t[tl]<<", [cd,cl,dp]=["<<cd<<", "<< cl << ", "<< dp << "]" << endl;
+     if(cd>cdmax){cdmax=cd;tcdmax=t[tl];}
+     if(cl>clmax){clmax=cl;tclmax=t[tl];}
+
+     // V. John 2004 paper formula:
+     // Vh utan=uh[tl]*N.y-vh[tl]*N.x;
+     // cd=-20*(int1d(Th,qforder=quadOrder,5)(nu*(dx(utan)*N.x+dy(utan)*N.y)*N.y-ph[tl]*N.x ));
+     // cl=20*(int1d(Th,qforder=quadOrder,5)(nu*(dx(utan)*N.x+dy(utan)*N.y)*N.x+ph[tl]*N.y));
+     //
+     // cout << "2. t="<<t[tl]<<", [cd,cl,dp]=["<<cd<<", "<< cl << ", "<< dp << "]" << endl;
+
+     
+   }
+
+
+ if((step%pstep)==0)
 {
 // plot solutions, div, errors(if tz) and save a copy of eps file.
 int counter = step/pstep;
-include "plotOrSaveResults.edp"  
+include "plotOrSaveResults.edp"
+
+if(isFPC)
+  {
+    // write data to m files:
+    if(step==0)
+      {
+	ofstream oFilecd(cdfilename);
+	ofstream oFilecl(clfilename);
+	ofstream oFiledp(dpfilename);
+	oFilecd << "cd=[";
+	oFilecl << "cl=[";
+	oFiledp<< "dp=[";
+      }
+    ofstream oFilecd(cdfilename,append);
+    ofstream oFilecl(clfilename,append);
+    ofstream oFiledp(dpfilename,append);
+    if((step/pstep)%10==0)
+      {
+	 oFilecd << "...\n";
+	 oFilecl << "...\n";
+	 oFiledp<< "...\n ";
+      }
+    oFilecd << cd << " ";
+    oFilecl << cl << " ";
+    oFiledp<< dp<< " ";
+   }
+  
 }
+
+ 
 }
+
+if(isFPC)
+  {
+    
+    ofstream oFilecd(cdfilename,append);
+    ofstream oFilecl(clfilename,append);
+    ofstream oFiledp(dpfilename,append);
+    oFilecd << "];";
+    oFilecl <<  "];";
+    oFiledp<<  "];";
+
+    ofstream oFile(maxcdclfilename);
+    oFile << "cdmax="<< cdmax << ";\n";
+    oFile << "tcdmax="<< tcdmax << ";\n";
+    oFile << "clmax="<< clmax << ";\n";
+    oFile << "tclmax="<< tclmax << ";\n";   
+  }
+
 
 // output error to file for tz tests.
 include "writeErrorToFile.edp"

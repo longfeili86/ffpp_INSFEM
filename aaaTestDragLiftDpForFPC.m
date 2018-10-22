@@ -1,9 +1,9 @@
 clear
 close all
 
-resultsName='testFPC';
+resultsName='testFPCWABE';
 
-numSolutions=160;
+numSolutions=139;
 for i=1:numSolutions
     run(sprintf('%s/dlp%dFile.m',resultsName,i));
     dlp=eval(sprintf('dlp%d',i));
@@ -16,7 +16,7 @@ figure
 plot(t,cd);
 title('cd')
 figure
-plot(t,cl);
+plot(t,cl,'.-');
 title('cl')
 
 figure
