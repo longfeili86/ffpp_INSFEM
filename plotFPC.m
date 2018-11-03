@@ -1,7 +1,8 @@
 close all
 %this script generate plots for flow past a cylinder results
-resultsName='testFPC';
-%resultsName='testFPCWABE';
+%resultsName='testFPC';
+resultsName='testFPCWABEP4';
+aaaTestDragLiftDpForFPCnew;
 
 % grid spacing for plotting
 h=0.01;
@@ -9,7 +10,7 @@ x=0:h:2.2;
 y=0:h:0.41;
 
 [X,Y]=meshgrid(x,y);
-solutionNumber=37; 
+solutionNumber=160; 
 
 
 R=interpResultsOnCartitianMesh(X,Y,resultsName,solutionNumber);
@@ -17,7 +18,7 @@ R=interpResultsOnCartitianMesh(X,Y,resultsName,solutionNumber);
 
 tcurr=R.t0+solutionNumber*R.tplot;
 
-cmd=sprintf('plotResults -f=%s -solution=%d -grid -curl -fpc',resultsName,solutionNumber);
+cmd=sprintf('plotResults -f=%s -solution=%d -grid -curl -pd -fpc',resultsName,solutionNumber);
 eval(cmd);
 
 setupFigure

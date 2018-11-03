@@ -1,7 +1,7 @@
-clear
-close all
-
-resultsName='testFPCP4';
+% clear
+% close all
+% 
+% resultsName='testFPCP4';
 
 run(sprintf('%s/cdFile.m',resultsName));
 run(sprintf('%s/clFile.m',resultsName));
