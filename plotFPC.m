@@ -1,8 +1,23 @@
 close all
+setupFigure
+
+% mesh
+figure
+plotFPCdomain
+hold on
+cmd='plotMsh mesh/cilc.msh -save';
+eval(cmd);
+hold off
+
 %this script generate plots for flow past a cylinder results
 %resultsName='testFPC';
+%resultsName='testFPCP2';
+%resultsName='testFPCP4';
+%resultsName='testFPCWABE';
+%resultsName='testFPCWABEP2';
 resultsName='testFPCWABEP4';
-aaaTestDragLiftDpForFPCnew;
+
+plotDragLiftDpForFPC;
 
 % grid spacing for plotting
 h=0.01;
@@ -19,23 +34,13 @@ R=interpResultsOnCartitianMesh(X,Y,resultsName,solutionNumber);
 tcurr=R.t0+solutionNumber*R.tplot;
 
 cmd=sprintf('plotResults -f=%s -solution=%d -grid -curl -pd -fpc',resultsName,solutionNumber);
-eval(cmd);
+%eval(cmd);
 
-setupFigure
 
 
 figure
 
-% plot FPC domain boundaries
-plotFPCdomain;
-hold on
-axis equal
-%xlim([min(x),max(x)]);
-%ylim([min(y),max(y)]);
-d=4;
-%quiver(X(1:d:end,1:d:end),Y(1:d:end,1:d:end),R.u(1:d:end,1:d:end),R.v(1:d:end,1:d:end),2,'k','LineWidth',1)
-axis equal
-hold off
+
 
 %streamline
 ns=20;
@@ -46,10 +51,12 @@ x=linspace(0.05,2.15,30);
 y=linspace(0.01,0.40,8);
 [Xs,Ys]=meshgrid(x,y);
 h=streamline(X,Y,R.u,R.v,Xs,Ys,[0.1,500]);
-tic;
-%myStreamline(X,Y,R.u,R.v,Xs(:),Ys(:));
-toc;
-% print('-depsc2','aaaWABEmyStreamline.eps')
+% plot FPC domain boundaries
+hold on
+plotFPCdomain;
+hold off
+axis off
+print('-depsc2',sprintf('%sStreamline.eps',resultsName))
 
 
 

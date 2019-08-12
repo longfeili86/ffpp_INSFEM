@@ -1,3 +1,27 @@
+11/5/2018:
+run FPC tests with P2
+generateRunScript.pl -run=true  -runName=testFPCP2 -isFPC=true -mu=0.001  -funcDefFILE=icbcFunctions_FlowPastCylinder  -pn=2 -WABE=false -ts=PC2 -meshName=cilc -tf=8.  -cfl=1. -isPlot=false -isTwilightzone=false -quadOrder=5 -pSOLVER=sparsesolver -vSOLVER=sparsesolver  -dt=5e-5 -splitNumber=2
+
+
+generateRunScript.pl -run=true  -runName=testFPCWABEP2 -isFPC=true -mu=0.001  -funcDefFILE=icbcFunctions_FlowPastCylinder  -pn=2 -WABE=true -ts=PC2 -meshName=cilc -tf=8.  -cfl=1. -isPlot=false -isTwilightzone=false -quadOrder=5 -pSOLVER=sparsesolver -vSOLVER=sparsesolver  -dt=5e-5 -splitNumber=2
+
+
+
+11/02/2018:
+## test stability of no dd 
+ generateRunScript.pl -run=true -runName=testNoddTZ -isTwilightzone=true -funcDefFILE=tzTrig1Functions -pn=1 -WABE=false -dd=false -ts=PC2  -meshName=square -tf=10  -isPlot=false -periodic=false -cfl=1.  (ok)
+
+
+generateRunScript.pl -run=true  -runName=testFPCnodd -isFPC=true -mu=0.001  -funcDefFILE=icbcFunctions_FlowPastCylinder  -WABE=false -ts=PC2 -meshName=cilc -tf=8.  -cfl=1. -isPlot=false -isTwilightzone=false -quadOrder=3 -pSOLVER=sparsesolver -vSOLVER=sparsesolver  -dd=false
+(failed at current time = 1.58703
+nan != nan => Sorry error in Optimization add:  (p) int2d(Th,optimize=0)(...)
+  current line = 9)
+
+
+### test IMEXPC
+generateRunScript.pl -run=true  -runName=testFPCWABEP4IMEXPC -isFPC=true -mu=0.001  -funcDefFILE=icbcFunctions_FlowPastCylinder -pn=4 -WABE=true -ts=IMEXPC -mesh=cilc -tf=8.  -cfl=1.  -isPlot=true -isTwilightzone=false -quadOrder=10 -pSOLVER=sparsesolver -vSOLVER=sparsesolver -dd=true -useExDt=true
+
+
 ####### test icbc functions
 10/22/2018: try p4
 generateRunScript.pl -run=true  -runName=testFPCP4 -isFPC=true -mu=0.001  -funcDefFILE=icbcFunctions_FlowPastCylinder  -pn=4 -WABE=false -ts=PC2 -meshName=cilc -tf=8.  -cfl=1. -isPlot=false -isTwilightzone=false -quadOrder=10 -pSOLVER=sparsesolver -vSOLVER=sparsesolver  -dt=5e-5

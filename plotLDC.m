@@ -3,8 +3,8 @@ close all
 
 %resultsName='testLDCSWABEtretched64x64';
 %resultsName='testLDCStretched64x64';
-resultsName='testMLDCStretched64x64';
-%resultsName='testMLDCWABEStretched64x64';
+%resultsName='testMLDCStretched64x64';
+resultsName='testMLDCWABEStretched64x64';
 
 solutionNumber=1000;
 
@@ -29,19 +29,31 @@ cmd=sprintf('plotResults -f=%s -solution=%d -grid -curl',resultsName,solutionNum
 
 setupFigure
 
+% mesh
+figure
+cmd='plotMsh mesh/squareStretched32x32.msh -save';
+eval(cmd);
+
 % contour vorticity
 figure
 [C,h]=contour(X,Y,R.curl,[-5, -4, -3, -2, -1, -0.5, 0, 0.5, 1, 2, 3],'LineWidth',figOptions.LW,'ShowText','on');
 clabel(C,h,'FontSize',figOptions.FS)
-colormap jet
-title(sprintf('t=%f',tcurr),'FontSize',figOptions.FS);
+axis([0,1,0,1]);
+axis equal
+%title(sprintf('t=%f',tcurr),'FontSize',figOptions.FS);
+set(gca,'FontSize',figOptions.FS);
+print('-depsc2',sprintf('%sCurlContour.eps',resultsName));
 
 % contour pressure
 figure
 [C,h]=contour(X,Y,R.p-R.p(Ic,Ic),[0.3, 0.17, 0.12, 0.11, 0.09, 0.07, 0.05, 0.02, 0, -0.002],'LineWidth',figOptions.LW,'ShowText','on');
 clabel(C,h,'FontSize',figOptions.FS)
-colormap jet
-title(sprintf('t=%f',tcurr),'FontSize',figOptions.FS);
+axis([0,1,0,1]);
+axis equal
+
+%title(sprintf('t=%f',tcurr),'FontSize',figOptions.FS);
+set(gca,'FontSize',figOptions.FS);
+print('-depsc2',sprintf('%sPressureContour.eps',resultsName));
 
 % plot comparison with Ghia et al. 1982
 figure
@@ -60,11 +72,13 @@ plot(Y(:,Ic),R.u(:,Ic),'b','LineWidth',figOptions.LW);
 plot(giahRe1000.y,giahRe1000.u,'bo','MarkerSize',figOptions.MS);
 plot(X(Ic,:),R.v(Ic,:),'r','LineWidth',figOptions.LW);
 plot(giahRe1000.x,giahRe1000.v,'ro','MarkerSize',figOptions.MS);
-legend('u(0.5,y)','u(0.5,y) (Giah{\it et al.})', 'v(x,0.5)','v(x,0.5) (Giah{\it et al.})','Location','North')
+box on;
 
-title(sprintf('t=%f',tcurr),'FontSize',figOptions.FS);
-
+legend('u(0.5,y)','u(0.5,y) (Giah et al.)', 'v(x,0.5)','v(x,0.5) (Giah et al.)','Location','North')
+%title(sprintf('t=%f',tcurr),'FontSize',figOptions.FS);
 set(gca,'FontSize',figOptions.FS);
+print('-depsc2',sprintf('%sComparisonWithGHIA.eps',resultsName));
+
 
 figure
 
@@ -86,7 +100,14 @@ fprintf('n=%d\n',n);
 %  set(h,'color','k','LineWidth',figOptions.LW);
 %  end
 %  toc;
-  myStreamline(X,Y,R.u,R.v,xs,ys);
+myStreamline(X,Y,R.u,R.v,xs,ys);
+axis equal
+axis([0,1,0,1]);    
+set(gca,'FontSize',figOptions.FS);
+box on;
+  
+print('-depsc2',sprintf('%sStreamline.eps',resultsName));
+
 %  title(sprintf('t=%f',tcurr),'FontSize',figOptions.FS);
 %  set(gca,'FontSize',figOptions.FS);
 
@@ -102,12 +123,14 @@ fprintf('n=%d\n',n);
 % delete(h(~logical(ind)));
 % 
 
-figure
-nm=sqrt(R.u.^2+R.v.^2);
-u=R.u./nm;
-v=R.v./nm;
-quiver(X(1:5:end),Y(1:5:end),u(1:5:end),v(1:5:end))
-axis([0,1,0,1])
+% figure
+% nm=sqrt(R.u.^2+R.v.^2);
+% u=R.u./nm;
+% v=R.v./nm;
+% quiver(X(1:5:end),Y(1:5:end),u(1:5:end),v(1:5:end))
+% axis([0,1,0,1])
+
+
 
 
 

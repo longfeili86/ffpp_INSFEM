@@ -17,8 +17,19 @@ n=length(cd);
 t=timeInfo(1)+timeInfo(3)*(0:n-1);
 
 figure
-plot(t,cd);
+plot(t,cd,'k','LineWidth',figOptions.LW);
+set(gca,'FontSize',figOptions.FS)
+print('-depsc2',sprintf('%scd.eps',resultsName))
+
 figure
-plot(t,cl);
+plot(t,cl,'k','LineWidth',figOptions.LW);
+set(gca,'FontSize',figOptions.FS)
+print('-depsc2',sprintf('%scl.eps',resultsName))
+
+
 figure
-plot(t,dp);
+plot(t,dp,'k','LineWidth',figOptions.LW);
+set(gca,'FontSize',figOptions.FS)
+print('-depsc2',sprintf('%sdp.eps',resultsName))
+
+
