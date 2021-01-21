@@ -55,7 +55,8 @@ macro WRITEDOFTOMFILE(Name,dir)
 {
 string fileName = dir+"/"+Name+"File.m";
 ofstream oFile(fileName);
-
+cout << "writting DOF to " << fileName << endl;
+ 
 oFile << "% number of nodes: "     << Vh.ndof << endl;
 oFile << "% number of elements: "  << Vh.nt   << endl;
 

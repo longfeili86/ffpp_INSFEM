@@ -1,23 +1,35 @@
 close all
+isSavePlot=true
 setupFigure
 
 % mesh
-figure
-plotFPCdomain
-hold on
-cmd='plotMsh mesh/cilc.msh -save';
-eval(cmd);
-hold off
+% figure
+% plotFPCdomain
+% hold on
+% cmd='plotMsh mesh/cilc.msh -save';
+% eval(cmd);
+% hold off
 
 %this script generate plots for flow past a cylinder results
+
+%old results"
 %resultsName='testFPC';
 %resultsName='testFPCP2';
 %resultsName='testFPCP4';
 %resultsName='testFPCWABE';
 %resultsName='testFPCWABEP2';
-resultsName='testFPCWABEP4';
+%resultsName='testFPCWABEP4';
 
-plotDragLiftDpForFPC;
+% new results for conv study 20191013:
+resultsName='testFPCP1G4';
+%resultsName='testFPCP2newdd';
+%resultsName='testFPCP4newdd';
+%resultsName='testFPCWABEP1G4';
+%resultsName='testFPCWABEP2newdd';
+%resultsName='testFPCWABEP4newdd';
+
+
+%plotDragLiftDpForFPC;
 
 % grid spacing for plotting
 h=0.01;
@@ -56,7 +68,8 @@ hold on
 plotFPCdomain;
 hold off
 axis off
-print('-depsc2',sprintf('%sStreamline.eps',resultsName))
-
+if(isSavePlot)
+    print('-depsc2',sprintf('%sStreamline.eps',resultsName))
+end
 
 

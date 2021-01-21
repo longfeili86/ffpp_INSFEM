@@ -14,8 +14,8 @@ int nstep = tf/dt+0.5;    // total number of steps
 
 // Divergence Damping
 real alpha=0.;
-if(dd){alpha=100.*mu/(h[].min*h[].min*rho);}  
-
+//if(dd){alpha=100.*mu/(h[].min*h[].min*rho);}  
+if(dd){alpha=pn*pn*25.*mu/(h[].min*h[].min*rho);}  
 
 if(saveDataForMATLAB)
 {

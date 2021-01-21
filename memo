@@ -1,3 +1,67 @@
+10/13/2019:
+% conv study for FPC
+
+
+%TN:
+./generateRunScript.pl -run=true  -runName=testFPCP1G1 -isFPC=true -mu=0.001  -funcDefFILE=icbcFunctions_FlowPastCylinder  -pn=1 -WABE=false -ts=PC2  -meshName=cilc -tf=8.0  -cfl=1.2 -isPlot=false -isTwilightzone=false -quadOrder=3 -pSOLVER=sparsesolver -vSOLVER=sparsesolver -splitNumber=1
+
+./generateRunScript.pl -run=true  -runName=testFPCP1G2 -isFPC=true -mu=0.001  -funcDefFILE=icbcFunctions_FlowPastCylinder  -pn=1 -WABE=false -ts=PC2  -meshName=cilc -tf=8.0  -cfl=1.2 -isPlot=false -isTwilightzone=false -quadOrder=3 -pSOLVER=sparsesolver -vSOLVER=sparsesolver -splitNumber=2
+
+./generateRunScript.pl -run=true  -runName=testFPCP1G4 -isFPC=true -mu=0.001  -funcDefFILE=icbcFunctions_FlowPastCylinder  -pn=1 -WABE=false -ts=PC2  -meshName=cilc -tf=8.0  -cfl=1.2 -isPlot=false -isTwilightzone=false -quadOrder=3 -pSOLVER=sparsesolver -vSOLVER=sparsesolver -splitNumber=4
+[detached from 22102.pts-4.UL-MATH-MDD433]
+
+
+generateRunScript.pl -run=true  -runName=testFPCP2G1newdd -isFPC=true -mu=0.001  -funcDefFILE=icbcFunctions_FlowPastCylinder  -pn=2 -WABE=false -ts=PC2 -meshName=cilc -tf=8.0  -cfl=1.0 -isPlot=false -isTwilightzone=false -quadOrder=5 -pSOLVER=sparsesolver -vSOLVER=sparsesolver  -dt=2e-4 -splitNumber=1
+[detached from 22479.pts-11.UL-MATH-MDD433]
+
+
+generateRunScript.pl -run=true  -runName=testFPCP2newdd -isFPC=true -mu=0.001  -funcDefFILE=icbcFunctions_FlowPastCylinder  -pn=2 -WABE=false -ts=PC2 -meshName=cilc -tf=8.0  -cfl=1.0 -isPlot=false -isTwilightzone=false -quadOrder=5 -pSOLVER=sparsesolver -vSOLVER=sparsesolver  -dt=5e-5 -splitNumber=2
+[detached from 19264.pts-7.UL-MATH-MDD433]
+
+
+generateRunScript.pl -run=true  -runName=testFPCP4newdd -isFPC=true -mu=0.001  -funcDefFILE=icbcFunctions_FlowPastCylinder  -pn=4 -WABE=false -ts=PC2 -meshName=cilc -tf=8.0  -cfl=1.0 -isPlot=false -isTwilightzone=false -quadOrder=10 -pSOLVER=sparsesolver -vSOLVER=sparsesolver  -dt=5e-5
+[detached from 19317.pts-7.UL-MATH-MDD433]
+
+
+%WABE:
+./generateRunScript.pl -run=true  -runName=testFPCWABEP1G1 -isFPC=true -mu=0.001  -funcDefFILE=icbcFunctions_FlowPastCylinder  -pn=1 -WABE=true -ts=PC2  -meshName=cilc -tf=8.0  -cfl=1.2 -isPlot=false -isTwilightzone=false -quadOrder=3 -pSOLVER=sparsesolver -vSOLVER=sparsesolver -splitNumber=1
+
+
+
+./generateRunScript.pl -run=true  -runName=testFPCWABEP1G2 -isFPC=true -mu=0.001  -funcDefFILE=icbcFunctions_FlowPastCylinder  -pn=1 -WABE=true -ts=PC2  -meshName=cilc -tf=8.0  -cfl=1.2 -isPlot=false -isTwilightzone=false -quadOrder=3 -pSOLVER=sparsesolver -vSOLVER=sparsesolver -splitNumber=2
+
+
+./generateRunScript.pl -run=true  -runName=testFPCWABEP1G4 -isFPC=true -mu=0.001  -funcDefFILE=icbcFunctions_FlowPastCylinder  -pn=1 -WABE=true -ts=PC2  -meshName=cilc -tf=8.0  -cfl=1.2 -isPlot=false -isTwilightzone=false -quadOrder=3 -pSOLVER=sparsesolver -vSOLVER=sparsesolver -splitNumber=4
+[detached from 22160.pts-4.UL-MATH-MDD433]
+
+
+generateRunScript.pl -run=true  -runName=testFPCWABEP2G1newdd -isFPC=true -mu=0.001  -funcDefFILE=icbcFunctions_FlowPastCylinder  -pn=2 -WABE=true -ts=PC2 -meshName=cilc -tf=8.0  -cfl=1.0 -isPlot=false -isTwilightzone=false -quadOrder=5 -pSOLVER=sparsesolver -vSOLVER=sparsesolver  -dt=2e-4 -splitNumber=1
+[detached from 22529.pts-11.UL-MATH-MDD433]
+
+
+
+generateRunScript.pl -run=true  -runName=testFPCWABEP2newdd -isFPC=true -mu=0.001  -funcDefFILE=icbcFunctions_FlowPastCylinder  -pn=2 -WABE=true -ts=PC2 -meshName=cilc -tf=8.0  -cfl=1.0 -isPlot=false -isTwilightzone=false -quadOrder=5 -pSOLVER=sparsesolver -vSOLVER=sparsesolver  -dt=5e-5 -splitNumber=2
+[detached from 19389.pts-7.UL-MATH-MDD433]
+
+
+
+generateRunScript.pl -run=true  -runName=testFPCWABEP4newdd -isFPC=true -mu=0.001  -funcDefFILE=icbcFunctions_FlowPastCylinder  -pn=4 -WABE=true -ts=PC2 -meshName=cilc -tf=8.  -cfl=1. -isPlot=false -isTwilightzone=false -quadOrder=10 -pSOLVER=sparsesolver -vSOLVER=sparsesolver  -dt=5e-5
+[detached from 19440.pts-7.UL-MATH-MDD433]
+
+
+
+
+
+10/07/2019:
+mesh refinement for FPC:
+
+./generateRunScript.pl -run=true  -runName=testFPCR1 -isFPC=true -mu=0.001  -funcDefFILE=icbcFunctions_FlowPastCylinder  -pn=1 -WABE=false -ts=PC2  -meshName=cilc -tf=8.0  -cfl=1.2 -isPlot=false -isTwilightzone=false -quadOrder=3 -pSOLVER=sparsesolver -vSOLVER=sparsesolver -splitNumber=8
+[screen  23619.pts-1.UL-MATH-MDD433	(10/07/2019 02:17:09 AM)	(Detached) ]
+
+
+./generateRunScript.pl -run=true  -runName=testFPCWABER1 -isFPC=true -mu=0.001  -funcDefFILE=icbcFunctions_FlowPastCylinder  -pn=1 -WABE=true -ts=PC2  -meshName=cilc -tf=8.0  -cfl=1.2 -isPlot=false -isTwilightzone=false -quadOrder=3 -pSOLVER=sparsesolver -vSOLVER=sparsesolver -splitNumber=8
+[screen   23732.pts-1.UL-MATH-MDD433	(10/07/2019 02:25:03 AM)	(Detached) ]
+
 11/5/2018:
 run FPC tests with P2
 generateRunScript.pl -run=true  -runName=testFPCP2 -isFPC=true -mu=0.001  -funcDefFILE=icbcFunctions_FlowPastCylinder  -pn=2 -WABE=false -ts=PC2 -meshName=cilc -tf=8.  -cfl=1. -isPlot=false -isTwilightzone=false -quadOrder=5 -pSOLVER=sparsesolver -vSOLVER=sparsesolver  -dt=5e-5 -splitNumber=2

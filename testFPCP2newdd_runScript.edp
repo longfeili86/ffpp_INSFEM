@@ -1,0 +1,84 @@
+/*
+This script was gerenerated by generateRunScript.pl  
+============================================================================
+ To run with different options, one can use generateRunScript.pl to genererate a new runScript or
+ make a copy of this file  and modify the option.
+============================================================================
+
+Sun Oct 13 12:39:49 2019
+*/
+
+
+
+
+// define output location to store results:
+string outputDir = ""; // empty to store in 'pwd'
+string runName = "testFPCP2newdd";   // folder name for the output data, can not be empty
+
+
+// physical parameters
+real mu=0.001;
+real rho=1;
+bool isFPC=true; // for FPC problem, we need to compute lift, drag and pressure difference
+
+
+// PDE options
+real tf=8.0; // finial time
+real t0=0; // initial time
+real dt=5e-5; // time stepping; getDt will compute a value for dt if dt=0. or specify a value here directly.
+real cfl=1.0; // fraction of the computed dt to use, i.e., dt = cfl*dt;
+string ts="PC2"; // time-stepping method. Support: FE,AB2,PC2, IMEX, IMEXPC
+bool useExDt = false;  // use the same dt as Explicit methods for IMEX methods				     
+bool dd=true; // divergence damping option
+bool NS =true; // Navier-Stokes or Stokes
+bool WABE=false; // WABE or TN pressure boundary conditions
+int  quadOrder=5; // order of quadrature formula for integration
+macro vSOLVER  sparsesolver //EOM //solver for velocity
+macro pSOLVER  sparsesolver //EOM //solver for pressure
+macro Pn P2 //EOM //use Pn finite-element space. P1,...,P4
+int pn = 2; //need to specify pn in int as well due to FF++ syntax
+bool periodic = false; // use periodic bc on left and right sides of unit square
+macro VH Vh(Th,Pn)  //EOM //define fespace
+
+
+// mesh options
+string meshName = "cilc"; //name of the mesh. A meshName.msh file must be created first in mesh/
+int splitNumber = 2; // split each side of a triangle into splitNumber pieces. specify 1 for no splitting. This is used for mesh refinement
+
+
+// plot options
+real tplot=0.05; // plot frequency
+bool isPlot=false; // plot option
+bool vwait=false; // plot with wait or not
+bool vfill=true; // fill the plot or not
+bool vvalue=true; // show the colorbar with values or not
+bool saveDataForMATLAB=true; // write data into matlab format or not
+
+
+// twilightzone options.
+bool isTwilightzone=false;
+
+
+// specify the name of the .edp file that defines TZ functions if TZ tests
+// otherwise the file name that defines initial and boundary functions.
+// TZ functions definition file can be generated using twilightzonePreparation.m
+// icbc functions definition file can be generated using icbcPreparation.m
+
+
+macro funcDefFILE()  "icbcFunctions_FlowPastCylinder.edp" //EOM  //modify the file name between quotes
+
+
+// trig parameters
+real a=0.5;
+real fx=2;
+real fy=2;
+real ft=2;
+
+
+
+
+
+
+//*********** DO NOT MODIFY BELOW:***************
+include "setup.edp"
+

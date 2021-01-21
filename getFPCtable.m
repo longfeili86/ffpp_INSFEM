@@ -3,8 +3,8 @@
 % tabulate the Drag Lift and Dp for various cases
 
 
-resultsNamesTN={'testFPC','testFPCP2','testFPCP4'};
-resultsNamesWABE={'testFPCWABE','testFPCWABEP2','testFPCWABEP4'};
+resultsNamesTN={'testFPCP1G4','testFPCP2newdd','testFPCP4newdd'};
+resultsNamesWABE={'testFPCWABEP1G4','testFPCWABEP2newdd','testFPCWABEP4newdd'};
 
 cdmaxRef=2.950921575;tcdmaxRef=3.93625;clmaxRef=0.47795;tclmaxRef=5.693125;dppRef=-0.1116;
 
@@ -22,7 +22,7 @@ for i=1:length(resultsNamesTN)
     resultsName=resultsNames{i};
     run(sprintf('%s/maxcdclFile.m',resultsName));
     run(sprintf('%s/dpFile.m',resultsName));
-    fprintf(fid,'TN  $\\mathbb{P}_%d $ & $%.4f $ & $ %.4f $ & $ %.4f $ & $ %.4f $ & $ %.4f $ \\\\ \\hline \n',2^(i-1),cdmax,tcdmax,clmax,tclmax,dp(end));
+    fprintf(fid,'TN  ($\\mathbb{P}_%d,   \\mathcal{G}_%d$) & $%.4f $ & $ %.4f $ & $ %.4f $ & $ %.4f $ & $ %.4f $ \\\\ \\hline \n',2^(i-1),2^(3-i),cdmax,tcdmax,clmax,tclmax,dp(end));
     fprintf('RE %14s: [%.2f%%,%.2f%%,%.2f%%]\n\n',resultsName,abs(cdmax-cdmaxRef)/cdmaxRef*100,abs(clmax-clmaxRef)/clmaxRef*100,abs(dp(end)-dppRef)/abs(dppRef)*100);
 end
 
@@ -33,7 +33,7 @@ for i=1:length(resultsNamesWABE)
     resultsName=resultsNames{i};
     run(sprintf('%s/maxcdclFile.m',resultsName));
     run(sprintf('%s/dpFile.m',resultsName));
-    fprintf(fid,'WABE $\\mathbb{P}_%d $ & $%.4f $ & $ %.4f $ & $ %.4f $ & $ %.4f $ & $ %.4f $ \\\\ \\hline \n',2^(i-1),cdmax,tcdmax,clmax,tclmax,dp(end));
+    fprintf(fid,'WABE ($\\mathbb{P}_%d,   \\mathcal{G}_%d$) & $%.4f $ & $ %.4f $ & $ %.4f $ & $ %.4f $ & $ %.4f $ \\\\ \\hline \n',2^(i-1),2^(3-i),cdmax,tcdmax,clmax,tclmax,dp(end));
     fprintf('RE %14s: [%.2f%%,%.2f%%,%.2f%%]\n\n',resultsName,abs(cdmax-cdmaxRef)/cdmaxRef*100,abs(clmax-clmaxRef)/clmaxRef*100,abs(dp(end)-dppRef)/abs(dppRef)*100);
 end
 
@@ -55,7 +55,7 @@ fprintf(fid,'%s & $[%.3f,%.3f] $ &   & $ [%.3f,%.3f] $ &   & $[%.3f,%.3f] $ \\\\
 
 fprintf(fid,'\\end{tabular}\n');
 
-fprintf(fid,'\\caption{Drag Lift and $\\Delta p(8)$} \n');
+fprintf(fid,'\\caption{Maximum values of the drag and lift coefficients and the pressure difference at final time $t=8$.} \n');
 fprintf(fid,'\\end{center}\n');
 fprintf(fid,'\\end{figure}\n');
 

@@ -3,8 +3,8 @@ close all
 
 %resultsName='testLDCSWABEtretched64x64';
 %resultsName='testLDCStretched64x64';
-%resultsName='testMLDCStretched64x64';
-resultsName='testMLDCWABEStretched64x64';
+resultsName='testMLDCStretched64x64';
+%resultsName='testMLDCWABEStretched64x64';
 
 solutionNumber=1000;
 
@@ -33,6 +33,25 @@ setupFigure
 figure
 cmd='plotMsh mesh/squareStretched32x32.msh -save';
 eval(cmd);
+
+% boundary velocity transition 01/04/2020
+figure
+meshname=sprintf('%s/mesh.msh',resultsName);
+T=readMsh(meshname);
+
+idx=find(T.coordinates(:,2)==1); % find the top boundary
+x=T.coordinates(idx,1); % x coordinates of the top boundary
+y=T.coordinates(idx,2); % y coordinates of the top boundary
+run(sprintf('%s/%s%dFile',resultsName,'u',solutionNumber)); % get the u solution at solutionNumber
+u=eval(sprintf('%s%d','u',solutionNumber));
+plot(x,u(idx),'ko-','linewidth',figOptions.LW,'MarkerSize',figOptions.MS);
+xlim([0,0.2])
+xlabel('$x$','interpreter','latex','FontSize',figOptions.FS)
+ylabel('$u$','interpreter','latex','FontSize',figOptions.FS);
+set(gca,'FontSize',figOptions.FS);
+print('-depsc2',sprintf('%sUTopSmoothed.eps',resultsName));
+
+
 
 % contour vorticity
 figure
